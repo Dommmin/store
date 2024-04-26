@@ -1,0 +1,7 @@
+/redisdata/
+/mysqldata/
+.idea/
+typesense-data/
+storage/minio/
+/data.ms/
+/storage/

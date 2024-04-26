@@ -1,0 +1,26 @@
+stages:
+  - analyze
+  - test
+
+analyze:
+  stage: analyze
+  image: php:8.2
+  script:
+    - cd api
+    - apt-get update && apt-get install -y unzip libpq-dev
+    - docker-php-ext-install pdo pdo_mysql
+    - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+    - composer install --prefer-dist --no-progress
+    - ./vendor/bin/phpstan analyze --memory-limit=1G
+    - php artisan insights --no-interaction --min-quality=90 --min-complexity=80 --min-architecture=90 --min-style=90 --ansi --format=github-action
+
+test:
+  stage: test
+  image: php:8.2
+  script:
+    - cd api
+    - apt-get update && apt-get install -y unzip libpq-dev
+    - docker-php-ext-install pdo pdo_mysql
+    - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+    - composer install --prefer-dist --no-progress
+    - composer pest

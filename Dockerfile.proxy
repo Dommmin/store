@@ -1,0 +1,5 @@
+FROM nginx:alpine
+
+COPY ./deployment/config/proxy.conf /etc/nginx/nginx.conf
+
+EXPOSE 80

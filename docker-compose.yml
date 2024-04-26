@@ -1,0 +1,226 @@
+networks:
+  laravel:
+    driver: bridge
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: ./frontend/Dockerfile
+      target: dev
+    command: sh -c "npm install && npm run dev"
+    restart: unless-stopped
+    volumes:
+      - ./frontend:/usr/src
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - api
+    ports:
+      - "3000:3000"
+    networks:
+      - laravel
+
+  api:
+    build:
+      args:
+        user: dominik
+        uid: 1000
+      context: .
+      dockerfile: ./api/Dockerfile
+      target: api
+    command: sh -c "composer install --no-scripts && chmod +x /usr/src/migration.sh && /usr/src/migration.sh && php artisan octane:start --host=0.0.0.0 --port=8000 --watch"
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./api:/usr/src
+      - ./deployment/config/php-fpm/php-dev.ini:/usr/local/etc/php/conf.d/php.ini
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - laravel
+
+  scheduler:
+    build:
+      args:
+        user: dominik
+        uid: 1000
+      context: .
+      dockerfile: ./api/Dockerfile
+      target: scheduler
+    command: sh -c "chmod +x /usr/src/scheduler.sh && /usr/src/scheduler.sh"
+    restart: unless-stopped
+    env_file:
+      - ./api/.env
+    volumes:
+      - ./api:/usr/src
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - laravel
+
+  worker:
+    build:
+      args:
+        user: dominik
+        uid: 1000
+      context: .
+      dockerfile: ./api/Dockerfile
+      target: worker
+    command: sh -c "chmod +x /usr/src/worker.sh && /usr/src/worker.sh"
+    env_file:
+      - ./api/.env
+    restart: unless-stopped
+    volumes:
+      - ./api:/usr/src
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - laravel
+
+  nginx:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.nginx
+    command: sh -c "nginx -g \"daemon off;\""
+    restart: unless-stopped
+    ports:
+      - "80:8000"
+    volumes:
+      - ./api:/usr/src
+      - ./deployment/config/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - api
+    networks:
+      - laravel
+
+  mysql:
+    build:
+      args:
+        password: secret
+      context: .
+      dockerfile: ./Dockerfile.mysql
+    restart: unless-stopped
+    volumes:
+      - ./mysqldata:/var/lib/mysql
+    ports:
+      - "33060:3306"
+    healthcheck:
+      test: mysql -h localhost -u root -psecret -e 'SELECT version();'
+      start_period: 5s
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+    networks:
+      - laravel
+
+  redis:
+    image: redis:latest
+    restart: unless-stopped
+    volumes:
+      - ./redisdata:/data
+    ports:
+      - "63790:6379"
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - laravel
+
+  mailcatcher:
+    image: schickling/mailcatcher
+    ports:
+      - "1080:1080"
+    networks:
+      - laravel
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8888:80"
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: secret
+    depends_on:
+      - mysql
+    networks:
+      - laravel
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    ports:
+      - "8081:8081"
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - laravel
+
+  minio:
+    image: minio/minio
+    ports:
+      - "9000:9000"
+      - "9099:9099"
+    volumes:
+      - storage-minio:/data
+    networks:
+      - laravel
+    environment:
+      - MINIO_ACCESS_KEY=admin
+      - MINIO_SECRET_KEY=admin123
+    command: server --address ":9099" --console-address ":9000" /data
+
+  meilisearch:
+    image: getmeili/meilisearch:latest
+    ports:
+      - 7700:7700
+    volumes:
+      - ./data.ms:/data.ms
+    networks:
+      - laravel
+
+  reverb:
+    build:
+      args:
+        user: dominik
+        uid: 1000
+      context: .
+      dockerfile: ./api/Dockerfile
+      target: reverb
+    command: sh -c "chmod +x /usr/src/reverb.sh && /usr/src/reverb.sh"
+    restart: unless-stopped
+    env_file:
+      - ./api/.env
+    volumes:
+      - ./api:/usr/src
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - laravel
+
+
+volumes:
+  storage-minio:
+  data.ms:

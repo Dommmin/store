@@ -1,0 +1,6 @@
+FROM nginx:alpine
+
+COPY ./api /usr/src
+COPY ./deployment/config/nginx.conf /etc/nginx/nginx.conf
+
+EXPOSE 80
