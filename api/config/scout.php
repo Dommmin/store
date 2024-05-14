@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Models\Product;
+
 return [
 
     /*
@@ -136,6 +138,10 @@ return [
         'host' => env('MEILISEARCH_HOST', 'http://localhost:7700'),
         'key' => env('MEILISEARCH_KEY'),
         'index-settings' => [
+            Product::class => [
+                'filterableAttributes' => ['brand_id', 'category_id', 'price'],
+                'sortableAttributes' => ['price', 'name', 'id'],
+            ],
             // 'users' => [
             //     'filterableAttributes'=> ['id', 'name', 'email'],
             // ],

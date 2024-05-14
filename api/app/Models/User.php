@@ -6,9 +6,10 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Log;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
@@ -47,9 +48,8 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function getTwoFactorEnabledAttribute(): bool
     {
-        Log::info($this->two_factor_confirmed_at);
-
         return Features::enabled(Features::twoFactorAuthentication())
+            && $this->hasAttribute('two_factor_secret')
             && null !== $this->two_factor_secret;
     }
 
@@ -66,6 +66,26 @@ class User extends Authenticatable implements MustVerifyEmail
             . '?s=200&d=https://s3.amazonaws.com/laracasts/images/forum/avatars/default-avatar-'
             . $integerToUse
             . '.png';
+    }
+
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function bookmarks(): HasMany
+    {
+        return $this->hasMany(Bookmark::class);
+    }
+
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->hasRole('admin');
     }
 
     /**

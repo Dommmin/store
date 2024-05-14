@@ -82,7 +82,7 @@ export default function ConfirmPassword({
                            ref={passwordInput}
                            value={password}
                            type="password"
-                           className="input-custom max-w-lg"
+                           className="input input-bordered max-w-lg"
                            placeholder="Password"
                            autoComplete="current-password"
                            onKeyUp={(event) => {

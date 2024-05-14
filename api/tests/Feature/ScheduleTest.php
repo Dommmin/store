@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Enums\RolesEnum;
 use App\Models\Service;
 use App\Models\User;
+
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\postJson;
 
@@ -28,7 +31,7 @@ function getScheduleData($employeeId, $serviceId): array
     ];
 }
 
-it('user cannot create a schedule for an employee', function () {
+it('user cannot create a schedule for an employee', function (): void {
     $employee = User::factory()->create();
     $employee->assignRole(RolesEnum::Employee->value);
 
@@ -39,11 +42,11 @@ it('user cannot create a schedule for an employee', function () {
 
     actingAs($user);
 
-    $response = postJson("/api/employees/$employee->slug/schedule", $schedules);
+    $response = postJson("/api/employees/{$employee->slug}/schedule", $schedules);
     $response->assertStatus(403);
 });
 
-it('admin can create a schedule for an employee', function () {
+it('admin can create a schedule for an employee', function (): void {
     $employee = User::factory()->create();
     $employee->assignRole(RolesEnum::Employee->value);
 
@@ -56,11 +59,11 @@ it('admin can create a schedule for an employee', function () {
 
     actingAs($admin);
 
-    $response = postJson("/api/employees/$employee->slug/schedule", $schedules);
+    $response = postJson("/api/employees/{$employee->slug}/schedule", $schedules);
     $response->assertStatus(201);
 });
 
-it('admin cannot create a schedule for an user that is not an employee', function () {
+it('admin cannot create a schedule for an user that is not an employee', function (): void {
     $user = User::factory()->create();
 
     $admin = User::factory()->create();
@@ -72,6 +75,6 @@ it('admin cannot create a schedule for an user that is not an employee', functio
 
     actingAs($admin);
 
-    $response = postJson("/api/employees/$user->slug/schedule", $schedules);
+    $response = postJson("/api/employees/{$user->slug}/schedule", $schedules);
     $response->assertStatus(403);
 });

@@ -1,7 +1,9 @@
-import InputError from '@/app/ui/InputError';
+'use client';
+
+import InputError from '../../../ui/InputError';
 import { useAuth } from '../../../hooks/auth';
 import { useEffect, useState } from 'react';
-import AuthSessionStatus from '../../components/AuthSessionStatus.jsx';
+import AuthSessionStatus from '../../components/AuthSessionStatus';
 import { useSearchParams } from 'next/navigation';
 
 export default function PasswordReset() {

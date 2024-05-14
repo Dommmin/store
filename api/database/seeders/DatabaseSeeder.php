@@ -17,7 +17,14 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UserSeeder::class,
-            PostSeeder::class,
+            CategorySeeder::class,
+            BrandSeeder::class,
+            CollectionSeeder::class,
+            AttributeSeeder::class,
+            AttributeValueSeeder::class,
+            SizeSeeder::class,
+            ProductSeeder::class,
+            ReviewSeeder::class,
         ]);
     }
 }

@@ -1,17 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Models\Service;
 use App\Models\User;
+
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\postJson;
 
-it('creates an appointment', function () {
+it('creates an appointment', function (): void {
     $user = User::factory()->create();
     $employee = User::factory()->create();
 
     $service = Service::factory()->create([
-        'duration' => 30
+        'duration' => 30,
     ]);
 
     actingAs($user);
@@ -26,7 +29,7 @@ it('creates an appointment', function () {
         'starts_at_time' => $starts_at_time,
     ];
 
-    $response = postJson("/api/appointments/$service->slug/$employee->slug", $data);
+    $response = postJson("/api/appointments/{$service->slug}/{$employee->slug}", $data);
     $response->assertSuccessful();
 
     assertDatabaseHas('appointments', [
@@ -34,6 +37,6 @@ it('creates an appointment', function () {
         'starts_at_time' => $starts_at_time,
         'service_id' => $service->id,
         'employee_id' => $employee->id,
-        'client_id' => $user->id
+        'client_id' => $user->id,
     ]);
 });

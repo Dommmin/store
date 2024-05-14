@@ -13,7 +13,7 @@ const Images = () => {
 
    const fetchImages = () => {
       axios
-         .get('/api/images')
+         .get('/api/v1/images')
          .then((response) => {
             setImages(response.data);
          })

@@ -61,7 +61,7 @@ export default function UpdatePasswordForm({ className = '' }) {
                      value={data.current_password}
                      onChange={(e) => setData({ ...data, current_password: e.target.value })}
                      type="password"
-                     className="input-custom max-w-lg"
+                     className="input input-bordered max-w-lg"
                      autoComplete="current-password"
                   />
                </label>
@@ -78,7 +78,7 @@ export default function UpdatePasswordForm({ className = '' }) {
                      value={data.password}
                      onChange={(e) => setData({ ...data, password: e.target.value })}
                      type="password"
-                     className="input-custom max-w-lg"
+                     className="input input-bordered max-w-lg"
                      autoComplete="new-password"
                   />
                </label>
@@ -95,7 +95,7 @@ export default function UpdatePasswordForm({ className = '' }) {
                      value={data.password_confirmation}
                      onChange={(e) => setData({ ...data, password_confirmation: e.target.value })}
                      type="password"
-                     className="input-custom max-w-lg"
+                     className="input input-bordered max-w-lg"
                      autoComplete="new-password"
                   />
                </label>

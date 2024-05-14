@@ -47,7 +47,7 @@ export default function UpdateProfileInformation({ className = '', user, resendE
                   </div>
                   <input
                      id="name"
-                     className="input-custom max-w-lg"
+                     className="input input-bordered max-w-lg"
                      value={data.name}
                      onChange={(e) => setData({ ...data, name: e.target.value })}
                      autoComplete="name"
@@ -65,7 +65,7 @@ export default function UpdateProfileInformation({ className = '', user, resendE
                   <input
                      id="email"
                      type="email"
-                     className="input-custom max-w-lg"
+                     className="input input-bordered max-w-lg"
                      value={data.email}
                      onChange={(e) => setData({ ...data, email: e.target.value })}
                      required

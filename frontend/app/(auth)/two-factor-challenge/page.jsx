@@ -1,11 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import InputError from '@/app/ui/InputError';
-import PrimaryButton from '.@/app/ui/PrimaryButton';
-import Wrapper from '@/app/ui/Wrapper.jsx';
+import InputError from '../../ui/InputError';
+import PrimaryButton from '../../ui/PrimaryButton';
+import Wrapper from '../../ui/Wrapper.jsx';
 import axios from '../../lib/axios.js';
-import LoadingSpinner from '@/app/ui/LoadingSpinner.jsx';
+import LoadingSpinner from '../../ui/LoadingSpinner.jsx';
 import { useAuth } from '../../hooks/auth.js';
 import { useRouter } from 'next/navigation';
 

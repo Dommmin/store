@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Enums\RolesEnum;
 use App\Models\Service;
 use App\Models\User;
+
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\postJson;
 
-it('user cannot assign service to employee', function () {
+it('user cannot assign service to employee', function (): void {
     $user = User::factory()->create();
 
     $employee = User::factory()->create();
@@ -16,11 +19,11 @@ it('user cannot assign service to employee', function () {
 
     actingAs($user);
 
-    $response = postJson("/api/employees/$employee->slug/services", ['service_id' => $service->id]);
+    $response = postJson("/api/employees/{$employee->slug}/services", ['service_id' => $service->id]);
     $response->assertStatus(403);
 });
 
-it('manager can assign service to employee', function () {
+it('manager can assign service to employee', function (): void {
     $manager = User::factory()->create();
     $manager->assignRole(RolesEnum::Manager->value);
 
@@ -31,6 +34,6 @@ it('manager can assign service to employee', function () {
 
     actingAs($manager);
 
-    $response = postJson("/api/employees/$employee->slug/services", ['service_id' => $service->id]);
+    $response = postJson("/api/employees/{$employee->slug}/services", ['service_id' => $service->id]);
     $response->assertStatus(201);
 });

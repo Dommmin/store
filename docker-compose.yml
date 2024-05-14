@@ -180,12 +180,12 @@ services:
       - "9099:9099"
     volumes:
       - storage-minio:/data
-    networks:
-      - laravel
     environment:
       - MINIO_ACCESS_KEY=admin
       - MINIO_SECRET_KEY=admin123
     command: server --address ":9099" --console-address ":9000" /data
+    networks:
+      - laravel
 
   meilisearch:
     image: getmeili/meilisearch:latest

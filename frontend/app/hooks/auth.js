@@ -13,22 +13,26 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
       error,
       mutate: refetch,
       isLoading: isFetching,
-   } = useSWR('/api/user', () =>
-      axios
-         .get('/api/user')
-         .then((res) => res.data)
-         .catch((error) => {
-            if (error.response.status !== 409) throw error;
+      isValidating,
+   } = useSWR(
+      '/api/v1/user',
+      () =>
+         axios
+            .get('/api/v1/user')
+            .then((res) => res.data)
+            .catch((error) => {
+               if (error.response.status !== 409) throw error;
 
-            router.push('/verify-email');
-         }),
+               router.push('/verify-email');
+            }),
+      { focusThrottleInterval: 15000 },
    );
 
-   const csrf = () => axios.get('/sanctum/csrf-cookie');
+   const getCsrfToken = () => axios.get('/sanctum/csrf-cookie');
 
    const register = async ({ setErrors, ...props }) => {
       setIsLoading(true);
-      await csrf();
+      await getCsrfToken();
 
       setErrors([]);
 
@@ -45,7 +49,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
 
    const login = async ({ setErrors, setStatus, ...props }) => {
       setIsLoading(true);
-      await csrf();
+      await getCsrfToken();
 
       setErrors([]);
       setStatus(null);
@@ -67,7 +71,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
    };
 
    const forgotPassword = async ({ setErrors, setStatus, email }) => {
-      await csrf();
+      await getCsrfToken();
 
       setErrors([]);
       setStatus(null);
@@ -83,7 +87,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
    };
 
    const resetPassword = async ({ setErrors, setStatus, ...props }) => {
-      await csrf();
+      await getCsrfToken();
 
       setErrors([]);
       setStatus(null);
@@ -126,6 +130,8 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
       logout,
       isLoading,
       isFetching,
+      isValidating,
       refetch,
+       getCsrfToken,
    };
 };
