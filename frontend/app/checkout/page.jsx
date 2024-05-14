@@ -12,7 +12,7 @@ const Checkout = () => {
    const [display, setDisplay] = useState(false);
    const [isOpen, setIsOpen] = useState(false);
 
-   const [step, setStep] = useState('Information'); // Dodajemy nowy stan
+   const [step, setStep] = useState('Information');
 
    const handleContinue = () => {
       if (step === 'Information') {

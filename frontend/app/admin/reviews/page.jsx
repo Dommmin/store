@@ -5,272 +5,271 @@ import { useEffect, useState } from 'react';
 import axios from '../../lib/axios';
 import LoadingSpinner from '../../ui/LoadingSpinner';
 import { motion } from 'framer-motion';
-import {toast, ToastContainer} from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {Switch} from '@headlessui/react';
+import { Switch } from '@headlessui/react';
 import Link from 'next/link';
 import Image from 'next/image';
 
 export default function Reviews() {
-    const [data, setData] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [url, setUrl] = useState('/api/v1/admin/reviews');
-    const [selectedItems, setSelectedItems] = useState([]);
+   const [data, setData] = useState([]);
+   const [isLoading, setIsLoading] = useState(true);
+   const [url, setUrl] = useState('/api/v1/admin/reviews');
+   const [selectedItems, setSelectedItems] = useState([]);
 
-    const handleSelectAll = (event) => {
-        if (event.target.checked) {
-            setSelectedItems(data.data.map((item) => item.id));
-            return;
-        }
-        setSelectedItems([]);
-    };
+   const handleSelectAll = (event) => {
+      if (event.target.checked) {
+         setSelectedItems(data.data.map((item) => item.id));
+         return;
+      }
+      setSelectedItems([]);
+   };
 
-    const handleSelectOne = (id) => {
-        if (selectedItems.includes(id)) {
-            setSelectedItems(selectedItems.filter((item) => item !== id));
-        } else {
-            setSelectedItems([...selectedItems, id]);
-        }
-    };
+   const handleSelectOne = (id) => {
+      if (selectedItems.includes(id)) {
+         setSelectedItems(selectedItems.filter((item) => item !== id));
+      } else {
+         setSelectedItems([...selectedItems, id]);
+      }
+   };
 
-    const fetchData = () => {
-        axios
-        .get(url, {
+   const fetchData = () => {
+      axios
+         .get(url, {
             params: {
-                perPage: 10,
+               perPage: 10,
             },
-        })
-        .then((response) => {
+         })
+         .then((response) => {
             setData(response.data);
-        })
-        .catch((error) => {
+         })
+         .catch((error) => {
             console.log(error);
-        })
-        .finally(() => setIsLoading(false));
-    };
+         })
+         .finally(() => setIsLoading(false));
+   };
 
-    const variants = {
-        hidden: { opacity: 0 },
-        show: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.1,
-            },
-        },
-    };
+   const variants = {
+      hidden: { opacity: 0 },
+      show: {
+         opacity: 1,
+         transition: {
+            staggerChildren: 0.1,
+         },
+      },
+   };
 
-    const childVariants = {
-        hidden: { opacity: 0 },
-        show: { opacity: 1 },
-    };
+   const childVariants = {
+      hidden: { opacity: 0 },
+      show: { opacity: 1 },
+   };
 
-    const handleDelete = (id) => {
-        axios
-        .delete(`/api/v1/admin/reviews/${id}`)
-        .then((response) => {
+   const handleDelete = (id) => {
+      axios
+         .delete(`/api/v1/admin/reviews/${id}`)
+         .then((response) => {
             toast.success(response.data.message, {
-                autoClose: 1000,
-                position: 'bottom-right',
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
+               autoClose: 1000,
+               position: 'bottom-right',
+               hideProgressBar: true,
+               closeOnClick: true,
+               pauseOnHover: true,
             });
             fetchData();
-        })
-        .catch((error) => {
+         })
+         .catch((error) => {
             toast.error(error.response.data.message, {
-                autoClose: 1000,
-                position: 'bottom-right',
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
-            })
+               autoClose: 1000,
+               position: 'bottom-right',
+               hideProgressBar: true,
+               closeOnClick: true,
+               pauseOnHover: true,
+            });
             console.log(error);
-        });
-    };
+         });
+   };
 
-    const handleApprove = (item) => {
-        let action = 'approve';
+   const handleApprove = (item) => {
+      let action = 'approve';
 
-        if (item.approved) {
-            action = 'unapprove';
-        }
+      if (item.approved) {
+         action = 'unapprove';
+      }
 
-        axios
-        .post(`/api/v1/admin/reviews/${item.id}/${action}`)
-        .then(() => {
+      axios
+         .post(`/api/v1/admin/reviews/${item.id}/${action}`)
+         .then(() => {
             fetchData();
-        })
-        .catch((error) => {
+         })
+         .catch((error) => {
             console.log(error);
-        });
-    };
+         });
+   };
 
+   useEffect(() => {
+      fetchData();
+   }, [url]);
 
-    useEffect(() => {
-        fetchData();
-    }, [url]);
+   if (isLoading) return <LoadingSpinner className="h-screen" />;
 
-    if (isLoading) return <LoadingSpinner className="h-screen" />;
+   console.log(data);
 
-    console.log(data);
-
-    return (
-        <>
-            <ToastContainer />
-            <h1 className="text-3xl font-bold p-2">Reviews</h1>
-            <Wrapper maxWidth="max-w-[1920px]">
-                <div className="overflow-x-auto">
-                    {data.data.length > 0 ? (
-                        <>
-                            <table className="table">
-                                <thead>
-                                <tr>
-                                    <th>
-                                        <label>
-                                            <input
-                                                onChange={handleSelectAll}
-                                                checked={selectedItems.length === data.data.length}
-                                                type="checkbox"
-                                                className="checkbox"
-                                            />
-                                        </label>
-                                    </th>
-                                    <th>ID</th>
-                                    <th>Title</th>
-                                    <th>Product</th>
-                                    <th>Posted by</th>
-                                    <th>Posted at</th>
-                                    <th>Approved</th>
-                                    <th>Action</th>
-                                </tr>
-                                </thead>
-                                <motion.tbody variants={variants} initial="hidden" animate="show">
-                                    {data.data.map((item) => (
-                                        <motion.tr variants={childVariants} key={item.id}>
-                                            <th>
-                                                <label>
-                                                    <input
-                                                        onChange={() => handleSelectOne(item.id)}
-                                                        checked={selectedItems.includes(item.id)}
-                                                        value={item.id}
-                                                        type="checkbox"
-                                                        className="checkbox"
-                                                    />
-                                                </label>
-                                            </th>
-                                            <td>
-                                                <div className="flex items-center gap-3">
-                                                    <div>
-                                                        <div className="font-bold">{item.id}</div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div className="flex items-center gap-3">
-                                                    <div>
-                                                        <div className="font-bold truncate">{item.title}</div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div className="flex items-center gap-3">
-                                                    <ul className="avatar">
-                                                        <Link href={'/p/' + item.product.id} className="mask mask-squircle w-12 h-12">
-                                                            <Image
-                                                                src={item.product.main_image}
-                                                                alt={item.product.title}
-                                                                width={100}
-                                                                height={100}
-                                                                blurDataURL={item.product.main_image}
-                                                                placeholder="blur"
-                                                            />
-                                                        </Link>
-                                                    </ul>
-                                                    <div>
-                                                        <div className="font-bold">{item.product.name}</div>
-                                                        {/*<div className="text-sm opacity-50">{item.product.name}</div>*/}
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div className="flex items-center gap-3">
-                                                    <ul className="avatar">
-                                                        <li className="mask mask-squircle w-12 h-12">
-                                                            <Image
-                                                                src={item.user.profile_photo_url}
-                                                                alt={item.user.name}
-                                                                width={100}
-                                                                height={100}
-                                                                blurDataURL={item.user.profile_photo_url}
-                                                                placeholder="blur"
-                                                            />
-                                                        </li>
-                                                    </ul>
-                                                    <div>
-                                                        <div className="font-bold">{item.user.name}</div>
-                                                        <div className="text-sm opacity-50">{item.user.email}</div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div className="flex items-center gap-3">
-                                                    <div>
-                                                        <div className="font-bold truncate">{item.created_at}</div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div className="flex items-center gap-3">
-                                                    <div>
-                                                        <div className="font-bold">
-                                                            <Switch
-                                                                checked={!!item.approved}
-                                                                onChange={() => handleApprove(item)}
-                                                                className="group inline-flex h-6 w-11 items-center rounded-full bg-gray-200 transition data-[checked]:bg-blue-600"
-                                                            >
-                                                                <span
-                                                                    className="size-4 translate-x-1 rounded-full bg-white transition group-data-[checked]:translate-x-6"/>
-                                                            </Switch>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <button
-                                                    onClick={() => handleDelete(item.id)}
-                                                    className="btn btn-error btn-outline btn-xs"
-                                                >Delete
-                                                </button>
-                                            </td>
-                                        </motion.tr>
-                                    ))}
-                                </motion.tbody>
-                            </table>
-                            {(data.links.prev || data.links.next) && (
-                                <div className="join grid grid-cols-2 mt-4">
+   return (
+      <>
+         <ToastContainer />
+         <h1 className="text-3xl font-bold p-2">Reviews</h1>
+         <Wrapper maxWidth="max-w-[1920px]">
+            <div className="overflow-x-auto">
+               {data.data.length > 0 ? (
+                  <>
+                     <table className="table">
+                        <thead>
+                           <tr>
+                              <th>
+                                 <label>
+                                    <input
+                                       onChange={handleSelectAll}
+                                       checked={selectedItems.length === data.data.length}
+                                       type="checkbox"
+                                       className="checkbox"
+                                    />
+                                 </label>
+                              </th>
+                              <th>ID</th>
+                              <th>Title</th>
+                              <th>Product</th>
+                              <th>Posted by</th>
+                              <th>Posted at</th>
+                              <th>Approved</th>
+                              <th>Action</th>
+                           </tr>
+                        </thead>
+                        <motion.tbody variants={variants} initial="hidden" animate="show">
+                           {data.data.map((item) => (
+                              <motion.tr variants={childVariants} key={item.id}>
+                                 <th>
+                                    <label>
+                                       <input
+                                          onChange={() => handleSelectOne(item.id)}
+                                          checked={selectedItems.includes(item.id)}
+                                          value={item.id}
+                                          type="checkbox"
+                                          className="checkbox"
+                                       />
+                                    </label>
+                                 </th>
+                                 <td>
+                                    <div className="flex items-center gap-3">
+                                       <div>
+                                          <div className="font-bold">{item.id}</div>
+                                       </div>
+                                    </div>
+                                 </td>
+                                 <td>
+                                    <div className="flex items-center gap-3">
+                                       <div>
+                                          <div className="font-bold truncate">{item.title}</div>
+                                       </div>
+                                    </div>
+                                 </td>
+                                 <td>
+                                    <div className="flex items-center gap-3">
+                                       <ul className="avatar">
+                                          <Link href={'/p/' + item.product.id} className="mask mask-squircle w-12 h-12">
+                                             <Image
+                                                src={item.product.main_image}
+                                                alt={item.product.title}
+                                                width={100}
+                                                height={100}
+                                                blurDataURL={item.product.main_image}
+                                                placeholder="blur"
+                                             />
+                                          </Link>
+                                       </ul>
+                                       <div>
+                                          <div className="font-bold">{item.product.name}</div>
+                                          {/*<div className="text-sm opacity-50">{item.product.name}</div>*/}
+                                       </div>
+                                    </div>
+                                 </td>
+                                 <td>
+                                    <div className="flex items-center gap-3">
+                                       <ul className="avatar">
+                                          <li className="mask mask-squircle w-12 h-12">
+                                             <Image
+                                                src={item.user.profile_photo_url}
+                                                alt={item.user.name}
+                                                width={100}
+                                                height={100}
+                                                blurDataURL={item.user.profile_photo_url}
+                                                placeholder="blur"
+                                             />
+                                          </li>
+                                       </ul>
+                                       <div>
+                                          <div className="font-bold">{item.user.name}</div>
+                                          <div className="text-sm opacity-50">{item.user.email}</div>
+                                       </div>
+                                    </div>
+                                 </td>
+                                 <td>
+                                    <div className="flex items-center gap-3">
+                                       <div>
+                                          <div className="font-bold truncate">{item.created_at}</div>
+                                       </div>
+                                    </div>
+                                 </td>
+                                 <td>
+                                    <div className="flex items-center gap-3">
+                                       <div>
+                                          <div className="font-bold">
+                                             <Switch
+                                                checked={!!item.approved}
+                                                onChange={() => handleApprove(item)}
+                                                className="group inline-flex h-6 w-11 items-center rounded-full bg-gray-200 transition data-[checked]:bg-blue-600"
+                                             >
+                                                <span className="size-4 translate-x-1 rounded-full bg-white transition group-data-[checked]:translate-x-6" />
+                                             </Switch>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </td>
+                                 <td>
                                     <button
-                                        disabled={!data.links.prev}
-                                        onClick={() => setUrl(data.links.prev)}
-                                        className="join-item btn btn-outline"
+                                       onClick={() => handleDelete(item.id)}
+                                       className="btn btn-error btn-outline btn-xs"
                                     >
-                                        Previous page
+                                       Delete
                                     </button>
-                                    <button
-                                        disabled={!data.links.next}
-                                        onClick={() => setUrl(data.links.next)}
-                                        className="join-item btn btn-outline"
-                                    >
-                                        Next
-                                    </button>
-                                </div>
-                            )}
-                        </>
-                    ) : (
-                        <p>No data found...</p>
-                    )}
-                </div>
-            </Wrapper>
-        </>
-    );
+                                 </td>
+                              </motion.tr>
+                           ))}
+                        </motion.tbody>
+                     </table>
+                     {(data.links.prev || data.links.next) && (
+                        <div className="join grid grid-cols-2 mt-4">
+                           <button
+                              disabled={!data.links.prev}
+                              onClick={() => setUrl(data.links.prev)}
+                              className="join-item btn btn-outline"
+                           >
+                              Previous page
+                           </button>
+                           <button
+                              disabled={!data.links.next}
+                              onClick={() => setUrl(data.links.next)}
+                              className="join-item btn btn-outline"
+                           >
+                              Next
+                           </button>
+                        </div>
+                     )}
+                  </>
+               ) : (
+                  <p>No data found...</p>
+               )}
+            </div>
+         </Wrapper>
+      </>
+   );
 }

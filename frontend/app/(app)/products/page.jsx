@@ -164,12 +164,12 @@ export default function Page() {
                         onChange={(e) => setSort(e.target.value)}
                         className="select select-bordered w-full"
                      >
-                         <option value={JSON.stringify({ column: 'id', order: 'asc' })}>Default</option>
-                         <option value={JSON.stringify({ column: 'price', order: 'asc' })}>Price ASC</option>
-                         <option value={JSON.stringify({ column: 'price', order: 'desc' })}>Price DESC</option>
-                         <option value={JSON.stringify({ column: 'name', order: 'asc' })}>Name ASC</option>
-                         <option value={JSON.stringify({ column: 'name', order: 'desc' })}>Name DESC</option>
-                         <option value={JSON.stringify({ column: 'id', order: 'desc' })}>Latest</option>
+                        <option value={JSON.stringify({ column: 'id', order: 'asc' })}>Default</option>
+                        <option value={JSON.stringify({ column: 'price', order: 'asc' })}>Price ASC</option>
+                        <option value={JSON.stringify({ column: 'price', order: 'desc' })}>Price DESC</option>
+                        <option value={JSON.stringify({ column: 'name', order: 'asc' })}>Name ASC</option>
+                        <option value={JSON.stringify({ column: 'name', order: 'desc' })}>Name DESC</option>
+                        <option value={JSON.stringify({ column: 'id', order: 'desc' })}>Latest</option>
                      </select>
                   </div>
                </div>

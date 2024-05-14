@@ -6,7 +6,7 @@ import axios from '../../lib/axios';
 import Link from 'next/link';
 import LoadingSpinner from '../../ui/LoadingSpinner';
 import { motion } from 'framer-motion';
-import {toast, ToastContainer} from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function Attributes() {
@@ -34,12 +34,12 @@ export default function Attributes() {
    const fetchData = () => {
       axios
          .get(url, {
-             params: {
-                perPage: 5,
-             },
-      })
+            params: {
+               perPage: 5,
+            },
+         })
          .then((response) => {
-             console.log(response);
+            console.log(response);
             setData(response.data);
          })
          .catch((error) => {
@@ -63,32 +63,31 @@ export default function Attributes() {
       show: { opacity: 1 },
    };
 
-    const handleDelete = (id) => {
-        axios
-        .delete(`/api/v1/admin/attributes/${id}`)
-        .then((response) => {
+   const handleDelete = (id) => {
+      axios
+         .delete(`/api/v1/admin/attributes/${id}`)
+         .then((response) => {
             toast.success(response.data.message, {
-                autoClose: 1000,
-                position: 'bottom-right',
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
+               autoClose: 1000,
+               position: 'bottom-right',
+               hideProgressBar: true,
+               closeOnClick: true,
+               pauseOnHover: true,
             });
             fetchData();
-        })
-        .catch((error) => {
+         })
+         .catch((error) => {
             toast.error(error.response.data.message, {
-                autoClose: 1000,
-                position: 'bottom-right',
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
-            })
-        });
-    };
+               autoClose: 1000,
+               position: 'bottom-right',
+               hideProgressBar: true,
+               closeOnClick: true,
+               pauseOnHover: true,
+            });
+         });
+   };
 
-
-    useEffect(() => {
+   useEffect(() => {
       fetchData();
    }, [url]);
 
@@ -96,7 +95,7 @@ export default function Attributes() {
 
    return (
       <>
-          <ToastContainer />
+         <ToastContainer />
          <h1 className="text-3xl font-bold p-2">Attributes</h1>
          <div className="flex justify-end p-2 max-w-6xl mx-auto sm:px-6 lg:px-8">
             <Link href={'/admin/attributes/create'} className="btn btn-success btn-wide text-white">
@@ -153,34 +152,43 @@ export default function Attributes() {
                                        </div>
                                     </div>
                                  </td>
-                                  <th>
-                                      <div className="grid grid-cols-2 gap-2 items-center">
-                                          <Link href={'/admin/attributes/' + item.id + '/edit'}
-                                                className="btn btn-info btn-outline btn-xs">Edit</Link>
-                                          <button
-                                              onClick={() => handleDelete(item.id)}
-                                              className="btn btn-error btn-outline btn-xs"
-                                          >Delete
-                                          </button>
-                                          <Link href={'/admin/attributes/' + item.id + '/values'}
-                                                className="col-span-2 btn btn-accent btn-outline btn-xs ">Values</Link>
-                                      </div>
-                                  </th>
+                                 <th>
+                                    <div className="grid grid-cols-2 gap-2 items-center">
+                                       <Link
+                                          href={'/admin/attributes/' + item.id + '/edit'}
+                                          className="btn btn-info btn-outline btn-xs"
+                                       >
+                                          Edit
+                                       </Link>
+                                       <button
+                                          onClick={() => handleDelete(item.id)}
+                                          className="btn btn-error btn-outline btn-xs"
+                                       >
+                                          Delete
+                                       </button>
+                                       <Link
+                                          href={'/admin/attributes/' + item.id + '/values'}
+                                          className="col-span-2 btn btn-accent btn-outline btn-xs "
+                                       >
+                                          Values
+                                       </Link>
+                                    </div>
+                                 </th>
                               </motion.tr>
                            ))}
                         </motion.tbody>
                      </table>
-                      {(data.prev_page_url || data.next_page_url) && (
-                          <div className="join grid grid-cols-2 mt-4">
-                              <button
-                                  disabled={!data.prev_page_url}
-                                  onClick={() => setUrl(data.prev_page_url)}
-                                  className="join-item btn btn-outline"
-                              >
-                                  Previous page
-                              </button>
-                              <button
-                                  disabled={!data.next_page_url}
+                     {(data.prev_page_url || data.next_page_url) && (
+                        <div className="join grid grid-cols-2 mt-4">
+                           <button
+                              disabled={!data.prev_page_url}
+                              onClick={() => setUrl(data.prev_page_url)}
+                              className="join-item btn btn-outline"
+                           >
+                              Previous page
+                           </button>
+                           <button
+                              disabled={!data.next_page_url}
                               onClick={() => setUrl(data.next_page_url)}
                               className="join-item btn btn-outline"
                            >

@@ -132,6 +132,6 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
       isFetching,
       isValidating,
       refetch,
-       getCsrfToken,
+      getCsrfToken,
    };
 };

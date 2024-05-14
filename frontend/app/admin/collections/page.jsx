@@ -6,7 +6,7 @@ import axios from '../../lib/axios';
 import Link from 'next/link';
 import LoadingSpinner from '../../ui/LoadingSpinner';
 import { motion } from 'framer-motion';
-import {toast, ToastContainer} from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function Collections() {
@@ -34,21 +34,21 @@ export default function Collections() {
    const fetchData = () => {
       axios
          .get(url, {
-          params: {
-              perPage: 5,
-          },
-      })
+            params: {
+               perPage: 5,
+            },
+         })
          .then((response) => {
             setData(response.data);
          })
          .catch((error) => {
-              toast.error(error.response.data.message, {
-                  autoClose: 1000,
-                  position: 'bottom-right',
-                  hideProgressBar: true,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-              })
+            toast.error(error.response.data.message, {
+               autoClose: 1000,
+               position: 'bottom-right',
+               hideProgressBar: true,
+               closeOnClick: true,
+               pauseOnHover: true,
+            });
          })
          .finally(() => setIsLoading(false));
    };
@@ -68,29 +68,29 @@ export default function Collections() {
       show: { opacity: 1 },
    };
 
-    const handleDelete = (id) => {
-        axios
-        .delete(`/api/v1/admin/collections/${id}`)
-        .then((response) => {
+   const handleDelete = (id) => {
+      axios
+         .delete(`/api/v1/admin/collections/${id}`)
+         .then((response) => {
             toast.success(response.data.message, {
-                autoClose: 1000,
-                position: 'bottom-right',
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
+               autoClose: 1000,
+               position: 'bottom-right',
+               hideProgressBar: true,
+               closeOnClick: true,
+               pauseOnHover: true,
             });
             fetchData();
-        })
-        .catch((error) => {
+         })
+         .catch((error) => {
             toast.error(error.response.data.message, {
-                autoClose: 1000,
-                position: 'bottom-right',
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
-            })
-        });
-    };
+               autoClose: 1000,
+               position: 'bottom-right',
+               hideProgressBar: true,
+               closeOnClick: true,
+               pauseOnHover: true,
+            });
+         });
+   };
 
    useEffect(() => {
       fetchData();
@@ -159,9 +159,11 @@ export default function Collections() {
                                  </td>
                                  <th>
                                     <button
-                                        onClick={() => handleDelete(item.id)}
-                                        className="btn btn-error btn-outline btn-xs"
-                                    >Delete</button>
+                                       onClick={() => handleDelete(item.id)}
+                                       className="btn btn-error btn-outline btn-xs"
+                                    >
+                                       Delete
+                                    </button>
                                  </th>
                               </motion.tr>
                            ))}

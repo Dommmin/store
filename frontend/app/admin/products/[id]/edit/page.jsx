@@ -9,12 +9,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import LoadingSpinner from '../../../../ui/LoadingSpinner';
 import Images from './partials/Images';
 import Attributes from './partials/Attributes';
-import {useRouter} from 'next/navigation';
-import {ChevronDoubleLeftIcon} from '@heroicons/react/24/outline';
+import { useRouter } from 'next/navigation';
+import { ChevronDoubleLeftIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
 export default function Edit({ params }) {
-    const router = useRouter();
+   const router = useRouter();
    const [isLoading, setIsLoading] = useState(true);
    const [errors, setErrors] = useState({});
    const [selectedTab, setSelectedTab] = useState('General');
@@ -27,8 +27,8 @@ export default function Edit({ params }) {
    const [brand, setBrand] = useState('');
    const [collection, setCollection] = useState('');
    const [name, setName] = useState('');
-    const [model, setModel] = useState('');
-    const [description, setDescription] = useState('');
+   const [model, setModel] = useState('');
+   const [description, setDescription] = useState('');
    const [shortDescription, setShortDescription] = useState('');
    const [price, setPrice] = useState(0);
 
@@ -55,18 +55,17 @@ export default function Edit({ params }) {
       });
    };
 
-    const removeAttribute = (index) => {
-        const newAttributes = [...selectedAttributes];
-        newAttributes.splice(index, 1);
-        setSelectedAttributes(newAttributes);
+   const removeAttribute = (index) => {
+      const newAttributes = [...selectedAttributes];
+      newAttributes.splice(index, 1);
+      setSelectedAttributes(newAttributes);
 
-        const newAttributeValues = [...attributeValues];
-        newAttributeValues.splice(index, 1);
-        setAttributeValues(newAttributeValues);
-    };
+      const newAttributeValues = [...attributeValues];
+      newAttributeValues.splice(index, 1);
+      setAttributeValues(newAttributeValues);
+   };
 
-
-    const updateValue = (index, value) => {
+   const updateValue = (index, value) => {
       const newAttributes = [...selectedAttributes];
       newAttributes[index].value = value;
       setSelectedAttributes(newAttributes);
@@ -94,9 +93,9 @@ export default function Edit({ params }) {
       setImages((prevImages) => prevImages.filter((image, i) => i !== index));
    };
 
-    function getImageUrl(path) {
-        return 'http://localhost:9099/app/' + path;
-    }
+   function getImageUrl(path) {
+      return 'http://localhost:9099/app/' + path;
+   }
 
    const fetchProduct = () => {
       axios
@@ -110,8 +109,8 @@ export default function Edit({ params }) {
             setBrand(res.brand_id);
             setCollection(res.collection_id || '');
             setName(res.name);
-            setModel(res.model)
-            setPrice(res.price)
+            setModel(res.model);
+            setPrice(res.price);
             setShortDescription(res.short_description);
             setDescription(res.description);
             setPrice(res.price);
@@ -120,7 +119,7 @@ export default function Edit({ params }) {
                res.images.map((image) =>
                   axios.get(getImageUrl(image.path), { responseType: 'blob' }).then((response) => {
                      const blob = new Blob([response.data], { type: response.headers['content-type'] });
-                      return new File([blob], image.name, { type: blob.type });
+                     return new File([blob], image.name, { type: blob.type });
                   }),
                ),
             ).then((imageFiles) => {
@@ -128,7 +127,9 @@ export default function Edit({ params }) {
             });
 
             Promise.all(
-               res.attributes.map((attribute) => axios.get('/api/v1/admin/attributes/' + attribute + '/attributeValues')),
+               res.attributes.map((attribute) =>
+                  axios.get('/api/v1/admin/attributes/' + attribute + '/attributeValues'),
+               ),
             ).then((response) => {
                const newSelectedAttributes = res.attributes.map((attribute) => ({
                   attribute: attribute.id,
@@ -198,7 +199,7 @@ export default function Edit({ params }) {
       const formData = new FormData();
 
       formData.append('name', name);
-       formData.append('model', model);
+      formData.append('model', model);
       formData.append('description', description);
       formData.append('short_description', shortDescription);
       formData.append('price', price);
@@ -241,90 +242,90 @@ export default function Edit({ params }) {
    if (isLoading) return <LoadingSpinner className="h-screen" />;
 
    return (
-       <>
-           <div className="p-4">
-               <Link href={'/admin/products'} className="btn btn-default btn-outline">
-                   <ChevronDoubleLeftIcon className="h-6"/>
-               </Link>
-           </div>
-           <Wrapper className="space-y-4" maxWidth="max-w-[1920px]" paddingY="py-4">
-               <ToastContainer position={'bottom-right'} autoClose={1500}/>
-               <div role="tablist" className="tabs tabs-lifted tabs-lg overflow-auto">
-                   <a
-                       role="tab"
-                       className={`tab ${selectedTab === 'General' ? 'tab-active text-info/80' : ''}`}
-                       onClick={() => setSelectedTab('General')}
-                   >
-                       General
-                   </a>
-                   <a
-                       role="tab"
-                       className={`tab ${selectedTab === 'Attributes' ? 'tab-active text-info/80' : ''}`}
-                       onClick={() => setSelectedTab('Attributes')}
-                   >
-                       Attributes
-                   </a>
-                   <a
-                       role="tab"
-                       className={`tab ${selectedTab === 'Images' ? 'tab-active text-info/80' : ''}`}
-                       onClick={() => setSelectedTab('Images')}
-                   >
-                       Images
-                   </a>
-               </div>
+      <>
+         <div className="p-4">
+            <Link href={'/admin/products'} className="btn btn-default btn-outline">
+               <ChevronDoubleLeftIcon className="h-6" />
+            </Link>
+         </div>
+         <Wrapper className="space-y-4" maxWidth="max-w-[1920px]" paddingY="py-4">
+            <ToastContainer position={'bottom-right'} autoClose={1500} />
+            <div role="tablist" className="tabs tabs-lifted tabs-lg overflow-auto">
+               <a
+                  role="tab"
+                  className={`tab ${selectedTab === 'General' ? 'tab-active text-info/80' : ''}`}
+                  onClick={() => setSelectedTab('General')}
+               >
+                  General
+               </a>
+               <a
+                  role="tab"
+                  className={`tab ${selectedTab === 'Attributes' ? 'tab-active text-info/80' : ''}`}
+                  onClick={() => setSelectedTab('Attributes')}
+               >
+                  Attributes
+               </a>
+               <a
+                  role="tab"
+                  className={`tab ${selectedTab === 'Images' ? 'tab-active text-info/80' : ''}`}
+                  onClick={() => setSelectedTab('Images')}
+               >
+                  Images
+               </a>
+            </div>
 
-               {selectedTab === 'General' && (
-                   <General
-                       categories={categories}
-                       brands={brands}
-                       collections={collections}
-                       name={name}
-                       setName={setName}
-                       description={description}
-                       setDescription={setDescription}
-                       shortDescription={shortDescription}
-                       setShortDescription={setShortDescription}
-                       price={price}
-                       setPrice={setPrice}
-                       brand={brand}
-                       setBrand={setBrand}
-                       category={category}
-                       setCategory={setCategory}
-                       collection={collection}
-                       setCollection={setCollection}
-                       model={model}
-                       setModel={setModel}
-                   />
-               )}
-               {selectedTab === 'Attributes' && (
-                   <Attributes
-                       attributes={attributes}
-                       attributeValues={attributeValues}
-                       selectedAttributes={selectedAttributes}
-                       setSelectedAttributes={setSelectedAttributes}
-                       updateAttribute={updateAttribute}
-                       updateValue={updateValue}
-                       addAttribute={addAttribute}
-                       removeAttribute={removeAttribute}
-                   />
-               )}
-               {selectedTab === 'Images' && (
-                   <Images
-                       images={images}
-                       handleDroppedFiles={handleDroppedFiles}
-                       removeImage={removeImage}
-                       setImages={setImages}
-                   />
-               )}
+            {selectedTab === 'General' && (
+               <General
+                  categories={categories}
+                  brands={brands}
+                  collections={collections}
+                  name={name}
+                  setName={setName}
+                  description={description}
+                  setDescription={setDescription}
+                  shortDescription={shortDescription}
+                  setShortDescription={setShortDescription}
+                  price={price}
+                  setPrice={setPrice}
+                  brand={brand}
+                  setBrand={setBrand}
+                  category={category}
+                  setCategory={setCategory}
+                  collection={collection}
+                  setCollection={setCollection}
+                  model={model}
+                  setModel={setModel}
+               />
+            )}
+            {selectedTab === 'Attributes' && (
+               <Attributes
+                  attributes={attributes}
+                  attributeValues={attributeValues}
+                  selectedAttributes={selectedAttributes}
+                  setSelectedAttributes={setSelectedAttributes}
+                  updateAttribute={updateAttribute}
+                  updateValue={updateValue}
+                  addAttribute={addAttribute}
+                  removeAttribute={removeAttribute}
+               />
+            )}
+            {selectedTab === 'Images' && (
+               <Images
+                  images={images}
+                  handleDroppedFiles={handleDroppedFiles}
+                  removeImage={removeImage}
+                  setImages={setImages}
+               />
+            )}
 
-               <div className="bottom-2 right-2 space-x-2">
-                   <div className="flex justify-center pt-4">
-                       <button onClick={handleUpdate} className="w-full max-w-3xl btn btn-success text-white">
-                           Update
-                       </button>
-                   </div>
+            <div className="bottom-2 right-2 space-x-2">
+               <div className="flex justify-center pt-4">
+                  <button onClick={handleUpdate} className="w-full max-w-3xl btn btn-success text-white">
+                     Update
+                  </button>
                </div>
-           </Wrapper>
-       </>
+            </div>
+         </Wrapper>
+      </>
    );
 }

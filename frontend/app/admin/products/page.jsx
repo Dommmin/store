@@ -16,8 +16,8 @@ export default function Products() {
    const [selectedItems, setSelectedItems] = useState([]);
    const [sortBy, setSortBy] = useState('id');
    const [sortOrder, setSortOrder] = useState('desc');
-    const [perPage, setPerPage] = useState(10);
-    const [action, setAction] = useState('');
+   const [perPage, setPerPage] = useState(10);
+   const [action, setAction] = useState('');
 
    const handleSelectAll = (event) => {
       if (event.target.checked) {
@@ -102,8 +102,8 @@ export default function Products() {
    const handleMassAction = () => {
       if (!selectedItems.length) return;
 
-       console.log(selectedItems);
-   }
+      console.log(selectedItems);
+   };
 
    useEffect(() => {
       fetchData();
@@ -116,13 +116,19 @@ export default function Products() {
          <h1 className="text-3xl font-bold p-2">Products</h1>
          <div className="flex space-x-4 justify-between p-2 max-w-[1920px] mx-auto sm:px-6 lg:px-8">
             <div className="flex w-full max-w-xs space-x-2">
-               <select onChange={(e) => setAction(e.target.value)} value={action} className="select select-bordered w-full max-w-xs">
+               <select
+                  onChange={(e) => setAction(e.target.value)}
+                  value={action}
+                  className="select select-bordered w-full max-w-xs"
+               >
                   <option disabled value="">
                      Mass actions
                   </option>
                   <option value="delete">Delete selected</option>
                </select>
-               <button onClick={handleMassAction} className="btn btn-default">Apply</button>
+               <button onClick={handleMassAction} className="btn btn-default">
+                  Apply
+               </button>
             </div>
             <Link href={'/admin/products/create'} className="btn btn-success btn-wide text-white">
                Create Product
@@ -154,8 +160,11 @@ export default function Products() {
                               <th onClick={() => handleSort('price')} className="cursor-pointer hover:bg-base-200">
                                  Price {sortBy === 'price' && (sortOrder === 'asc' ? '↑' : '↓')}
                               </th>
-                              <th onClick={() => handleSort('is_published')} className="cursor-pointer hover:bg-base-200">
-                                  Published {sortBy === 'is_published' && (sortOrder === 'asc' ? '↑' : '↓')}
+                              <th
+                                 onClick={() => handleSort('is_published')}
+                                 className="cursor-pointer hover:bg-base-200"
+                              >
+                                 Published {sortBy === 'is_published' && (sortOrder === 'asc' ? '↑' : '↓')}
                               </th>
                               <th>Action</th>
                            </tr>
@@ -229,12 +238,24 @@ export default function Products() {
                                  </td>
                                  <td>
                                     <div className="grid grid-cols-2 gap-2 items-center">
-                                        <Link href={'/admin/products/' + item.id + '/edit'} className="btn btn-info btn-outline btn-xs">Edit</Link>
-                                        <button
-                                            onClick={() => handleDelete(item.id)}
-                                            className="btn btn-error btn-outline btn-xs"
-                                        >Delete</button>
-                                        <Link href={'/admin/products/' + item.id + '/associations'} className="col-span-2 btn btn-accent btn-outline btn-xs ">Associations</Link>
+                                       <Link
+                                          href={'/admin/products/' + item.id + '/edit'}
+                                          className="btn btn-info btn-outline btn-xs"
+                                       >
+                                          Edit
+                                       </Link>
+                                       <button
+                                          onClick={() => handleDelete(item.id)}
+                                          className="btn btn-error btn-outline btn-xs"
+                                       >
+                                          Delete
+                                       </button>
+                                       <Link
+                                          href={'/admin/products/' + item.id + '/associations'}
+                                          className="col-span-2 btn btn-accent btn-outline btn-xs "
+                                       >
+                                          Associations
+                                       </Link>
                                     </div>
                                  </td>
                               </motion.tr>

@@ -8,12 +8,12 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Images from './partials/Images';
 import Attributes from './partials/Attributes';
-import {useRouter} from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import {ChevronDoubleLeftIcon} from '@heroicons/react/24/outline';
+import { ChevronDoubleLeftIcon } from '@heroicons/react/24/outline';
 
 export default function Create() {
-    const router = useRouter();
+   const router = useRouter();
    const [selectedTab, setSelectedTab] = useState('General');
 
    const [categories, setCategories] = useState([]);
@@ -58,17 +58,17 @@ export default function Create() {
       setSelectedAttributes(newAttributes);
    };
 
-    const removeAttribute = (index) => {
-        const newAttributes = [...selectedAttributes];
-        newAttributes.splice(index, 1);
-        setSelectedAttributes(newAttributes);
+   const removeAttribute = (index) => {
+      const newAttributes = [...selectedAttributes];
+      newAttributes.splice(index, 1);
+      setSelectedAttributes(newAttributes);
 
-        const newAttributeValues = [...attributeValues];
-        newAttributeValues.splice(index, 1);
-        setAttributeValues(newAttributeValues);
-    };
+      const newAttributeValues = [...attributeValues];
+      newAttributeValues.splice(index, 1);
+      setAttributeValues(newAttributeValues);
+   };
 
-    const handleDroppedFiles = (files) => {
+   const handleDroppedFiles = (files) => {
       Array.from(files).forEach((file) => {
          if (!file.type.startsWith('image/')) {
             toast.error(`"${file.name}" is not an image.`);
@@ -176,90 +176,90 @@ export default function Create() {
    }, []);
 
    return (
-       <>
-           <div className="p-4">
-               <Link href={'/admin/products'} className="btn btn-default btn-outline">
-                   <ChevronDoubleLeftIcon className="h-6"/>
-               </Link>
-           </div>
-           <Wrapper className="space-y-4" maxWidth="max-w-[1920px]" paddingY="py-4">
-               <ToastContainer position={'bottom-right'} autoClose={1500}/>
-               <div role="tablist" className="tabs tabs-lifted tabs-lg overflow-auto px-2">
-                   <a
-                       role="tab"
-                       className={`tab ${selectedTab === 'General' ? 'tab-active text-info/80' : ''}`}
-                       onClick={() => setSelectedTab('General')}
-                   >
-                       General
-                   </a>
-                   <a
-                       role="tab"
-                       className={`tab ${selectedTab === 'Attributes' ? 'tab-active text-info/80' : ''}`}
-                       onClick={() => setSelectedTab('Attributes')}
-                   >
-                       Attributes
-                   </a>
-                   <a
-                       role="tab"
-                       className={`tab ${selectedTab === 'Images' ? 'tab-active text-info/80' : ''}`}
-                       onClick={() => setSelectedTab('Images')}
-                   >
-                       Images
-                   </a>
-               </div>
+      <>
+         <div className="p-4">
+            <Link href={'/admin/products'} className="btn btn-default btn-outline">
+               <ChevronDoubleLeftIcon className="h-6" />
+            </Link>
+         </div>
+         <Wrapper className="space-y-4" maxWidth="max-w-[1920px]" paddingY="py-4">
+            <ToastContainer position={'bottom-right'} autoClose={1500} />
+            <div role="tablist" className="tabs tabs-lifted tabs-lg overflow-auto px-2">
+               <a
+                  role="tab"
+                  className={`tab ${selectedTab === 'General' ? 'tab-active text-info/80' : ''}`}
+                  onClick={() => setSelectedTab('General')}
+               >
+                  General
+               </a>
+               <a
+                  role="tab"
+                  className={`tab ${selectedTab === 'Attributes' ? 'tab-active text-info/80' : ''}`}
+                  onClick={() => setSelectedTab('Attributes')}
+               >
+                  Attributes
+               </a>
+               <a
+                  role="tab"
+                  className={`tab ${selectedTab === 'Images' ? 'tab-active text-info/80' : ''}`}
+                  onClick={() => setSelectedTab('Images')}
+               >
+                  Images
+               </a>
+            </div>
 
-               {selectedTab === 'General' && (
-                   <General
-                       categories={categories}
-                       brands={brands}
-                       collections={collections}
-                       name={name}
-                       setName={setName}
-                       description={description}
-                       setDescription={setDescription}
-                       shortDescription={shortDescription}
-                       setShortDescription={setShortDescription}
-                       price={price}
-                       setPrice={setPrice}
-                       brand={brand}
-                       setBrand={setBrand}
-                       category={category}
-                       setCategory={setCategory}
-                       collection={collection}
-                       setCollection={setCollection}
-                       model={model}
-                       setModel={setModel}
-                   />
-               )}
-               {selectedTab === 'Attributes' && (
-                   <Attributes
-                       attributes={attributes}
-                       attributeValues={attributeValues}
-                       selectedAttributes={selectedAttributes}
-                       setSelectedAttributes={setSelectedAttributes}
-                       updateAttribute={updateAttribute}
-                       updateValue={updateValue}
-                       addAttribute={addAttribute}
-                       removeAttribute={removeAttribute}
-                   />
-               )}
-               {selectedTab === 'Images' && (
-                   <Images
-                       images={images}
-                       handleDroppedFiles={handleDroppedFiles}
-                       removeImage={removeImage}
-                       setImages={setImages}
-                   />
-               )}
+            {selectedTab === 'General' && (
+               <General
+                  categories={categories}
+                  brands={brands}
+                  collections={collections}
+                  name={name}
+                  setName={setName}
+                  description={description}
+                  setDescription={setDescription}
+                  shortDescription={shortDescription}
+                  setShortDescription={setShortDescription}
+                  price={price}
+                  setPrice={setPrice}
+                  brand={brand}
+                  setBrand={setBrand}
+                  category={category}
+                  setCategory={setCategory}
+                  collection={collection}
+                  setCollection={setCollection}
+                  model={model}
+                  setModel={setModel}
+               />
+            )}
+            {selectedTab === 'Attributes' && (
+               <Attributes
+                  attributes={attributes}
+                  attributeValues={attributeValues}
+                  selectedAttributes={selectedAttributes}
+                  setSelectedAttributes={setSelectedAttributes}
+                  updateAttribute={updateAttribute}
+                  updateValue={updateValue}
+                  addAttribute={addAttribute}
+                  removeAttribute={removeAttribute}
+               />
+            )}
+            {selectedTab === 'Images' && (
+               <Images
+                  images={images}
+                  handleDroppedFiles={handleDroppedFiles}
+                  removeImage={removeImage}
+                  setImages={setImages}
+               />
+            )}
 
-               <div className="bottom-2 right-2 space-x-2">
-                   <div className="flex justify-center pt-4">
-                       <button onClick={handleSave} className="w-full max-w-3xl btn btn-success text-white">
-                           Save
-                       </button>
-                   </div>
+            <div className="bottom-2 right-2 space-x-2">
+               <div className="flex justify-center pt-4">
+                  <button onClick={handleSave} className="w-full max-w-3xl btn btn-success text-white">
+                     Save
+                  </button>
                </div>
-           </Wrapper>
-       </>
+            </div>
+         </Wrapper>
+      </>
    );
 }

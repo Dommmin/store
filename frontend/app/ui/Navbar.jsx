@@ -33,7 +33,7 @@ export default function Navbar() {
                   </div>
 
                   <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                     <NavLink href="/products" active={(pathname.startsWith('/products') || pathname.startsWith('/p/'))}>
+                     <NavLink href="/products" active={pathname.startsWith('/products') || pathname.startsWith('/p/')}>
                         Products
                      </NavLink>
                   </div>
@@ -128,7 +128,10 @@ export default function Navbar() {
                <ResponsiveNavLink href="/" active={pathname === '/'}>
                   Home
                </ResponsiveNavLink>
-               <ResponsiveNavLink href="/products" active={(pathname.startsWith('/products') || pathname.startsWith('/p/'))}>
+               <ResponsiveNavLink
+                  href="/products"
+                  active={pathname.startsWith('/products') || pathname.startsWith('/p/')}
+               >
                   Products
                </ResponsiveNavLink>
             </div>

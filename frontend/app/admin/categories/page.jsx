@@ -6,7 +6,7 @@ import axios from '../../lib/axios';
 import Link from 'next/link';
 import LoadingSpinner from '../../ui/LoadingSpinner';
 import { motion } from 'framer-motion';
-import {toast, ToastContainer} from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function Categories() {
@@ -34,10 +34,10 @@ export default function Categories() {
    const fetchData = () => {
       axios
          .get(url, {
-          params: {
-              perPage: 5,
-          },
-      })
+            params: {
+               perPage: 5,
+            },
+         })
          .then((response) => {
             setData(response.data);
          })
@@ -62,32 +62,31 @@ export default function Categories() {
       show: { opacity: 1 },
    };
 
-    const handleDelete = (id) => {
-        axios
-        .delete(`/api/v1/admin/categories/${id}`)
-        .then((response) => {
+   const handleDelete = (id) => {
+      axios
+         .delete(`/api/v1/admin/categories/${id}`)
+         .then((response) => {
             toast.success(response.data.message, {
-                autoClose: 1000,
-                position: 'bottom-right',
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
+               autoClose: 1000,
+               position: 'bottom-right',
+               hideProgressBar: true,
+               closeOnClick: true,
+               pauseOnHover: true,
             });
             fetchData();
-        })
-        .catch((error) => {
+         })
+         .catch((error) => {
             toast.error(error.response.data.message, {
-                autoClose: 1000,
-                position: 'bottom-right',
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
-            })
-        });
-    };
+               autoClose: 1000,
+               position: 'bottom-right',
+               hideProgressBar: true,
+               closeOnClick: true,
+               pauseOnHover: true,
+            });
+         });
+   };
 
-
-    useEffect(() => {
+   useEffect(() => {
       fetchData();
    }, [url]);
 
@@ -95,7 +94,7 @@ export default function Categories() {
 
    return (
       <>
-          <ToastContainer />
+         <ToastContainer />
          <h1 className="text-3xl font-bold p-2">Categories</h1>
          <div className="flex justify-end p-2 max-w-6xl mx-auto sm:px-6 lg:px-8">
             <Link href={'/admin/categories/create'} className="btn btn-success btn-wide text-white">
@@ -154,9 +153,11 @@ export default function Categories() {
                                  </td>
                                  <th>
                                     <button
-                                        onClick={() => handleDelete(item.id)}
-                                        className="btn btn-error btn-outline btn-xs"
-                                    >Delete</button>
+                                       onClick={() => handleDelete(item.id)}
+                                       className="btn btn-error btn-outline btn-xs"
+                                    >
+                                       Delete
+                                    </button>
                                  </th>
                               </motion.tr>
                            ))}
