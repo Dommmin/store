@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Observers\UserObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Cashier\Cashier;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,5 +27,7 @@ class AppServiceProvider extends ServiceProvider
         Model::shouldBeStrict( ! app()->isProduction());
 
         User::observe(UserObserver::class);
+
+        Cashier::calculateTaxes();
     }
 }

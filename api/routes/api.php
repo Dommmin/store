@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\v1\BookmarkController;
 use App\Http\Controllers\Api\v1\BrandController;
 use App\Http\Controllers\Api\v1\CartController;
 use App\Http\Controllers\Api\v1\CategoryController;
+use App\Http\Controllers\Api\v1\PaymentController;
 use App\Http\Controllers\Api\v1\ProductController;
 use App\Http\Controllers\Api\v1\ReviewController;
 use App\Http\Controllers\Api\v1\SearchController;
@@ -30,6 +31,8 @@ Route::post('cart-items/remove', [CartController::class, 'remove']);
 Route::get('cart-items/count', [CartController::class, 'count']);
 Route::get('cart-items/total', [CartController::class, 'totalPrice']);
 Route::get('bookmarks/count', [BookmarkController::class, 'count']);
+
+Route::post('checkout', [PaymentController::class, 'checkout']);
 
 Route::get('products/{product}/variants', [ProductController::class, 'variants']);
 Route::get('products/{product}/ratings', [ReviewController::class, 'ratings']);
