@@ -1,7 +1,7 @@
 'use client';
 
 import { Dialog, Transition } from '@headlessui/react';
-import { usePathname, useSearchParams } from 'next/navigation';
+import {usePathname, useRouter, useSearchParams} from 'next/navigation';
 import { Fragment, useEffect, useState } from 'react';
 import { MinusIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import CloseCart from '../ui/CloseCart';
@@ -9,13 +9,17 @@ import { ShoppingCartIcon } from '@heroicons/react/16/solid';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useCart } from '../hooks/cart';
+import axios from '../lib/axios';
+import LoadingDots from '../ui/LoadingDots';
 
 export default function CartMenu({ className = '' }) {
+    const router = useRouter();
    const pathname = usePathname();
    const searchParams = useSearchParams();
    const [isOpen, setIsOpen] = useState(false);
    const openCart = () => setIsOpen(true);
    const closeCart = () => setIsOpen(false);
+   const [isLoading, setIsLoading] = useState(false);
 
    const {
       cartItems,
@@ -26,6 +30,19 @@ export default function CartMenu({ className = '' }) {
       decrementQuantity,
       totalPrice,
    } = useCart();
+
+   const handleCheckout = () => {
+       setIsLoading(true);
+      axios
+        .post('/api/v1/checkout')
+        .then((response) => {
+          router.push(response.data.message);
+      })
+      .catch((error) => {
+          console.log(error);
+      })
+      .finally(() => setIsLoading(false));
+   };
 
    useEffect(() => {
       setIsOpen(false);
@@ -163,12 +180,19 @@ export default function CartMenu({ className = '' }) {
                                  {totalPrice}
                               </div>
                            </div>
-                           <Link
-                              href={'/checkout'}
-                              className="btn btn-info w-full p-3 text-center text-sm font-medium text-white"
-                           >
-                              Proceed to Checkout
-                           </Link>
+                           {/*<Link*/}
+                           {/*   href={'/checkout'}*/}
+                           {/*   className="btn btn-info w-full p-3 text-center text-sm font-medium text-white"*/}
+                           {/*>*/}
+                           {/*   Proceed to Checkout*/}
+                           {/*</Link>*/}
+                            <button
+                                disabled={isLoading}
+                                onClick={handleCheckout}
+                                className="btn btn-info w-full p-3 text-center text-sm font-medium text-white"
+                            >
+                                Proceed to Checkout
+                            </button>
                         </div>
                      )}
                   </Dialog.Panel>
