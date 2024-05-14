@@ -10,7 +10,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useCart } from '../hooks/cart';
 import axios from '../lib/axios';
-import LoadingDots from '../ui/LoadingDots';
 
 export default function CartMenu({ className = '' }) {
     const router = useRouter();
@@ -180,19 +179,19 @@ export default function CartMenu({ className = '' }) {
                                  {totalPrice}
                               </div>
                            </div>
-                           {/*<Link*/}
-                           {/*   href={'/checkout'}*/}
-                           {/*   className="btn btn-info w-full p-3 text-center text-sm font-medium text-white"*/}
-                           {/*>*/}
-                           {/*   Proceed to Checkout*/}
-                           {/*</Link>*/}
-                            <button
-                                disabled={isLoading}
-                                onClick={handleCheckout}
-                                className="btn btn-info w-full p-3 text-center text-sm font-medium text-white"
-                            >
-                                Proceed to Checkout
-                            </button>
+                           <Link
+                              href={'/checkout'}
+                              className="btn btn-info w-full p-3 text-center text-sm font-medium text-white"
+                           >
+                              Proceed to Checkout
+                           </Link>
+                           {/* <button*/}
+                           {/*     disabled={isLoading}*/}
+                           {/*     onClick={handleCheckout}*/}
+                           {/*     className="btn btn-info w-full p-3 text-center text-sm font-medium text-white"*/}
+                           {/* >*/}
+                           {/*     Proceed to Checkout*/}
+                           {/* </button>*/}
                         </div>
                      )}
                   </Dialog.Panel>
