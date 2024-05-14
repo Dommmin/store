@@ -17,7 +17,14 @@ return new class() extends Migration
         Schema::create('orders', function (Blueprint $table): void {
             $table->id();
             $table->uuid();
-            $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
+            $table->string('stripe_checkout_session_id');
+            $table->foreignIdFor(User::class)->constrained();
+            $table->integer('total')->default(0);
+            $table->string('currency')->default('pln');
+            $table->string('status')->default('pending');
+            $table->string('notes')->nullable();
+            $table->json('billing_address');
+            $table->json('shipping_address');
             $table->softDeletes();
             $table->timestamps();
         });
