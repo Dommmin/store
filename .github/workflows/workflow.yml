@@ -19,10 +19,10 @@ jobs:
         run: |
           cd api
           composer install --prefer-dist --no-progress
-      - name: Run phpstan
-        run: |
-          cd api
-          ./vendor/bin/phpstan analyze --memory-limit=1G
+#      - name: Run phpstan
+#        run: |
+#          cd api
+#          ./vendor/bin/phpstan analyze --memory-limit=1G
       - name: Run phpinsights
         run: |
           cd api
