@@ -10,7 +10,7 @@ import Link from 'next/link';
 import { ChevronDoubleLeftIcon } from '@heroicons/react/24/outline';
 
 export default function Create({ params }) {
-    const productUrl = params.url;
+   const productUrl = params.url;
    const router = useRouter();
    const [data, setData] = useState([]);
    const [isLoading, setIsLoading] = useState(true);
@@ -44,7 +44,7 @@ export default function Create({ params }) {
          })
          .catch((error) => {
             setErrors([...errors, error.response.data.message]);
-            console.log(error);
+            console.error(error);
          })
          .finally(() => setIsLoading(false));
    };
@@ -60,7 +60,7 @@ export default function Create({ params }) {
             router.push('/admin/products/' + productUrl + '/associations');
          })
          .catch((error) => {
-            console.log(error);
+            console.error(error);
          });
    };
 

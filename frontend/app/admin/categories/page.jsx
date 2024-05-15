@@ -42,7 +42,7 @@ export default function Categories() {
             setData(response.data);
          })
          .catch((error) => {
-            console.log(error);
+            console.error(error);
          })
          .finally(() => setIsLoading(false));
    };

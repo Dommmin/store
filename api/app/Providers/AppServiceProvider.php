@@ -24,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Model::shouldBeStrict( ! app()->isProduction());
+        Model::shouldBeStrict(! app()->isProduction());
 
         User::observe(UserObserver::class);
 

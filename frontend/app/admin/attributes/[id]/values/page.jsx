@@ -63,7 +63,7 @@ export default function AttributeValues({ params }) {
             setAttribute(response.data);
          })
          .catch((error) => {
-            console.log(error);
+            console.error(error);
          })
          .finally(() => setIsLoadingAttribute(false));
    };
@@ -84,7 +84,6 @@ export default function AttributeValues({ params }) {
    };
 
    const handleDelete = (id) => {
-      console.log(id);
       axios
          .delete('/api/v1/admin/attributes/' + params.id + '/attributeValues/' + id)
          .then((response) => {
@@ -117,8 +116,6 @@ export default function AttributeValues({ params }) {
    }, [url]);
 
    if (isLoading || isLoadingAttribute) return <LoadingSpinner className="h-screen" />;
-
-   console.log(attribute);
 
    return (
       <>

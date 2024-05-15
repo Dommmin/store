@@ -15,7 +15,7 @@ class ApiController extends Controller
     {
         $param = request()->get('include');
 
-        if ( ! isset($param)) {
+        if (! isset($param)) {
             return false;
         }
 

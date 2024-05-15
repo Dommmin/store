@@ -31,10 +31,7 @@ const RatingStats = ({ ratings, averageRating = 0, ratingsCount = 0, className =
                         <p>{5 - i}</p>
                      </div>
                      <div className="bg-gray-700 w-full h-2 rounded-full overflow-hidden">
-                        <div
-                           style={{ width: `${(rating / totalRatings) * 100}%` }}
-                           className="h-full bg-yellow-500"
-                        ></div>
+                        <div style={{ width: `${(rating / totalRatings) * 100}%` }} className="h-full bg-yellow-500" />
                      </div>
                      <div className="flex justify-start" style={{ width: '30px', textAlign: 'right' }}>
                         {rating}

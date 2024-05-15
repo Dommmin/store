@@ -17,7 +17,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, HasRoles, Notifiable, TwoFactorAuthenticatable, Billable;
+    use Billable, HasApiTokens, HasFactory, HasRoles, Notifiable, TwoFactorAuthenticatable;
 
     /**
      * The attributes that are mass assignable.
@@ -50,7 +50,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return Features::enabled(Features::twoFactorAuthentication())
             && $this->hasAttribute('two_factor_secret')
-            && null !== $this->two_factor_secret;
+            && $this->two_factor_secret !== null;
     }
 
     public function createProfilePhotoUrl(): string

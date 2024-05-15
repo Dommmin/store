@@ -55,7 +55,7 @@ class FileService
         $extension = $file->getClientOriginalExtension();
         $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $fileName = $originalName . '-' . uniqid() . '.' . $extension;
-        $path = '' === $directory ? $fileName : $directory . '/' . $fileName;
+        $path = $directory === '' ? $fileName : $directory . '/' . $fileName;
 
         Storage::disk($disk)->put($path, $file->get(), 'public');
 

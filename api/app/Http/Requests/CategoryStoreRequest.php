@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -23,7 +25,7 @@ class CategoryStoreRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'parent_id' => ['nullable', 'exists:categories,id']
+            'parent_id' => ['nullable', 'exists:categories,id'],
         ];
     }
 }

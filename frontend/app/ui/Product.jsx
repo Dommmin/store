@@ -2,14 +2,17 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import React from 'react';
 
-export default function Product({ product }) {
+export default function Product({ product, className = '' }) {
    return (
       <motion.div
          animate={{ opacity: 1 }}
          initial={{ opacity: 0 }}
          exit={{ opacity: 0 }}
          layout
-         className="relative max-w-xl rounded-lg overflow-hidden border border-natural-200 dark:border-neutral-700"
+         className={
+            'relative max-w-xl rounded-lg overflow-hidden border border-natural-200 dark:border-neutral-700 ' +
+            className
+         }
       >
          <Image
             className="w-full h-64 object-cover transition-all duration-200"

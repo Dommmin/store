@@ -1,7 +1,7 @@
 'use client';
 
 import { Dialog, Transition } from '@headlessui/react';
-import {usePathname, useRouter, useSearchParams} from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Fragment, useEffect, useState } from 'react';
 import { MinusIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import CloseCart from '../ui/CloseCart';
@@ -12,7 +12,7 @@ import { useCart } from '../hooks/cart';
 import axios from '../lib/axios';
 
 export default function CartMenu({ className = '' }) {
-    const router = useRouter();
+   const router = useRouter();
    const pathname = usePathname();
    const searchParams = useSearchParams();
    const [isOpen, setIsOpen] = useState(false);
@@ -31,16 +31,16 @@ export default function CartMenu({ className = '' }) {
    } = useCart();
 
    const handleCheckout = () => {
-       setIsLoading(true);
+      setIsLoading(true);
       axios
-        .post('/api/v1/checkout')
-        .then((response) => {
-          router.push(response.data.message);
-      })
-      .catch((error) => {
-          console.log(error);
-      })
-      .finally(() => setIsLoading(false));
+         .post('/api/v1/checkout')
+         .then((response) => {
+            router.push(response.data.message);
+         })
+         .catch((error) => {
+            console.error(error);
+         })
+         .finally(() => setIsLoading(false));
    };
 
    useEffect(() => {
@@ -122,7 +122,7 @@ export default function CartMenu({ className = '' }) {
                                           </button>
                                        </div>
                                        <Link
-                                          href={`/p/${item.product.id}`}
+                                          href={`/p/${item.product.url}`}
                                           onClick={closeCart}
                                           className="z-30 flex flex-row space-x-4"
                                        >
@@ -179,19 +179,19 @@ export default function CartMenu({ className = '' }) {
                                  {totalPrice}
                               </div>
                            </div>
-                           <Link
-                              href={'/checkout'}
+                           {/*<Link*/}
+                           {/*   href={'/checkout'}*/}
+                           {/*   className="btn btn-info w-full p-3 text-center text-sm font-medium text-white"*/}
+                           {/*>*/}
+                           {/*   Proceed to Checkout*/}
+                           {/*</Link>*/}
+                           <button
+                              disabled={isLoading}
+                              onClick={handleCheckout}
                               className="btn btn-info w-full p-3 text-center text-sm font-medium text-white"
                            >
                               Proceed to Checkout
-                           </Link>
-                           {/* <button*/}
-                           {/*     disabled={isLoading}*/}
-                           {/*     onClick={handleCheckout}*/}
-                           {/*     className="btn btn-info w-full p-3 text-center text-sm font-medium text-white"*/}
-                           {/* >*/}
-                           {/*     Proceed to Checkout*/}
-                           {/* </button>*/}
+                           </button>
                         </div>
                      )}
                   </Dialog.Panel>

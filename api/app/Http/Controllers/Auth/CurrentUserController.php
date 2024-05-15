@@ -20,7 +20,7 @@ class CurrentUserController extends Controller
             $request->password
         );
 
-        if ( ! $confirmed) {
+        if (! $confirmed) {
             throw ValidationException::withMessages([
                 'password' => __('The password is incorrect.'),
             ]);

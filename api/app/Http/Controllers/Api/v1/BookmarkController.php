@@ -13,7 +13,7 @@ class BookmarkController extends ApiController
 {
     public function index(Request $request)
     {
-        if ( ! $request->user()) {
+        if (! $request->user()) {
             return [];
         }
 
@@ -27,7 +27,7 @@ class BookmarkController extends ApiController
     {
         $validated = $request->validated();
 
-        if ( ! $request->user()) {
+        if (! $request->user()) {
             return null;
         }
 
@@ -47,7 +47,7 @@ class BookmarkController extends ApiController
 
     public function count(Request $request)
     {
-        if ( ! $request->user()) {
+        if (! $request->user()) {
             return null;
         }
 

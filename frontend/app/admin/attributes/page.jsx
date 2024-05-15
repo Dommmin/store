@@ -39,11 +39,10 @@ export default function Attributes() {
             },
          })
          .then((response) => {
-            console.log(response);
             setData(response.data);
          })
          .catch((error) => {
-            console.log(error);
+            console.error(error);
          })
          .finally(() => setIsLoading(false));
    };

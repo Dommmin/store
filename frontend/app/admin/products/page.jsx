@@ -51,7 +51,7 @@ export default function Products() {
             setData(response.data);
          })
          .catch((error) => {
-            console.log(error);
+            console.error(error);
          })
          .finally(() => setIsLoading(false));
    };
@@ -79,30 +79,30 @@ export default function Products() {
       }
 
       axios
-         .post(`/api/v1/admin/products/${item.id}/${action}`)
+         .post(`/api/v1/admin/products/${item.url}/${action}`)
          .then(() => {
             fetchData();
          })
          .catch((error) => {
-            console.log(error);
+            console.error(error);
          });
    };
 
-   const handleDelete = (id) => {
+   const handleDelete = (url) => {
       axios
-         .delete(`/api/v1/admin/products/${id}`)
+         .delete(`/api/v1/admin/products/${url}`)
          .then(() => {
             fetchData();
          })
          .catch((error) => {
-            console.log(error);
+            console.error(error);
          });
    };
 
    const handleMassAction = () => {
       if (!selectedItems.length) return;
 
-      console.log(selectedItems);
+      // TODO: Implement mass action
    };
 
    useEffect(() => {
@@ -197,7 +197,7 @@ export default function Products() {
                                  <td>
                                     <div className="flex items-center gap-3">
                                        <div className="avatar">
-                                          <Link href={`/p/${item.id}`} className="mask mask-squircle w-12 h-12">
+                                          <Link href={`/p/${item.url}`} className="mask mask-squircle w-12 h-12">
                                              <Image
                                                 src={item.main_image}
                                                 alt={item.name}
@@ -239,19 +239,19 @@ export default function Products() {
                                  <td>
                                     <div className="grid grid-cols-2 gap-2 items-center">
                                        <Link
-                                          href={'/admin/products/' + item.id + '/edit'}
+                                          href={'/admin/products/' + item.url + '/edit'}
                                           className="btn btn-info btn-outline btn-xs"
                                        >
                                           Edit
                                        </Link>
                                        <button
-                                          onClick={() => handleDelete(item.id)}
+                                          onClick={() => handleDelete(item.url)}
                                           className="btn btn-error btn-outline btn-xs"
                                        >
                                           Delete
                                        </button>
                                        <Link
-                                          href={'/admin/products/' + item.id + '/associations'}
+                                          href={'/admin/products/' + item.url + '/associations'}
                                           className="col-span-2 btn btn-accent btn-outline btn-xs "
                                        >
                                           Associations

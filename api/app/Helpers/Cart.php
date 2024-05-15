@@ -7,8 +7,6 @@ namespace App\Helpers;
 use App\Models\CartItem;
 use App\Models\Product;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Log;
-
 use function request;
 
 class Cart
@@ -63,8 +61,6 @@ class Cart
         $request = request();
         $cartItems = json_decode($request->cookie('cart_items', '[]'), true);
 
-        Log::info('cartItems', $cartItems);
-
         $newCartItems = [];
 
         foreach ($cartItems as $cartItem) {
@@ -75,8 +71,8 @@ class Cart
             ];
         }
 
-        if ( ! empty($newCartItems)) {
-            CartItem::create($newCartItems);
+        if (! empty($newCartItems)) {
+            CartItem::insert($newCartItems);
         }
     }
 }

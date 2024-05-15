@@ -12,7 +12,6 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Log;
 
 class CartController extends ApiController
 {
@@ -37,7 +36,7 @@ class CartController extends ApiController
 
     public function count(Request $request)
     {
-        if ( ! $request->user()) {
+        if (! $request->user()) {
             $cartItems = Cart::getCookieCartItems();
 
             return array_reduce(
@@ -80,7 +79,7 @@ class CartController extends ApiController
             }
         }
 
-        if ( ! $productFound) {
+        if (! $productFound) {
             $cartItems[] = [
                 'product_id' => $validated['product_id'],
                 'size_id' => $validated['size_id'],

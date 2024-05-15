@@ -162,7 +162,7 @@ export default function Register() {
                   type="submit"
                   disabled={isLoading}
                >
-                  {isLoading ? <span className="loading loading-spinner"></span> : 'sign up'}
+                  {isLoading ? <span className="loading loading-spinner" /> : 'sign up'}
                </button>
 
                <div className="text-center space-x-1 pt-2">

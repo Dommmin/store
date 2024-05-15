@@ -26,7 +26,7 @@ export default function AttributeEdit({ params }) {
             setDescription(response.data.description);
          })
          .catch((error) => {
-            console.log(error);
+            console.error(error);
          })
          .finally(() => setIsLoading(false));
    };

@@ -42,7 +42,7 @@ export default function Brands() {
             setData(response.data);
          })
          .catch((error) => {
-            console.log(error);
+            console.error(error);
          })
          .finally(() => setIsLoading(false));
    };
@@ -83,7 +83,7 @@ export default function Brands() {
                closeOnClick: true,
                pauseOnHover: true,
             });
-            console.log(error);
+            console.error(error);
          });
    };
 

@@ -14,7 +14,7 @@ import { ChevronDoubleLeftIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
 export default function Edit({ params }) {
-    const productUrl = params.url;
+   const productUrl = params.url;
    const router = useRouter();
    const [isLoading, setIsLoading] = useState(true);
    const [errors, setErrors] = useState({});
@@ -104,8 +104,6 @@ export default function Edit({ params }) {
          .then((response) => {
             const res = response.data.data;
 
-            console.log(res);
-
             setCategory(res.category_id);
             setBrand(res.brand_id);
             setCollection(res.collection_id || '');
@@ -129,7 +127,7 @@ export default function Edit({ params }) {
 
             Promise.all(
                res.attributes.map((attribute) =>
-                  axios.get('/api/v1/admin/attributes/' + attribute + '/attributeValues'),
+                  axios.get('/api/v1/admin/attributes/' + attribute.id + '/attributeValues'),
                ),
             ).then((response) => {
                const newSelectedAttributes = res.attributes.map((attribute) => ({
@@ -227,8 +225,8 @@ export default function Edit({ params }) {
          .then(() => {
             router.push('/admin/products');
          })
-         .catch((err) => {
-            console.log(err);
+         .catch((error) => {
+            console.error(error);
          });
    };
 

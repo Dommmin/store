@@ -13,7 +13,6 @@ export default function uploadAdapter(loader) {
                      'Content-Type': 'multipart/form-data',
                   },
                });
-               console.log(response);
                resolve({
                   default: response.data,
                });

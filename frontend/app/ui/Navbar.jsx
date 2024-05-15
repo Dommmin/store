@@ -74,6 +74,7 @@ export default function Navbar() {
 
                            <Dropdown.Content>
                               <Dropdown.Link href="/admin">Admin Panel</Dropdown.Link>
+                              <Dropdown.Link href="/orders">My Orders</Dropdown.Link>
                               <Dropdown.Link href="/profile">Profile</Dropdown.Link>
                               <Dropdown.Link href="#" onClick={logout}>
                                  Log Out
@@ -148,6 +149,7 @@ export default function Navbar() {
 
                      <div className="mt-3 space-y-1">
                         <ResponsiveNavLink href="/admin">Admin Panel</ResponsiveNavLink>
+                        <ResponsiveNavLink href="/orders">My Orders</ResponsiveNavLink>
                         <ResponsiveNavLink href="/profile">Profile</ResponsiveNavLink>
                         <ResponsiveNavLink href="#" onClick={logout}>
                            Log Out

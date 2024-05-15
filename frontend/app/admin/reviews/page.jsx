@@ -44,7 +44,7 @@ export default function Reviews() {
             setData(response.data);
          })
          .catch((error) => {
-            console.log(error);
+            console.error(error);
          })
          .finally(() => setIsLoading(false));
    };
@@ -85,7 +85,7 @@ export default function Reviews() {
                closeOnClick: true,
                pauseOnHover: true,
             });
-            console.log(error);
+            console.error(error);
          });
    };
 
@@ -102,7 +102,7 @@ export default function Reviews() {
             fetchData();
          })
          .catch((error) => {
-            console.log(error);
+            console.error(error);
          });
    };
 
@@ -111,8 +111,6 @@ export default function Reviews() {
    }, [url]);
 
    if (isLoading) return <LoadingSpinner className="h-screen" />;
-
-   console.log(data);
 
    return (
       <>
@@ -175,7 +173,10 @@ export default function Reviews() {
                                  <td>
                                     <div className="flex items-center gap-3">
                                        <ul className="avatar">
-                                          <Link href={'/p/' + item.product.id} className="mask mask-squircle w-12 h-12">
+                                          <Link
+                                             href={'/p/' + item.product.url}
+                                             className="mask mask-squircle w-12 h-12"
+                                          >
                                              <Image
                                                 src={item.product.main_image}
                                                 alt={item.product.title}

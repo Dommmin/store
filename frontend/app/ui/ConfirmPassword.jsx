@@ -50,7 +50,7 @@ export default function ConfirmPassword({
             refetch();
          })
          .catch((error) => {
-            console.log(error);
+            console.error(error);
             setPassword(password);
             setErrors(error.response.data.errors);
             setProcessing(false);

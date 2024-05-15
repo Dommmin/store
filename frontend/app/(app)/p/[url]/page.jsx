@@ -21,7 +21,7 @@ import StarRating from '../../../ui/StarRating';
 import Review from '../../../ui/Review';
 
 export default function Page({ params }) {
-   const productId = params.id;
+   const productUrl = params.url;
    const [isOpen, setIsOpen] = useState(false);
    const [file, setFile] = useState(null);
    const [filePreview, setFilePreview] = useState('');
@@ -33,7 +33,7 @@ export default function Page({ params }) {
    const [ratings, setRatings] = useState([]);
    const [isFetchingReviews, setIsFetchingReviews] = useState(true);
    const [isFetchingRatings, setIsFetchingRatings] = useState(true);
-   const [reviewUrl, setReviewUrl] = useState('/api/v1/products/' + productId + '/reviews');
+   const [reviewUrl, setReviewUrl] = useState('/api/v1/products/' + productUrl + '/reviews');
 
    const [size, setSize] = useState('');
    const [selectedImage, setSelectedImage] = useState('');
@@ -43,7 +43,7 @@ export default function Page({ params }) {
    const { user } = useAuth();
    const router = useRouter();
 
-   const url = `/api/v1/products/${productId}`;
+   const url = `/api/v1/products/${productUrl}`;
 
    const fetchProduct = async () => {
       const response = await axios.get(url);
@@ -69,7 +69,7 @@ export default function Page({ params }) {
 
    const fetchRatings = () => {
       axios
-         .get(`/api/v1/products/${productId}/ratings`)
+         .get(`/api/v1/products/${productUrl}/ratings`)
          .then((response) => {
             setRatings(response.data);
          })
@@ -142,7 +142,7 @@ export default function Page({ params }) {
       }
 
       axios
-         .post('/api/v1/products/' + productId + '/reviews', formData)
+         .post('/api/v1/products/' + productUrl + '/reviews', formData)
          .then(() => {
             setIsOpen(false);
             clearForm();
@@ -183,7 +183,7 @@ export default function Page({ params }) {
 
    useEffect(() => {
       mutate();
-   }, [productId, mutate]);
+   }, [productUrl, mutate]);
 
    const variants = {
       hidden: { opacity: 0 },
@@ -196,8 +196,6 @@ export default function Page({ params }) {
    };
 
    if (isLoading || isFetchingReviews || isFetchingRatings) return;
-
-   console.log(product.associations);
 
    return (
       <Wrapper>
@@ -249,7 +247,7 @@ export default function Page({ params }) {
                   <span className="px-4 py-2 bg-info/80 rounded-3xl">{product.formatted_price} PLN</span>
                </div>
 
-               <div className="border-t border-gray-400 mt-8 mb-8"></div>
+               <div className="border-t border-gray-400 mt-8 mb-8" />
 
                {product.sizes.length > 0 && (
                   <div className="mb-8">
@@ -290,7 +288,7 @@ export default function Page({ params }) {
                         <div className="flex space-x-2">
                            {value.map((item) => (
                               <div key={item.id}>
-                                 <Link href={`/p/${item.variant.id}`} prefetch={true}>
+                                 <Link href={`/p/${item.variant.url}`} prefetch={true}>
                                     <Image
                                        className="rounded-lg"
                                        width={100}

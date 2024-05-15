@@ -163,8 +163,8 @@ export default function Create() {
          .then(() => {
             router.push('/admin/products');
          })
-         .catch((err) => {
-            console.log(err);
+         .catch((error) => {
+            console.error(error);
          });
    };
 

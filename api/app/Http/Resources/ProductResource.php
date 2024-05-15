@@ -30,13 +30,12 @@ class ProductResource extends JsonResource
             'description' => $this->description,
             'short_description' => $this->short_description,
             'price' => $this->price,
-            'formatted_price' => $this->whenHas('price', fn() => $this->formatted_price),
+            'formatted_price' => $this->whenHas('price', fn () => $this->formatted_price),
             'url' => $this->url,
             'images' => $this->images,
             'main_image' => $this->main_image,
             'sizes' => $this->whenLoaded('sizes', fn () => SizeResource::collection($this->sizes)) ?? [],
             'attributes' => $this->whenLoaded('attributes', fn () => app(ProductService::class)->transformAttributes($this->attributes)),
-            'variants' => $this->whenLoaded('group', fn () => ProductResource::collection($this->group->products)) ?? [],
             'associations' => $this->whenLoaded('associations', function () {
                 return $this->associations->groupBy('attribute.name')->map(fn ($item) => $item->map(function ($association) {
                     return [

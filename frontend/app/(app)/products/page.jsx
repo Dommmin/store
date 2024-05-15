@@ -211,8 +211,8 @@ export default function Page() {
                   >
                      <AnimatePresence>
                         {data.data?.map((product) => (
-                           <Link href={`/p/${product.id}`} key={product.id}>
-                              <Product product={product} mutate={mutate} />
+                           <Link href={`/p/${product.url}`} key={product.id}>
+                              <Product product={product} />
                            </Link>
                         ))}
                      </AnimatePresence>
@@ -238,7 +238,7 @@ export default function Page() {
                </>
             )}
          </div>
-         <div className="hidden 2xl:col-span-2"></div>
+         <div className="hidden 2xl:col-span-2" />
       </div>
    );
 }

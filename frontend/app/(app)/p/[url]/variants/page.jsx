@@ -9,17 +9,18 @@ import { StarIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
 export default function Variants({ params }) {
+   const productUrl = params.url;
    const [variants, setVariants] = useState([]);
    const [isLoading, setIsLoading] = useState(true);
 
    const fetchVariants = () => {
       axios
-         .get('/api/v1/products/' + params.id + '/variants')
+         .get('/api/v1/products/' + productUrl + '/variants')
          .then((response) => {
             setVariants(response.data.data);
          })
          .catch((error) => {
-            console.log(error);
+            console.error(error);
          })
          .finally(() => setIsLoading(false));
    };
@@ -30,8 +31,6 @@ export default function Variants({ params }) {
 
    if (isLoading) return <LoadingSpinner className="h-screen" />;
 
-   console.log(variants);
-
    return (
       <Wrapper>
          <div className="space-y-4">
@@ -41,7 +40,7 @@ export default function Variants({ params }) {
                   key={variant.id}
                >
                   <Link
-                     href={'/p/' + variant.id}
+                     href={'/p/' + variant.url}
                      className="flex flex-col sm:flex-row space-x-0 space-y-2 sm:space-x-4 sm:space-y-0 p-4"
                   >
                      <Image

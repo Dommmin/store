@@ -6,6 +6,7 @@ namespace Database\Factories;
 
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Collection;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
@@ -42,6 +43,7 @@ class ProductFactory extends Factory
 
             'category_id' => Category::inRandomOrder()->firstOrCreate()->id,
             'brand_id' => Brand::inRandomOrder()->firstOrCreate()->id,
+            'collection_id' => $this->faker->boolean() ? Collection::inRandomOrder()->firstOrCreate()->id : null,
         ];
     }
 }

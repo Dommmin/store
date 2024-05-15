@@ -16,7 +16,7 @@ class TwoFactorAuthenticationController extends Controller
 
     public function challenge(TwoFactorLoginRequest $request)
     {
-        if ( ! $request->hasChallengedUser()) {
+        if (! $request->hasChallengedUser()) {
             abort(403);
         }
 

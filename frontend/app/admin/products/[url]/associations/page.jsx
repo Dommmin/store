@@ -9,12 +9,12 @@ import { motion } from 'framer-motion';
 import PageNotFound from '../../../../../app/not-found';
 
 export default function Associations({ params }) {
-    const productUrl = params.id;
+   const productUrl = params.url;
    const [data, setData] = useState([]);
    const [product, setProduct] = useState({});
    const [isLoading, setIsLoading] = useState(true);
    const [isLoadingProduct, setIsLoadingProduct] = useState(true);
-   const [url, setUrl] = useState('/api/v1/admin/products/' + params.id + '/associations');
+   const [url, setUrl] = useState('/api/v1/admin/products/' + productUrl + '/associations');
    const [selectedItems, setSelectedItems] = useState([]);
    const [errors, setErrors] = useState([]);
 
@@ -89,8 +89,6 @@ export default function Associations({ params }) {
    if (errors.length > 0) {
       return <PageNotFound />;
    }
-
-   console.log(errors);
 
    return (
       <>

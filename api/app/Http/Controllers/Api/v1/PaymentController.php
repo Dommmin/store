@@ -1,27 +1,34 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Api\ApiController;
 use App\Models\CartItem;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Stripe\Checkout\Session;
+use Stripe\Exception\ApiErrorException;
 use Stripe\Stripe;
 
 class PaymentController extends ApiController
 {
+    /**
+     * @throws ApiErrorException
+     */
     public function checkout(Request $request)
     {
         Stripe::setApiKey(env('STRIPE_SECRET'));
 
-//        $stripe = new StripeClient(env('STRIPE_SECRET'));
-//
-//        $stripe->coupons->create([
-//            'duration' => 'repeating',
-//            'id' => '10OFF',
-//            'percent_off' => 10,
-//            'duration_in_months' => 3,
-//        ]);
+        //        $stripe = new StripeClient(env('STRIPE_SECRET'));
+        //
+        //        $stripe->coupons->create([
+        //            'duration' => 'repeating',
+        //            'id' => '10OFF',
+        //            'percent_off' => 10,
+        //            'duration_in_months' => 3,
+        //        ]);
 
         $cartItems = CartItem::query()
             ->where('user_id', $request->user()->id)
@@ -62,10 +69,18 @@ class PaymentController extends ApiController
             'metadata' => [
                 'user_id' => $request->user()->id,
             ],
-            'success_url' => env('FRONTEND_URL') . '/success',
-            'cancel_url' => env('FRONTEND_URL') . '/cancel',
+            'success_url' => env('FRONTEND_URL') . '/success?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => env('FRONTEND_URL') . '/',
         ]);
 
         return $this->ok($session->url);
+    }
+
+    public function confirmation(Request $request)
+    {
+        return Order::query()
+            ->where('user_id', $request->user()->id)
+            ->where('stripe_checkout_session_id', $request->session_id)
+            ->firstOrFail();
     }
 }
