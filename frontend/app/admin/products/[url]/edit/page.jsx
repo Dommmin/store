@@ -14,6 +14,7 @@ import { ChevronDoubleLeftIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
 export default function Edit({ params }) {
+    const productUrl = params.url;
    const router = useRouter();
    const [isLoading, setIsLoading] = useState(true);
    const [errors, setErrors] = useState({});
@@ -99,7 +100,7 @@ export default function Edit({ params }) {
 
    const fetchProduct = () => {
       axios
-         .get(`/api/v1/admin/products/${params.id}`)
+         .get(`/api/v1/admin/products/${productUrl}`)
          .then((response) => {
             const res = response.data.data;
 
@@ -218,7 +219,7 @@ export default function Edit({ params }) {
       formData.append('_method', 'PUT');
 
       axios
-         .post('/api/v1/admin/products/' + params.id, formData, {
+         .post('/api/v1/admin/products/' + productUrl, formData, {
             headers: {
                'Content-Type': 'multipart/form-data',
             },

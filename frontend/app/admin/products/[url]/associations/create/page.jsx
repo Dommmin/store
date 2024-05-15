@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { ChevronDoubleLeftIcon } from '@heroicons/react/24/outline';
 
 export default function Create({ params }) {
+    const productUrl = params.url;
    const router = useRouter();
    const [data, setData] = useState([]);
    const [isLoading, setIsLoading] = useState(true);
@@ -20,7 +21,7 @@ export default function Create({ params }) {
 
    const fetchData = () => {
       axios
-         .get('/api/v1/admin/products/' + params.id + '/attributes')
+         .get('/api/v1/admin/products/' + params.url + '/attributes')
          .then((response) => {
             setData(response.data);
          })
@@ -35,7 +36,7 @@ export default function Create({ params }) {
          .get('/api/v1/admin/products', {
             params: {
                attribute: attribute,
-               product: params.id,
+               product: data.product.id,
             },
          })
          .then((response) => {
@@ -51,12 +52,12 @@ export default function Create({ params }) {
    const handleSubmit = (event) => {
       event.preventDefault();
       axios
-         .post('/api/v1/admin/products/' + params.id + '/associations', {
+         .post('/api/v1/admin/products/' + productUrl + '/associations', {
             attribute_id: attribute,
             variant_id: variant,
          })
          .then(() => {
-            router.push('/admin/products/' + params.id + '/associations');
+            router.push('/admin/products/' + productUrl + '/associations');
          })
          .catch((error) => {
             console.log(error);
@@ -81,7 +82,7 @@ export default function Create({ params }) {
    return (
       <>
          <div className="p-4">
-            <Link href={'/admin/products/' + params.id + '/associations'} className="btn btn-default btn-outline">
+            <Link href={'/admin/products/' + productUrl + '/associations'} className="btn btn-default btn-outline">
                <ChevronDoubleLeftIcon className="h-6" />
             </Link>
          </div>

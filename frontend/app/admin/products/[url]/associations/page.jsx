@@ -9,6 +9,7 @@ import { motion } from 'framer-motion';
 import PageNotFound from '../../../../../app/not-found';
 
 export default function Associations({ params }) {
+    const productUrl = params.id;
    const [data, setData] = useState([]);
    const [product, setProduct] = useState({});
    const [isLoading, setIsLoading] = useState(true);
@@ -52,7 +53,7 @@ export default function Associations({ params }) {
 
    const fetchProduct = () => {
       axios
-         .get('/api/v1/admin/products/' + params.id)
+         .get('/api/v1/admin/products/' + productUrl)
          .then((response) => {
             setProduct(response.data.data);
          })
@@ -96,7 +97,7 @@ export default function Associations({ params }) {
          <h1 className="text-3xl font-bold p-2">Associations for {product.name}</h1>
          <div className="flex justify-end p-2 max-w-6xl mx-auto sm:px-6 lg:px-8">
             <Link
-               href={'/admin/products/' + params.id + '/associations/create'}
+               href={'/admin/products/' + productUrl + '/associations/create'}
                className="btn btn-success btn-wide text-white"
             >
                Create
