@@ -1,12 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Events;
 
+use App\Mail\OrderConfirmation;
 use App\Models\CartItem;
 use App\Models\OrderItem;
 use App\Models\User;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Laravel\Cashier\Cashier;
 use Stripe\LineItem;
@@ -17,7 +21,7 @@ class HandleCheckoutSessionCompletedEvent
 
     public function handle($sessionId): void
     {
-        DB::transaction(function () use ($sessionId) {
+        DB::transaction(function () use ($sessionId): void {
             $session = Cashier::stripe()->checkout->sessions->retrieve($sessionId);
 
             $user = User::find($session->metadata->user_id);
@@ -47,7 +51,7 @@ class HandleCheckoutSessionCompletedEvent
                     'line1' => $session->shipping_details->address->line1,
                     'line2' => $session->shipping_details->address->line2,
                     'state' => $session->shipping_details->address->state,
-                ]
+                ],
             ]);
 
             $lineItems = Cashier::stripe()->checkout->sessions->allLineItems($session->id);
@@ -66,6 +70,10 @@ class HandleCheckoutSessionCompletedEvent
             $order->items()->saveMany($orderItems);
 
             CartItem::where('user_id', $user->id)->delete();
+
+            $order->loadMissing('items.product', 'user');
+
+            Mail::to($user)->send(new OrderConfirmation($order));
         });
     }
 }
