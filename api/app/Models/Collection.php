@@ -27,4 +27,9 @@ class Collection extends Model
             ->generateSlugsFrom('name')
             ->saveSlugsTo('slug');
     }
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
 }

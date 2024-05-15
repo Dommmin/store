@@ -73,7 +73,11 @@ class Product extends Model
 
     public function getMainImageAttribute(): string
     {
-        return $this->images[0]['url'] ?? '';
+        if (is_array($this->images[0]) && array_key_exists('url', $this->images[0])) {
+            return $this->images[0]['url'];
+        }
+
+        return '';
     }
 
     public function bookmark(): HasOne
@@ -91,6 +95,11 @@ class Product extends Model
         return SlugOptions::create()
             ->generateSlugsFrom('name')
             ->saveSlugsTo('url');
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'url';
     }
 
     public function scopeFilter(Builder $builder, QueryFilter $filters): Builder
