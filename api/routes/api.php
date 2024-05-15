@@ -8,11 +8,13 @@ use App\Http\Controllers\Api\v1\BookmarkController;
 use App\Http\Controllers\Api\v1\BrandController;
 use App\Http\Controllers\Api\v1\CartController;
 use App\Http\Controllers\Api\v1\CategoryController;
+use App\Http\Controllers\Api\v1\CollectionController;
 use App\Http\Controllers\Api\v1\PaymentController;
 use App\Http\Controllers\Api\v1\ProductController;
 use App\Http\Controllers\Api\v1\ReviewController;
 use App\Http\Controllers\Api\v1\SearchController;
 use App\Http\Controllers\Auth\SocialiteLoginController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -33,6 +35,8 @@ Route::get('cart-items/total', [CartController::class, 'totalPrice']);
 Route::get('bookmarks/count', [BookmarkController::class, 'count']);
 
 Route::post('checkout', [PaymentController::class, 'checkout']);
+Route::post('confirmation', [PaymentController::class, 'confirmation']);
+Route::apiResource('orders', OrderController::class);
 
 Route::get('products/{product}/variants', [ProductController::class, 'variants']);
 Route::get('products/{product}/ratings', [ReviewController::class, 'ratings']);
@@ -42,8 +46,9 @@ Route::apiResource('bookmarks', BookmarkController::class);
 Route::apiResource('brands', BrandController::class);
 Route::apiResource('categories', CategoryController::class);
 Route::apiResource('products/{product}/reviews', ReviewController::class);
+Route::apiResource('collections', CollectionController::class);
 
-Route::withoutMiddleware('auth:sanctum')->prefix('admin')->group(function (): void {
+Route::middleware('auth:sanctum')->prefix('admin')->group(function (): void {
     Route::post('products/{product}/publish', [Admin\ProductController::class, 'publish']);
     Route::post('products/{product}/unpublish', [Admin\ProductController::class, 'unpublish']);
 
