@@ -37,6 +37,8 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
       - uses: actions/checkout@v4
+      - name: Copy .env.testing
+        run: cp .env.testing .env
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -46,7 +48,6 @@ jobs:
       - name: Install Dependencies
         run: |
           cd api
-          cp .env.example .env
           composer install --prefer-dist --no-progress
       - name: Generate key
         run: |
