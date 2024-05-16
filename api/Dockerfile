@@ -56,9 +56,9 @@ COPY ./deployment/config/php-fpm/www.conf /usr/local/etc/php-fpm.d/www.conf
 COPY ./api/worker.sh ./api/reverb.sh ./api/scheduler.sh ./api/migration.sh ./
 COPY ./api ./
 
-# Install composer dependencies
-RUN composer install --no-scripts --no-autoloader --no-dev
-RUN composer dump-autoload --optimize
+## Install composer dependencies
+#RUN composer install --no-scripts --no-autoloader --no-dev
+#RUN composer dump-autoload --optimize
 
 # Stage 2: Build the Worker image
 FROM api AS worker

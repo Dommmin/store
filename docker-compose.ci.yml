@@ -23,6 +23,7 @@ services:
         condition: service_started
       mysql-test:
         condition: service_healthy
+    command: composer install --prefer-dist --no-progress --no-interaction --no-ansi
 
   mysql-test:
     image: ${MYSQL_IMAGE}
