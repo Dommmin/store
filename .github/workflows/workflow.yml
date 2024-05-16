@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Install doctl
         run: |
@@ -18,15 +18,9 @@ jobs:
           curl -sL https://github.com/digitalocean/doctl/releases/download/v1.63.0/doctl-1.63.0-linux-amd64.tar.gz | tar -xzv -C /home/runner/doctl
           sudo mv /home/runner/doctl/doctl /usr/local/bin/doctl
 
-      - name: SSH into DigitalOcean Droplet and run Docker Compose
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.DROPLET_HOST }}
-          username: ${{ secrets.DROPLET_USERNAME }}
-          password: ${{ secrets.DROPLET_SSH_PASSWORD }}
-
       - name: Copy .env
         run: |
+          cd api
           cp .env.example .env
 
       - name: Build and push Docker images
