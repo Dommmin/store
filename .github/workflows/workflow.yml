@@ -38,7 +38,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Copy .env.testing
-        run: cp .env.testing .env
+        run: |
+          cd api
+          cp .env.testing .env
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
