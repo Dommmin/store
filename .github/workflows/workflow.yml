@@ -41,6 +41,7 @@ jobs:
       - name: Install Dependencies
         run: |
           cd api
+          cp .env.example .env
           composer install --prefer-dist --no-progress
       - name: Generate key
         run: |
