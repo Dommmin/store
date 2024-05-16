@@ -19,10 +19,6 @@ jobs:
         run: |
           cd api
           composer install --prefer-dist --no-progress
-#      - name: Run phpstan
-#        run: |
-#          cd api
-#          ./vendor/bin/phpstan analyze --memory-limit=1G
       - name: Run phpinsights
         run: |
           cd api
@@ -30,6 +26,15 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: secret
+          MYSQL_DATABASE: laravel
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
       - uses: actions/checkout@v4
       - name: Setup PHP
