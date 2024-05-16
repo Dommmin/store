@@ -29,8 +29,8 @@ jobs:
           docker build -t $API_IMAGE --target=api --build-arg user=dominik --build-arg uid=1000 -f ./api/Dockerfile .
           docker build -t $SCHEDULER_IMAGE --target=scheduler --build-arg user=dominik --build-arg uid=1000 -f ./api/Dockerfile .
           docker build -t $WORKER_IMAGE --target=worker --build-arg user=dominik --build-arg uid=1000 -f ./api/Dockerfile .
-      - name: Install dependencies
-        run: docker run --rm -t $API_IMAGE composer install --prefer-dist --no-progress
+#      - name: Install dependencies
+#        run: docker run --rm -t $API_IMAGE composer install --prefer-dist --no-progress
       - name: Push images
         run: |
           docker push $API_IMAGE
@@ -65,6 +65,8 @@ jobs:
         run: docker pull $MYSQL_IMAGE
 #      - name: Run phpstan
 #        run: docker run --rm -t $API_IMAGE ./vendor/bin/phpstan analyze --memory-limit=1G
+      - name: Install dependencies
+        run: docker run --rm -t $API_IMAGE composer install --prefer-dist --no-progress
       - name: Run phpinsights
         run: |
           docker run --rm -t $API_IMAGE php artisan insights --no-interaction --min-quality=90 --min-complexity=90 --min-architecture=90 --min-style=90 --ansi --format=github-action
@@ -82,10 +84,12 @@ jobs:
         run: docker pull $API_IMAGE
       - name: Pull MySQL image
         run: docker pull $MYSQL_IMAGE
+      - name: Install dependencies
+        run: docker run --rm -t $API_IMAGE composer install --prefer-dist --no-progress
       - name: Run tests
         run: |
           docker-compose -f docker-compose.ci.yml up -d
-          docker-compose -f docker-compose.ci.yml exec -T php artisan test
+          docker-compose -f docker-compose.ci.yml exec -T api php artisan test
 
   remove-images:
     needs: [ analyze, test ]
