@@ -23,7 +23,7 @@ jobs:
         with:
           host: ${{ secrets.DROPLET_HOST }}
           username: ${{ secrets.DROPLET_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          password: ${{ secrets.DROPLET_SSH_PASSWORD }}
 
       - name: Copy .env
         run: |
