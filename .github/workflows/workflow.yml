@@ -67,6 +67,12 @@ jobs:
 #        run: docker run --rm -t $API_IMAGE ./vendor/bin/phpstan analyze --memory-limit=1G
       - name: Install dependencies
         run: docker run --rm -t $API_IMAGE composer install --prefer-dist --no-progress
+      - name: Generate key
+        run: php artisan key:generate
+      - name: Run migrations
+        run: php artisan migrate
+      - name: Run tests
+        run: php artisan test
       - name: Run phpinsights
         run: |
           docker run --rm -t $API_IMAGE php artisan insights --no-interaction --min-quality=90 --min-complexity=90 --min-architecture=90 --min-style=90 --ansi --format=github-action
