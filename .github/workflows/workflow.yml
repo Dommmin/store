@@ -45,7 +45,7 @@ jobs:
       - name: Generate key
         run: |
           cd api 
-          php artisan key:generate --env=testing
+          php artisan key:generate
       - name: Run tests
         run: |
           cd api
