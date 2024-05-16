@@ -48,6 +48,10 @@ RUN docker-php-ext-enable imagick
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Install composer dependencies
+RUN composer install --no-scripts --no-autoloader --no-dev
+RUN composer dump-autoload --optimize
+
 # Copy PHP-FPM configuration
 COPY ./deployment/config/php-fpm/php-prod.ini /usr/local/etc/php/conf.d/php.ini
 COPY ./deployment/config/php-fpm/www.conf /usr/local/etc/php-fpm.d/www.conf
