@@ -32,6 +32,8 @@ class ReviewController extends ApiController
         $validated['product_id'] = $product->id;
         $validated['user_id'] = $request->user()->id;
 
+        // TODO handle image upload
+
         $review = Review::create($validated);
 
         return $this->ok('Review posted successfully.', $review);

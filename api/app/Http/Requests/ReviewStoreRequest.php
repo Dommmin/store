@@ -27,7 +27,7 @@ class ReviewStoreRequest extends FormRequest
             'title' => ['required', 'string', 'max:255'],
             'body' => ['required', 'string'],
             'rating' => ['required', 'integer', 'between:1,5'],
-            'image' => ['nullable', 'image', 'max:2048', 'mimes:png,jpg,jpeg'],
+            //            'image' => ['nullable', 'image', 'max:2048', 'mimes:png,jpg,jpeg'],
         ];
     }
 }
