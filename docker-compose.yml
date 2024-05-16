@@ -8,7 +8,8 @@ services:
       context: .
       dockerfile: ./frontend/Dockerfile
       target: dev
-    command: sh -c "npm install && npm run dev"
+    container_name: ${DOCKER_PREFIX}_frontend
+    command: sh -c "npm run dev"
     restart: unless-stopped
     volumes:
       - ./frontend:/usr/src
@@ -29,7 +30,8 @@ services:
       context: .
       dockerfile: ./api/Dockerfile
       target: api
-    command: sh -c "composer install --no-scripts && chmod +x /usr/src/migration.sh && /usr/src/migration.sh && php artisan octane:start --host=0.0.0.0 --port=8000 --watch"
+    container_name: ${DOCKER_PREFIX}_api
+    command: sh -c "php artisan octane:start --workers=16 --host=0.0.0.0 --port=8000 --watch"
     restart: unless-stopped
     ports:
       - "8000:8000"
@@ -92,6 +94,7 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile.nginx
+    container_name: ${DOCKER_PREFIX}_nginx
     command: sh -c "nginx -g \"daemon off;\""
     restart: unless-stopped
     ports:
@@ -110,6 +113,7 @@ services:
         password: secret
       context: .
       dockerfile: ./Dockerfile.mysql
+    container_name: ${DOCKER_PREFIX}_mysql
     restart: unless-stopped
     volumes:
       - ./mysqldata:/var/lib/mysql
@@ -127,13 +131,14 @@ services:
       - laravel
 
   redis:
-    image: redis:latest
+    image: redis:alpine
+    container_name: ${DOCKER_PREFIX}_redis
     restart: unless-stopped
     volumes:
       - ./redisdata:/data
     ports:
       - "63790:6379"
-    command: redis-server --appendonly yes
+    command: [ redis-server, --maxmemory 128mb, --maxmemory-policy volatile-lru, --save "" ]
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
       interval: 10s

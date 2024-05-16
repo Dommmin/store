@@ -1,56 +1,56 @@
-FROM php:8.2-fpm as api
+FROM php:8.2-fpm-alpine as api
 
 WORKDIR /usr/src
 
-ARG user
-ARG uid
-
-RUN apt-get update && apt-get install -y \
+RUN apk update && apk add --no-cache \
+    autoconf \
+    gcc \
+    g++ \
+    make \
+    pcre-dev \
+    zlib-dev \
+    file \
+    bash  \
+    linux-headers \
     git \
     curl \
     libpng-dev \
-    libonig-dev \
+    oniguruma-dev \
     libxml2-dev \
     libzip-dev \
-    libicu-dev \
-    libc6 \
+    icu-dev \
+    libc6-compat \
     zip \
     unzip \
     supervisor \
-    default-mysql-client \
-    libmagickwand-dev
-
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+    mysql-client \
+    imagemagick-dev \
+    libtool
 
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip intl
 
-RUN apt-get update && apt-get install -y nodejs npm
+RUN apk add --no-cache nodejs npm
 
 RUN npm install --save-dev chokidar
 
-RUN pecl install redis swoole xdebug imagick
+RUN pecl install redis
+RUN pecl install xdebug
+RUN pecl install imagick
+RUN pecl install swoole
 
 RUN docker-php-ext-enable imagick
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-RUN useradd -G www-data,root -u $uid -d /home/$user $user
-
-RUN mkdir -p /home/$user/.composer && \
-    chown -R $user:$user /home/$user
-
-COPY ./api/composer*.json /usr/src/
-COPY ./api/package*.json /usr/src/
 COPY ./deployment/config/php-fpm/php-prod.ini /usr/local/etc/php/conf.d/php.ini
 COPY ./deployment/config/php-fpm/www.conf /usr/local/etc/php-fpm.d/www.conf
 
-RUN composer install --no-scripts
+COPY ./api/worker.sh /usr/src/
+COPY ./api/reverb.sh /usr/src/
+COPY ./api/scheduler.sh /usr/src/
+COPY ./api/migration.sh /usr/src/
 
 COPY ./api .
-
-COPY --chown=$user:$user ./api .
-
-USER $user
 
 FROM api AS worker
 COPY ./deployment/config/supervisor/worker/supervisord.conf /etc/supervisor/conf.d/worker_supervisor.conf

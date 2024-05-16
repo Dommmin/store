@@ -1,3 +1,5 @@
+#!/bin/sh
+
 php artisan down
 php artisan key:generate
 php artisan migrate --force
