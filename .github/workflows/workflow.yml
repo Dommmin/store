@@ -1,65 +1,34 @@
-name: Tests
+name: Deploy to DigitalOcean
 
 on:
   push:
-    branches: [ "main", "develop" ]
+    branches:
+      - develop
 
 jobs:
-  analyze:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
-          extensions: mbstring, pdo_mysql # Add the extensions you need
-          coverage: none
-      - name: Install Dependencies
-        run: |
-          cd api
-          composer install --prefer-dist --no-progress
-      - name: Run phpinsights
-        run: |
-          cd api
-          php artisan insights --no-interaction --min-quality=90 --min-complexity=90 --min-architecture=90 --min-style=90 --ansi --format=github-action
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-  test:
-    runs-on: ubuntu-latest
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: secret
-          MYSQL_DATABASE: laravel-testing
-        ports:
-          - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-    steps:
-      - uses: actions/checkout@v4
-      - name: Copy .env.testing
-        run: |
-          cd api
-          cp .env.testing .env
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
         with:
-          php-version: '8.2'
-          extensions: mbstring, pdo_mysql
-          coverage: none
-      - name: Install Dependencies
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push Docker images
         run: |
-          cd api
-          composer install --prefer-dist --no-progress
-      - name: Generate key
+          docker-compose -f docker-compose.yml build
+          docker-compose -f docker-compose.yml push
+
+      - name: Login to DigitalOcean
         run: |
-          cd api 
-          php artisan key:generate
-      - name: Run migrations
+          echo ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }} | doctl auth login --context main --token-stdin
+
+      - name: Pull Docker images from Docker Hub
         run: |
-          cd api
-          php artisan migrate
-      - name: Run tests
-        run: |
-          cd api
-          composer pest
+          doctl kubernetes cluster kubeconfig save my-cluster
+          kubectl config use-context do-my-cluster
+          kubectl apply -f kubernetes/deployment.yaml
