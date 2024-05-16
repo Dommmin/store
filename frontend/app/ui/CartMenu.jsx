@@ -132,7 +132,7 @@ export default function CartMenu({ className = '' }) {
                                                 width={64}
                                                 height={64}
                                                 alt={item.product.name}
-                                                src={item.product.images[0]}
+                                                src={item.product.main_image}
                                              />
                                           </div>
 
