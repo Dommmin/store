@@ -30,7 +30,7 @@ jobs:
           docker build -t $SCHEDULER_IMAGE --target=scheduler --build-arg user=dominik --build-arg uid=1000 -f ./api/Dockerfile .
           docker build -t $WORKER_IMAGE --target=worker --build-arg user=dominik --build-arg uid=1000 -f ./api/Dockerfile .
       - name: Install dependencies
-        run: docker run --rm -v $(pwd):/app -w /app $API_IMAGE composer install
+        run: docker run --rm -t $API_IMAGE composer install --prefer-dist --no-progress
       - name: Push images
         run: |
           docker push $API_IMAGE
