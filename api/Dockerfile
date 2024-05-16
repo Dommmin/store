@@ -48,6 +48,9 @@ RUN docker-php-ext-enable imagick
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Copy composer.json and composer.lock
+COPY ./api/composer.json ./api/composer.lock ./
+
 # Install composer dependencies
 RUN composer install --no-scripts --no-autoloader --no-dev
 RUN composer dump-autoload --optimize
