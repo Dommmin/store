@@ -14,9 +14,10 @@ jobs:
 
       - name: Install doctl
         run: |
-          curl -sL https://github.com/digitalocean/doctl/releases/download/v1.63.0/doctl-1.63.0-linux-amd64.tar.gz | tar -xzv
-          sudo mv ~/doctl /usr/local/bin/doctl
-
+          mkdir -p /home/runner/doctl
+          curl -sL https://github.com/digitalocean/doctl/releases/download/v1.63.0/doctl-1.63.0-linux-amd64.tar.gz | tar -xzv -C /home/runner/doctl
+          sudo mv /home/runner/doctl/doctl /usr/local/bin/doctl
+      
       - name: Login to DigitalOcean
         run: |
           echo ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }} | doctl auth login --context main --token-stdin
