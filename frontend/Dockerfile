@@ -1,10 +1,8 @@
-FROM node:20.11 AS base
+FROM node:20-alpine AS base
 
 WORKDIR /usr/src
 
 COPY ./frontend/package*.json ./
-
-RUN npm install
 
 COPY ./frontend .
 
