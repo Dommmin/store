@@ -43,7 +43,7 @@ const Page = () => {
                <li key={bookmark.id}>
                   <Link
                      className="flex max-w-xs space-x-2 border border-neutral-200 dark:border-neutral-700 p-4 bg-base-100 rounded-xl"
-                     href={`/p/${bookmark.product.id}`}
+                     href={`/p/${bookmark.product.url}`}
                   >
                      <Image
                         className="rounded-xl"
