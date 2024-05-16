@@ -66,7 +66,9 @@ jobs:
 #      - name: Run phpstan
 #        run: docker run --rm -t $API_IMAGE ./vendor/bin/phpstan analyze --memory-limit=1G
       - name: Run phpinsights
-        run: docker run --rm -t $API_IMAGE php artisan insights --no-interaction --min-quality=90 --min-complexity=90 --min-architecture=90 --min-style=90 --ansi --format=github-action
+        run: |
+          composer install --prefer-dist --no-progress --no-interaction --no-ansi
+          docker run --rm -t $API_IMAGE php artisan insights --no-interaction --min-quality=90 --min-complexity=90 --min-architecture=90 --min-style=90 --ansi --format=github-action
 
   test:
     needs: [ build-backend-images, build-mysql ]
@@ -83,6 +85,7 @@ jobs:
         run: docker pull $MYSQL_IMAGE
       - name: Run tests
         run: |
+          composer install --prefer-dist --no-progress --no-interaction --no-ansi
           docker-compose -f docker-compose.ci.yml up -d
           docker-compose -f docker-compose.ci.yml exec -T api php artisan test
 
