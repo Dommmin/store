@@ -42,8 +42,10 @@ jobs:
         run: |
           cd api
           composer install --prefer-dist --no-progress
-      - name: generate key
-        run: php artisan key:generate --env=testing
+      - name: Generate key
+        run: |
+          cd api 
+          php artisan key:generate --env=testing
       - name: Run tests
         run: |
           cd api
