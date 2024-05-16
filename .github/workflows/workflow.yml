@@ -67,6 +67,7 @@ jobs:
         run: docker run --rm -t $API_IMAGE composer install --prefer-dist --no-progress
       - name: Run phpinsights
         run: |
+          docker-compose -f docker-compose.ci.yml up -d
           docker-compose -f docker-compose.ci.yml exec -T api php artisan insights --no-interaction --min-quality=90 --min-complexity=90 --min-architecture=90 --min-style=90 --ansi --format=github-action
 
   test:
