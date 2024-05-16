@@ -26,7 +26,7 @@ eval "$(grep ^DOCKER_PORT= $ENV_FILE)"
 
 # Uruchomienie kontenerów dla projektu
 echo "${YELLOW}Uruchomienie kontenerów dla projektu ${BOLD}${DOCKER_PREFIX}${RESET}"
-docker-compose up -d
+docker compose up -d
 
 # Dodanie użytkownika, jeśli nie istnieje
 if ! docker exec -it -u root "${DOCKER_PREFIX}_api" id -u $USER > /dev/null 2>&1; then
@@ -41,6 +41,12 @@ fi
 echo "${BOLD}${RED}--------------------------------------------------------------------------------${RESET}"
 echo -e "${BOLD}${YELLOW}Zmiana uprawnien${RESET}\n"
 docker exec -it -u root "${DOCKER_PREFIX}_api" chown -R $USER:$USER storage
+
+# Sprawdzenie, czy istnieje plik .env
+if [ ! -f "api/.env" ]; then
+    echo "${BOLD}${YELLOW}Plik .env nie istnieje, kopiowanie z .env.example${RESET}"
+    cp api/.env.example api/.env
+fi
 
 # Utworzenie katalogu dla Composera i zmiana właściciela
 echo "${BOLD}${RED}--------------------------------------------------------------------------------${RESET}"
