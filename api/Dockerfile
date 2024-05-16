@@ -56,6 +56,9 @@ COPY ./deployment/config/php-fpm/www.conf /usr/local/etc/php-fpm.d/www.conf
 COPY ./api/worker.sh ./api/reverb.sh ./api/scheduler.sh ./api/migration.sh ./
 COPY ./api ./
 
+# Install application dependencies
+RUN composer install --prefer-dist --no-progress
+
 # Stage 2: Build the Worker image
 FROM api AS worker
 COPY ./deployment/config/supervisor/worker/supervisord.conf /etc/supervisor/conf.d/worker_supervisor.conf
