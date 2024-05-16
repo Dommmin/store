@@ -31,12 +31,6 @@ jobs:
           docker build -t $WORKER_IMAGE --target=worker --build-arg user=dominik --build-arg uid=1000 -f ./api/Dockerfile .
       - name: Install dependencies
         run: docker run --rm -t $API_IMAGE composer install --prefer-dist --no-progress
-      - name: Generate key
-        run: php artisan key:generate
-      - name: Run migrations
-        run: php artisan migrate
-      - name: Run tests
-        run: php artisan test
       - name: Push images
         run: |
           docker push $API_IMAGE
@@ -69,13 +63,11 @@ jobs:
         run: docker pull $API_IMAGE
       - name: Pull MySQL image
         run: docker pull $MYSQL_IMAGE
-#      - name: Run phpstan
-#        run: docker run --rm -t $API_IMAGE ./vendor/bin/phpstan analyze --memory-limit=1G
       - name: Install dependencies
         run: docker run --rm -t $API_IMAGE composer install --prefer-dist --no-progress
       - name: Run phpinsights
         run: |
-          docker run --rm -t $API_IMAGE php artisan insights --no-interaction --min-quality=90 --min-complexity=90 --min-architecture=90 --min-style=90 --ansi --format=github-action
+          docker-compose -f docker-compose.ci.yml exec -T api php artisan insights --no-interaction --min-quality=90 --min-complexity=90 --min-architecture=90 --min-style=90 --ansi --format=github-action
 
   test:
     needs: [ build-backend-images, build-mysql ]
