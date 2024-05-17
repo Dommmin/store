@@ -1,26 +1,29 @@
+'use client';
+
 import axios from '../lib/axios';
 
 export default function uploadAdapter(loader) {
    return {
       upload: () => {
-         return new Promise(async (resolve, reject) => {
-            try {
-               const file = await loader.file;
-               const formData = new FormData();
-               formData.append('upload', file);
-               const response = await axios.post('/api/v1/admin/images', formData, {
+         return new Promise((resolve, reject) => {
+            const file = loader.file;
+            const formData = new FormData();
+            formData.append('upload', file);
+            axios
+               .post('/api/v1/admin/images', formData, {
                   headers: {
                      'Content-Type': 'multipart/form-data',
                   },
+               })
+               .then((response) => {
+                  resolve({
+                     default: response.data.url,
+                  });
+               })
+               .catch(() => {
+                  reject('Hello');
                });
-               resolve({
-                  default: response.data,
-               });
-            } catch (error) {
-               reject('Hello');
-            }
          });
       },
-      abort: () => {},
    };
 }

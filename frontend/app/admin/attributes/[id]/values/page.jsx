@@ -4,8 +4,6 @@ import { useEffect, useState } from 'react';
 import axios from '../../../../lib/axios';
 import Wrapper from '../../../../ui/Wrapper';
 import LoadingSpinner from '../../../../ui/LoadingSpinner';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ChevronDoubleLeftIcon } from '@heroicons/react/24/outline';
@@ -45,13 +43,7 @@ export default function AttributeValues({ params }) {
             setData(response.data);
          })
          .catch((error) => {
-            toast.error(error.response.data.message, {
-               autoClose: 1000,
-               position: 'bottom-right',
-               hideProgressBar: true,
-               closeOnClick: true,
-               pauseOnHover: true,
-            });
+            // TODO: show notification
          })
          .finally(() => setIsLoading(false));
    };
@@ -87,23 +79,11 @@ export default function AttributeValues({ params }) {
       axios
          .delete('/api/v1/admin/attributes/' + params.id + '/attributeValues/' + id)
          .then((response) => {
-            toast.success(response.data.message, {
-               autoClose: 1000,
-               position: 'bottom-right',
-               hideProgressBar: true,
-               closeOnClick: true,
-               pauseOnHover: true,
-            });
+            // TODO: show notification
             fetchData();
          })
          .catch((error) => {
-            toast.error(error.response.data.message, {
-               autoClose: 1000,
-               position: 'bottom-right',
-               hideProgressBar: true,
-               closeOnClick: true,
-               pauseOnHover: true,
-            });
+            // TODO: show notification
          });
    };
 
@@ -119,7 +99,6 @@ export default function AttributeValues({ params }) {
 
    return (
       <>
-         <ToastContainer />
          <h1 className="text-3xl font-bold p-2">Values for {attribute.name}</h1>
          <div className="p-4">
             <Link href={'/admin/attributes/'} className="btn btn-default btn-outline">

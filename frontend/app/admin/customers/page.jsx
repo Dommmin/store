@@ -1,14 +1,12 @@
 'use client';
 
-import Wrapper from '../../ui/Wrapper';
-import { useEffect, useState } from 'react';
 import axios from '../../lib/axios';
-import LoadingSpinner from '../../ui/LoadingSpinner';
 import { motion } from 'framer-motion';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
+import LoadingSpinner from '../../ui/LoadingSpinner';
+import Wrapper from '../../ui/Wrapper';
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default function Customers() {
@@ -19,7 +17,7 @@ export default function Customers() {
    const [searchQuery, setSearchQuery] = useState('');
    const [debouncedSearchQuery] = useDebounce(searchQuery, 500);
    const [sortOrder, setSortOrder] = useState('desc');
-   const [perPage, setPerPage] = useState(10);
+   const [perPage] = useState(10);
    const [selectedItems, setSelectedItems] = useState([]);
 
    const handleSelectAll = (event) => {
@@ -74,31 +72,6 @@ export default function Customers() {
       show: { opacity: 1 },
    };
 
-   const handleDelete = (id) => {
-      axios
-         .delete(`/api/v1/admin/customers/${id}`)
-         .then((response) => {
-            toast.success(response.data.message, {
-               autoClose: 1000,
-               position: 'bottom-right',
-               hideProgressBar: true,
-               closeOnClick: true,
-               pauseOnHover: true,
-            });
-            fetchData();
-         })
-         .catch((error) => {
-            toast.error(error.response.data.message, {
-               autoClose: 1000,
-               position: 'bottom-right',
-               hideProgressBar: true,
-               closeOnClick: true,
-               pauseOnHover: true,
-            });
-            console.error(error);
-         });
-   };
-
    useEffect(() => {
       fetchData();
    }, [url, sortOrder, sortBy, perPage, debouncedSearchQuery]);
@@ -107,7 +80,6 @@ export default function Customers() {
 
    return (
       <>
-         <ToastContainer />
          <h1 className="text-3xl font-bold p-2">Customers</h1>
          <Wrapper maxWidth="max-w-6xl">
             <label className="input input-bordered flex items-center w-full">

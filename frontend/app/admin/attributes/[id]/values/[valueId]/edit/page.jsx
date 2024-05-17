@@ -4,8 +4,6 @@ import React, { useEffect, useState } from 'react';
 import LoadingSpinner from '../../../../../../ui/LoadingSpinner';
 import axios from '../../../../../../lib/axios';
 import { useRouter } from 'next/navigation';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import Wrapper from '../../../../../../ui/Wrapper';
 import InputError from '../../../../../../ui/InputError';
 
@@ -39,26 +37,14 @@ export default function AttributeValueEdit({ params }) {
             name: name,
          })
          .then((response) => {
-            toast.success(response.data.message, {
-               autoClose: 1000,
-               position: 'bottom-right',
-               hideProgressBar: true,
-               closeOnClick: true,
-               pauseOnHover: true,
-            });
+            // TODO: show notification
             router.push('/admin/attributes/' + params.id + '/values');
          })
          .catch((error) => {
             if (error.response.status === 422) {
                setErrors(error.response.data.errors);
             } else {
-               toast.error(error.response.data.message, {
-                  autoClose: 1000,
-                  position: 'bottom-right',
-                  hideProgressBar: true,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-               });
+               // TODO: show notification
             }
          });
    };
@@ -71,7 +57,6 @@ export default function AttributeValueEdit({ params }) {
 
    return (
       <>
-         <ToastContainer />
          <h1 className="text-3xl font-bold p-2">Edit {attributeValue.name}</h1>
          <Wrapper maxWidth="max-w-xl">
             <form className="flex justify-center items-center" onSubmit={handleUpdate}>

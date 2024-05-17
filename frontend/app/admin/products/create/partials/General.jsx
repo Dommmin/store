@@ -1,8 +1,8 @@
 'use client';
 
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import uploadPlugin from '../../../../plugins/CustomUploadPlugin';
+// import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+// import { CKEditor } from '@ckeditor/ckeditor5-react';
+// import uploadPlugin from '../../../../plugins/CustomUploadPlugin';
 
 export default function General(props) {
    return (
@@ -83,30 +83,30 @@ export default function General(props) {
                rows={3}
             />
          </div>
-         <CKEditor
-            editor={ClassicEditor}
-            data={props.description}
-            config={{
-               extraPlugins: [uploadPlugin],
-               fontFamily: {
-                  options: ['default', 'Ubuntu, Arial, sans-serif', 'Ubuntu Mono, Courier New, Courier, monospace'],
-               },
-            }}
-            onReady={(editor) => {
-               // You can store the "editor" and use when it is needed.
-               console.log('Editor is ready to use!', editor);
-            }}
-            onChange={(event, editor) => {
-               const data = editor.getData();
-               props.setDescription(data);
-            }}
-            onBlur={(event, editor) => {
-               console.log('Blur.', editor);
-            }}
-            onFocus={(event, editor) => {
-               console.log('Focus.', editor);
-            }}
-         />
+         {/*<CKEditor*/}
+         {/*   editor={ClassicEditor}*/}
+         {/*   data={props.description}*/}
+         {/*   config={{*/}
+         {/*      extraPlugins: [uploadPlugin],*/}
+         {/*      fontFamily: {*/}
+         {/*         options: ['default', 'Ubuntu, Arial, sans-serif', 'Ubuntu Mono, Courier New, Courier, monospace'],*/}
+         {/*      },*/}
+         {/*   }}*/}
+         {/*   onReady={(editor) => {*/}
+         {/*      // You can store the "editor" and use when it is needed.*/}
+         {/*      console.log('Editor is ready to use!', editor);*/}
+         {/*   }}*/}
+         {/*   onChange={(event, editor) => {*/}
+         {/*      const data = editor.getData();*/}
+         {/*      props.setDescription(data);*/}
+         {/*   }}*/}
+         {/*   onBlur={(event, editor) => {*/}
+         {/*      console.log('Blur.', editor);*/}
+         {/*   }}*/}
+         {/*   onFocus={(event, editor) => {*/}
+         {/*      console.log('Focus.', editor);*/}
+         {/*   }}*/}
+         {/*/>*/}
       </div>
    );
 }

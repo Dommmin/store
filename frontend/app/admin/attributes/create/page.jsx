@@ -5,8 +5,6 @@ import Wrapper from '../../../ui/Wrapper';
 import axios from '../../../lib/axios';
 import { useRouter } from 'next/navigation';
 import InputError from '../../../ui/InputError';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 export default function AttributeCreate() {
    const router = useRouter();
@@ -25,33 +23,20 @@ export default function AttributeCreate() {
             description: description,
          })
          .then((response) => {
-            toast.success(response.data.message, {
-               autoClose: 1000,
-               position: 'bottom-right',
-               hideProgressBar: true,
-               closeOnClick: true,
-               pauseOnHover: true,
-            });
+            // TODO: show notification
             router.push('/admin/attributes');
          })
          .catch((error) => {
             if (error.response.status === 422) {
                setErrors(error.response.data.errors);
             } else {
-               toast.error(error.response.data.message, {
-                  autoClose: 1000,
-                  position: 'bottom-right',
-                  hideProgressBar: true,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-               });
+               // TODO: show notification
             }
          });
    };
 
    return (
       <>
-         <ToastContainer />
          <h1 className="text-3xl font-bold p-2">Create Attribute</h1>
          <Wrapper maxWidth="max-w-xl">
             <form className="flex justify-center items-center" onSubmit={handleSubmit}>

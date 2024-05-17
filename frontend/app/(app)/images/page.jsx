@@ -2,8 +2,6 @@
 
 import Wrapper from '../../ui/Wrapper.jsx';
 import axios from '../../lib/axios.js';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 
@@ -33,7 +31,6 @@ const Images = () => {
 
    return (
       <Wrapper>
-         <ToastContainer />
          <div className="columns-1 gap-4 sm:columns-2 xl:columns-3 2xl:columns-4 gap-4 space-y-4">
             {images.map((image, index) => (
                <Image

@@ -6,8 +6,6 @@ import axios from '../../lib/axios';
 import Link from 'next/link';
 import LoadingSpinner from '../../ui/LoadingSpinner';
 import { motion } from 'framer-motion';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 export default function Attributes() {
    const [data, setData] = useState([]);
@@ -66,23 +64,11 @@ export default function Attributes() {
       axios
          .delete(`/api/v1/admin/attributes/${id}`)
          .then((response) => {
-            toast.success(response.data.message, {
-               autoClose: 1000,
-               position: 'bottom-right',
-               hideProgressBar: true,
-               closeOnClick: true,
-               pauseOnHover: true,
-            });
+            // TODO: show notification
             fetchData();
          })
          .catch((error) => {
-            toast.error(error.response.data.message, {
-               autoClose: 1000,
-               position: 'bottom-right',
-               hideProgressBar: true,
-               closeOnClick: true,
-               pauseOnHover: true,
-            });
+            // TODO: show notification
          });
    };
 
@@ -94,7 +80,6 @@ export default function Attributes() {
 
    return (
       <>
-         <ToastContainer />
          <h1 className="text-3xl font-bold p-2">Attributes</h1>
          <div className="flex justify-end p-2 max-w-6xl mx-auto sm:px-6 lg:px-8">
             <Link href={'/admin/attributes/create'} className="btn btn-success btn-wide text-white">

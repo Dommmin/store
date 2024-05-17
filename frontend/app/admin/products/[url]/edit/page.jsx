@@ -4,8 +4,6 @@ import Wrapper from '../../../../ui/Wrapper';
 import { useEffect, useState } from 'react';
 import axios from '../../../../lib/axios';
 import General from './partials/General';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import LoadingSpinner from '../../../../ui/LoadingSpinner';
 import Images from './partials/Images';
 import Attributes from './partials/Attributes';
@@ -75,7 +73,7 @@ export default function Edit({ params }) {
    const handleDroppedFiles = (files) => {
       Array.from(files).forEach((file) => {
          if (!file.type.startsWith('image/')) {
-            toast.error(`"${file.name}" is not an image.`);
+            // TODO: show notification
             return;
          }
 
@@ -83,7 +81,7 @@ export default function Edit({ params }) {
             if (!prevImages.some((image) => image.name === file.name)) {
                return [...prevImages, file];
             } else {
-               toast.error(`"${file.name}" already exists in the list.`);
+               // TODO: show notification
                return prevImages;
             }
          });
@@ -248,7 +246,6 @@ export default function Edit({ params }) {
             </Link>
          </div>
          <Wrapper className="space-y-4" maxWidth="max-w-[1920px]" paddingY="py-4">
-            <ToastContainer position={'bottom-right'} autoClose={1500} />
             <div role="tablist" className="tabs tabs-lifted tabs-lg overflow-auto">
                <a
                   role="tab"

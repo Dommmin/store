@@ -5,8 +5,6 @@ import { useEffect, useState } from 'react';
 import axios from '../../lib/axios';
 import LoadingSpinner from '../../ui/LoadingSpinner';
 import { motion } from 'framer-motion';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { Switch } from '@headlessui/react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -68,23 +66,11 @@ export default function Reviews() {
       axios
          .delete(`/api/v1/admin/reviews/${id}`)
          .then((response) => {
-            toast.success(response.data.message, {
-               autoClose: 1000,
-               position: 'bottom-right',
-               hideProgressBar: true,
-               closeOnClick: true,
-               pauseOnHover: true,
-            });
+            // TODO: show notification
             fetchData();
          })
          .catch((error) => {
-            toast.error(error.response.data.message, {
-               autoClose: 1000,
-               position: 'bottom-right',
-               hideProgressBar: true,
-               closeOnClick: true,
-               pauseOnHover: true,
-            });
+            // TODO: show notification
             console.error(error);
          });
    };
@@ -114,7 +100,6 @@ export default function Reviews() {
 
    return (
       <>
-         <ToastContainer />
          <h1 className="text-3xl font-bold p-2">Reviews</h1>
          <Wrapper maxWidth="max-w-[1920px]">
             <div className="overflow-x-auto">
