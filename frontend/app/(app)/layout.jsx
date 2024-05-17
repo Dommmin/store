@@ -1,6 +1,6 @@
 import Navbar from '../ui/Navbar';
 
-export default function Page({ children }) {
+export default function AppLayout({ children }) {
    return (
       <div>
          <Navbar />
