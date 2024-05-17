@@ -1,6 +1,5 @@
 import { Lusitana } from 'next/font/google';
 import './globals.css';
-import '@radix-ui/themes/styles.css';
 
 const lusitana = Lusitana({ subsets: ['latin'], weight: ['400', '700'] });
 
