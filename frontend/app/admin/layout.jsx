@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Sidebar from './components/Sidebar';
 
-export default function Layout({ children }) {
+export default function AdminLayout({ children }) {
    const [isOpen, setIsOpen] = useState(true);
 
    return (
