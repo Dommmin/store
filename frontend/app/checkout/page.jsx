@@ -189,7 +189,7 @@ const Checkout = () => {
                   <div className="max-w-xl w-full space-y-4">
                      <p className="text-xl font-bold">Order summary</p>
                      {cartItems.map((item) => (
-                        <div className="flex w-full h-16 justify-between space-x-4 last:border-b">
+                        <div key={item.id} className="flex w-full h-16 justify-between space-x-4 last:border-b">
                            <div className="flex">
                               <div className="relative">
                                  <Image
