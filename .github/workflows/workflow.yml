@@ -144,3 +144,22 @@ jobs:
         run: |
           docker build -t $FRONTEND_IMAGE --target=prod -f ./frontend/Dockerfile .
           docker push $FRONTEND_IMAGE
+
+  deploy-digitalocean:
+    needs: [ build-frontend, build-nginx, build-proxy, build-backend-images, build-mysql, analyze, test ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install doctl
+        run: |
+          curl -L https://github.com/digitalocean/doctl/releases/download/v1.64.0/doctl-1.64.0-linux-amd64.tar.gz | tar xvz
+          sudo mv doctl /usr/local/bin
+      - name: Authenticate with DigitalOcean
+        run: doctl auth init --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      - name: Deploy to DigitalOcean
+        run: |
+          doctl compute ssh-key import github --public-key-file ./id_rsa.pub
+          doctl compute droplet create example --size s-1vcpu-1gb --image docker-20-04 --region nyc1 --ssh-keys github --wait
+          doctl compute ssh example --ssh-command "docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}"
+          doctl compute ssh example --ssh-command "docker pull $API_IMAGE && docker pull $SCHEDULER_IMAGE && docker pull $WORKER_IMAGE && docker pull $NGINX_IMAGE && docker pull $PROXY_IMAGE && docker pull $MYSQL_IMAGE && docker pull $FRONTEND_IMAGE"
+          doctl compute ssh example --ssh-command "docker-compose up -d"
