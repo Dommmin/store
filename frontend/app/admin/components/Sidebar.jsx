@@ -93,11 +93,11 @@ export default function Sidebar({ setIsOpen, isOpen }) {
 
    return (
       <>
-         <div className="flex justify-between items-center">
+         <div className="flex items-center justify-between">
             <button
                onClick={isOpen ? closeMobileMenu : openMobileMenu}
                aria-label="Open mobile menu"
-               className="flex h-11 w-11 items-center justify-center text-black transition-colors dark:text-white hover:scale-110 hover:bg-base-200"
+               className="flex h-11 w-11 items-center justify-center text-black transition-colors hover:scale-110 hover:bg-base-200 dark:text-white"
             >
                <Bars3Icon className="h-6" />
             </button>
@@ -109,9 +109,9 @@ export default function Sidebar({ setIsOpen, isOpen }) {
          </div>
 
          {isOpen && (
-            <div className="fixed bottom-0 left-0 top-0 flex h-full w-full flex-col md:w-[250px] bg-base-300 border-r border-neutral-200 dark:border-neutral-700">
+            <div className="fixed bottom-0 left-0 top-0 flex h-full w-full flex-col border-r border-neutral-200 bg-base-300 md:w-[250px] dark:border-neutral-700">
                <button
-                  className="md:hidden flex h-11 w-11 items-center justify-center text-black transition-colors dark:text-white hover:scale-110 hover:bg-base-100 rounded-lg"
+                  className="flex h-11 w-11 items-center justify-center rounded-lg text-black transition-colors hover:scale-110 hover:bg-base-100 md:hidden dark:text-white"
                   onClick={closeMobileMenu}
                   aria-label="Close mobile menu"
                >
@@ -119,11 +119,11 @@ export default function Sidebar({ setIsOpen, isOpen }) {
                </button>
 
                <Link href="/">
-                  <div className="flex justify-center items-center p-4 border-b-2 border-neutral-200 dark:border-neutral-700 bg-success/30 hover:bg-success/50 glass">
+                  <div className="glass flex items-center justify-center border-b-2 border-neutral-200 bg-success/30 p-4 hover:bg-success/50 dark:border-neutral-700">
                      <ShoppingCartIcon className="h-6" />
                   </div>
                </Link>
-               <div className="pt-4 space-y-1">
+               <div className="space-y-1 pt-4">
                   {menu.map((item, index) => (
                      <ul key={index} className="pr-2">
                         <li>

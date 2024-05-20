@@ -80,9 +80,9 @@ export default function Customers() {
 
    return (
       <>
-         <h1 className="text-3xl font-bold p-2">Customers</h1>
+         <h1 className="p-2 text-3xl font-bold">Customers</h1>
          <Wrapper maxWidth="max-w-6xl">
-            <label className="input input-bordered flex items-center w-full">
+            <label className="input input-bordered flex w-full items-center">
                <input
                   onChange={(event) => setSearchQuery(event.target.value)}
                   value={searchQuery}
@@ -94,7 +94,7 @@ export default function Customers() {
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 16 16"
                   fill="currentColor"
-                  className="w-4 h-4 opacity-70"
+                  className="h-4 w-4 opacity-70"
                >
                   <path
                      fillRule="evenodd"
@@ -152,7 +152,7 @@ export default function Customers() {
                                  <td>
                                     <div className="flex items-center gap-3">
                                        <ul className="avatar">
-                                          <li className="mask mask-squircle w-12 h-12">
+                                          <li className="mask mask-squircle h-12 w-12">
                                              <Image
                                                 src={item.profile_photo_url}
                                                 alt={item.name}
@@ -171,7 +171,7 @@ export default function Customers() {
                                  </td>
                                  <td>
                                     <Link
-                                       className="btn btn-primary btn-outline btn-xs"
+                                       className="btn btn-outline btn-primary btn-xs"
                                        href={'/admin/customers/' + item.id + '/orders'}
                                     >
                                        Orders
@@ -188,18 +188,18 @@ export default function Customers() {
                         </motion.tbody>
                      </table>
                      {(data.prev_page_url || data.next_page_url) && (
-                        <div className="join grid grid-cols-2 mt-4">
+                        <div className="join mt-4 grid grid-cols-2">
                            <button
                               disabled={!data.prev_page_url}
                               onClick={() => setUrl(data.prev_page_url)}
-                              className="join-item btn btn-outline"
+                              className="btn btn-outline join-item"
                            >
                               Previous page
                            </button>
                            <button
                               disabled={!data.next_page_url}
                               onClick={() => setUrl(data.next_page_url)}
-                              className="join-item btn btn-outline"
+                              className="btn btn-outline join-item"
                            >
                               Next
                            </button>

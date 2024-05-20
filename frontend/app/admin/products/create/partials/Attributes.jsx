@@ -1,12 +1,12 @@
 export default function Attributes({ ...props }) {
    return (
       <div>
-         <div className="flex justify-end mb-4">
-            <button onClick={props.addAttribute} className="w-full btn btn-info btn-sm text-white">
+         <div className="mb-4 flex justify-end">
+            <button onClick={props.addAttribute} className="btn btn-info btn-sm w-full text-white">
                Add attribute
             </button>
          </div>
-         <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 lg:gap-4">
+         <div className="grid grid-cols-1 gap-2 lg:grid-cols-2 lg:gap-4">
             {props.selectedAttributes.map((selected, index) => (
                <div className="flex space-x-2 lg:space-x-4" key={index}>
                   <select

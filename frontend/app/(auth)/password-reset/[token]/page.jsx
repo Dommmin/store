@@ -34,13 +34,13 @@ export default function PasswordReset() {
    }, [searchParams.get('email')]);
 
    return (
-      <div className="flex items-center justify-center min-h-screen max-w-lg mx-auto">
+      <div className="mx-auto flex min-h-screen max-w-lg items-center justify-center">
          <AuthSessionStatus className="mb-4" status={status} />
          <form
             onSubmit={submitForm}
-            className="flex flex-col items-center justify-center w-full space-y-4 card bg-white dark:bg-gray-800 glass shadow-xl py-12"
+            className="card glass flex w-full flex-col items-center justify-center space-y-4 bg-white py-12 shadow-xl dark:bg-gray-800"
          >
-            <h1 className="font-bold text-3xl text-gray-200">Reset your password</h1>
+            <h1 className="text-3xl font-bold text-gray-200">Reset your password</h1>
             <label className="form-control w-full max-w-md">
                <div className="label">
                   <span className="label-text text-gray-200">E-mail</span>
@@ -87,8 +87,8 @@ export default function PasswordReset() {
                <InputError messages={errors.password_confirmation} className="mt-2" />
             </label>
 
-            <div className="flex items-center justify-end mt-4 w-full max-w-md">
-               <button type="submit" className="btn btn-primary w-full max-w-md dark:text-gray-200 tracking-wide">
+            <div className="mt-4 flex w-full max-w-md items-center justify-end">
+               <button type="submit" className="btn btn-primary w-full max-w-md tracking-wide dark:text-gray-200">
                   Reset Password
                </button>
             </div>

@@ -99,13 +99,13 @@ export default function AttributeValues({ params }) {
 
    return (
       <>
-         <h1 className="text-3xl font-bold p-2">Values for {attribute.name}</h1>
+         <h1 className="p-2 text-3xl font-bold">Values for {attribute.name}</h1>
          <div className="p-4">
-            <Link href={'/admin/attributes/'} className="btn btn-default btn-outline">
+            <Link href={'/admin/attributes/'} className="btn-default btn btn-outline">
                <ChevronDoubleLeftIcon className="h-6" />
             </Link>
          </div>
-         <div className="flex justify-end p-2 max-w-6xl mx-auto sm:px-6 lg:px-8">
+         <div className="mx-auto flex max-w-6xl justify-end p-2 sm:px-6 lg:px-8">
             <Link
                href={'/admin/attributes/' + params.id + '/values/create'}
                className="btn btn-success btn-wide text-white"
@@ -164,16 +164,16 @@ export default function AttributeValues({ params }) {
                                     </div>
                                  </td>
                                  <th>
-                                    <div className="grid grid-cols-2 gap-2 items-center">
+                                    <div className="grid grid-cols-2 items-center gap-2">
                                        <Link
                                           href={'/admin/attributes/' + params.id + '/values/' + item.id + '/edit'}
-                                          className="btn btn-info btn-outline btn-xs"
+                                          className="btn btn-outline btn-info btn-xs"
                                        >
                                           Edit
                                        </Link>
                                        <button
                                           onClick={() => handleDelete(item.id)}
-                                          className="btn btn-error btn-outline btn-xs"
+                                          className="btn btn-outline btn-error btn-xs"
                                        >
                                           Delete
                                        </button>
@@ -184,18 +184,18 @@ export default function AttributeValues({ params }) {
                         </motion.tbody>
                      </table>
                      {(data.prev_page_url || data.next_page_url) && (
-                        <div className="join grid grid-cols-2 mt-4">
+                        <div className="join mt-4 grid grid-cols-2">
                            <button
                               disabled={!data.prev_page_url}
                               onClick={() => setUrl(data.prev_page_url)}
-                              className="join-item btn btn-outline"
+                              className="btn btn-outline join-item"
                            >
                               Previous page
                            </button>
                            <button
                               disabled={!data.next_page_url}
                               onClick={() => setUrl(data.next_page_url)}
-                              className="join-item btn btn-outline"
+                              className="btn btn-outline join-item"
                            >
                               Next
                            </button>

@@ -1,6 +1,6 @@
 export default function Breadcrumb({ step, handleBreadcrumbClick }) {
    return (
-      <div className="text-sm breadcrumbs">
+      <div className="breadcrumbs text-sm">
          <ul>
             <li>
                <button
@@ -17,7 +17,7 @@ export default function Breadcrumb({ step, handleBreadcrumbClick }) {
                      step === 'Shipping'
                         ? 'text-blue-500'
                         : step === 'Information'
-                          ? 'text-gray-400 cursor-default'
+                          ? 'cursor-default text-gray-400'
                           : 'hover:opacity-80'
                   }`}
                   onClick={() => handleBreadcrumbClick('Shipping')}
@@ -28,7 +28,7 @@ export default function Breadcrumb({ step, handleBreadcrumbClick }) {
             </li>
             <li>
                <button
-                  className={`${step === 'Payment' ? 'text-blue-500 cursor-default' : 'text-gray-400 cursor-default'}`}
+                  className={`${step === 'Payment' ? 'cursor-default text-blue-500' : 'cursor-default text-gray-400'}`}
                   onClick={() => handleBreadcrumbClick('Payment')}
                   disabled={true}
                >

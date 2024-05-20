@@ -88,7 +88,7 @@ export default function CartMenu({ className = '' }) {
                   leaveFrom="translate-x-0"
                   leaveTo="translate-x-full"
                >
-                  <Dialog.Panel className="fixed bottom-0 right-0 top-0 flex h-full w-full flex-col border-l border-neutral-200 bg-white/80 py-2 px-4 text-black backdrop-blur-xl md:w-[390px] dark:border-neutral-700 dark:bg-black/80 dark:text-white">
+                  <Dialog.Panel className="fixed bottom-0 right-0 top-0 flex h-full w-full flex-col border-l border-neutral-200 bg-white/80 px-4 py-2 text-black backdrop-blur-xl md:w-[390px] dark:border-neutral-700 dark:bg-black/80 dark:text-white">
                      <div className="flex items-center justify-between">
                         <p className="text-lg font-semibold">My Cart</p>
 
@@ -155,7 +155,7 @@ export default function CartMenu({ className = '' }) {
                                              </p>
                                              <button
                                                 onClick={() => incrementQuantity(item.id, item.product.id)}
-                                                className="ease flex h-full min-w-[36px] max-w-[36px] flex-none items-center justify-center rounded-full px-2 transition-all duration-200 hover:border-neutral-800 hover:opacity-80'"
+                                                className="ease hover:opacity-80' flex h-full min-w-[36px] max-w-[36px] flex-none items-center justify-center rounded-full px-2 transition-all duration-200 hover:border-neutral-800"
                                              >
                                                 <PlusIcon />
                                              </button>

@@ -35,9 +35,9 @@ export default function AttributeValuesCreate({ params }) {
 
    return (
       <>
-         <h1 className="text-3xl font-bold p-2">Create Attribute</h1>
+         <h1 className="p-2 text-3xl font-bold">Create Attribute</h1>
          <Wrapper maxWidth="max-w-xl">
-            <form className="flex justify-center items-center" onSubmit={handleSubmit}>
+            <form className="flex items-center justify-center" onSubmit={handleSubmit}>
                <div className="space-y-2">
                   <input
                      className={'input input-bordered w-full ' + (errors.name ? ' input-error' : '')}
@@ -52,7 +52,7 @@ export default function AttributeValuesCreate({ params }) {
                      placeholder="Name"
                   />
                   <InputError messages={errors.name} className="mt-2" />
-                  <button className="w-full btn btn-success text-white mt-8" onSubmit={handleSubmit}>
+                  <button className="btn btn-success mt-8 w-full text-white" onSubmit={handleSubmit}>
                      Submit
                   </button>
                </div>

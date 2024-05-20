@@ -17,14 +17,14 @@ export default function Order({ order }) {
       <Link href={`/orders/${order.id}`}>
          <motion.div
             variants={variants}
-            className="border border-neutral-200 dark:border-neutral-700 rounded-xl p-4 bg-base-100"
+            className="rounded-xl border border-neutral-200 bg-base-100 p-4 dark:border-neutral-700"
          >
-            <div className="flex justify-between space-x-2 items-center">
+            <div className="flex items-center justify-between space-x-2">
                <div>{order.uuid}</div>
                <div>{order.created_at}</div>
             </div>
-            <div className="flex space-x-2 mt-2">{order.total} zł</div>
-            <div className="w-full max-w-4xl text-sm tracking-wide mt-4">Items: {order.items_count}</div>
+            <div className="mt-2 flex space-x-2">{order.total} zł</div>
+            <div className="mt-4 w-full max-w-4xl text-sm tracking-wide">Items: {order.items_count}</div>
          </motion.div>
       </Link>
    );

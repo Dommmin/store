@@ -1,6 +1,6 @@
 export default function LoadingSpinner({ className = '' }) {
    return (
-      <div className={'flex justify-center items-center ' + className}>
+      <div className={'flex items-center justify-center ' + className}>
          <span className="loading loading-spinner text-info" />
       </div>
    );

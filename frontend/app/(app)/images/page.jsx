@@ -31,10 +31,10 @@ const Images = () => {
 
    return (
       <Wrapper>
-         <div className="columns-1 gap-4 sm:columns-2 xl:columns-3 2xl:columns-4 gap-4 space-y-4">
+         <div className="columns-1 gap-4 gap-4 space-y-4 sm:columns-2 xl:columns-3 2xl:columns-4">
             {images.map((image, index) => (
                <Image
-                  className="transform rounded-lg brightness-90 transition will-change-auto group-hover:brightness-110 h-96"
+                  className="h-96 transform rounded-lg brightness-90 transition will-change-auto group-hover:brightness-110"
                   key={image.id}
                   src={image.path}
                   alt={`Slide ${index + 1}`}

@@ -82,14 +82,14 @@ export default function Create({ params }) {
    return (
       <>
          <div className="p-4">
-            <Link href={'/admin/products/' + productUrl + '/associations'} className="btn btn-default btn-outline">
+            <Link href={'/admin/products/' + productUrl + '/associations'} className="btn-default btn btn-outline">
                <ChevronDoubleLeftIcon className="h-6" />
             </Link>
          </div>
          <Wrapper>
-            <form onSubmit={handleSubmit} className="flex justify-center items-center max-auto">
+            <form onSubmit={handleSubmit} className="max-auto flex items-center justify-center">
                <div className="w-full max-w-3xl space-y-4">
-                  <div className="p-6 flex space-x-4">
+                  <div className="flex space-x-4 p-6">
                      <label className="form-control w-full max-w-md">
                         <div className="label">
                            <span className="label-text">Attribute</span>

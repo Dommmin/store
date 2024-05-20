@@ -75,7 +75,7 @@ export default function General(props) {
          </div>
          <div className="space-x-4">
             <textarea
-               className="w-full max-w-4xl textarea textarea-bordered"
+               className="textarea textarea-bordered w-full max-w-4xl"
                placeholder="Short Description"
                minLength={10}
                value={props.shortDescription}

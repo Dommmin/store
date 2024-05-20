@@ -83,9 +83,9 @@ const Checkout = () => {
 
    return (
       <>
-         <div className="bg-white dark:bg-base-300 border-b border-t dark:border-neutral-700 overflow-hidden shadow-sm lg:hidden mt-12">
-            <div className="py-4 px-8 text-gray-900 dark:text-gray-100">
-               <div className="max-w-xl mx-auto">
+         <div className="mt-12 overflow-hidden border-b border-t bg-white shadow-sm lg:hidden dark:border-neutral-700 dark:bg-base-300">
+            <div className="px-8 py-4 text-gray-900 dark:text-gray-100">
+               <div className="mx-auto max-w-xl">
                   {!isOpen ? (
                      <button
                         className="flex items-center space-x-2 text-info/90 hover:text-info/60"
@@ -113,26 +113,26 @@ const Checkout = () => {
                   animate={{ height: 'auto' }}
                   exit={{ height: 0 }}
                   transition={{ duration: 0.2, ease: 'easeInOut' }}
-                  className="border-b dark:border-neutral-700 overflow-hidden shadow-sm lg:hidden"
+                  className="overflow-hidden border-b shadow-sm lg:hidden dark:border-neutral-700"
                >
-                  <div className="py-4 px-8 text-gray-900 dark:text-gray-100">
-                     <div className="max-w-xl mx-auto">
-                        <div className="flex w-full h-16 justify-between space-x-4">
+                  <div className="px-8 py-4 text-gray-900 dark:text-gray-100">
+                     <div className="mx-auto max-w-xl">
+                        <div className="flex h-16 w-full justify-between space-x-4">
                            <div className="flex">
                               <div className="relative">
                                  <img
                                     src="https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"
                                     alt=""
-                                    className="w-14 h-14 object-cover rounded"
+                                    className="h-14 w-14 rounded object-cover"
                                  />
-                                 <div className="absolute right-0 top-0 -mr-3 -mt-3 h-6 w-6 rounded-full bg-base-content border border-neutral-700 text-[12px] flex items-center justify-center text-black font-bold">
+                                 <div className="absolute right-0 top-0 -mr-3 -mt-3 flex h-6 w-6 items-center justify-center rounded-full border border-neutral-700 bg-base-content text-[12px] font-bold text-black">
                                     2
                                  </div>
                               </div>
-                              <div className="flex py-2 ml-4">
+                              <div className="ml-4 flex py-2">
                                  <div>
                                     <p className="font-semibold">Acme Drawstring Bag</p>
-                                    <p className="text-sm -mt-1 text-gray-400 tracking-tight">White / 6 x 8 inch</p>
+                                    <p className="-mt-1 text-sm tracking-tight text-gray-400">White / 6 x 8 inch</p>
                                  </div>
                               </div>
                            </div>
@@ -146,10 +146,10 @@ const Checkout = () => {
             )}
          </AnimatePresence>
 
-         <div className="flex w-full min-h-screen">
-            <div className="flex w-full justify-start p-8 lg:border-r border-neutral-200 dark:border-neutral-700">
-               <div className="flex justify-end w-full h-20">
-                  <div className="max-w-xl max-lg:mx-auto w-full space-y-4">
+         <div className="flex min-h-screen w-full">
+            <div className="flex w-full justify-start border-neutral-200 p-8 lg:border-r dark:border-neutral-700">
+               <div className="flex h-20 w-full justify-end">
+                  <div className="w-full max-w-xl space-y-4 max-lg:mx-auto">
                      <Breadcrumb step={step} handleBreadcrumbClick={handleBreadcrumbClick} />
                      <p className="text-xl font-bold">{step}</p>
 
@@ -184,12 +184,12 @@ const Checkout = () => {
                   </div>
                </div>
             </div>
-            <div className="max-lg:hidden flex w-full p-8">
-               <div className="flex flex-col w-full h-20">
-                  <div className="max-w-xl w-full space-y-4">
+            <div className="flex w-full p-8 max-lg:hidden">
+               <div className="flex h-20 w-full flex-col">
+                  <div className="w-full max-w-xl space-y-4">
                      <p className="text-xl font-bold">Order summary</p>
                      {cartItems.map((item) => (
-                        <div key={item.id} className="flex w-full h-16 justify-between space-x-4 last:border-b">
+                        <div key={item.id} className="flex h-16 w-full justify-between space-x-4 last:border-b">
                            <div className="flex">
                               <div className="relative">
                                  <Image
@@ -197,13 +197,13 @@ const Checkout = () => {
                                     alt={item.product.name}
                                     width={80}
                                     height={80}
-                                    className="w-14 h-14 object-cover rounded"
+                                    className="h-14 w-14 rounded object-cover"
                                  />
-                                 <div className="absolute right-0 top-0 -mr-3 -mt-3 h-6 w-6 rounded-full bg-base-content border border-neutral-700 text-[12px] flex items-center justify-center text-black font-bold">
+                                 <div className="absolute right-0 top-0 -mr-3 -mt-3 flex h-6 w-6 items-center justify-center rounded-full border border-neutral-700 bg-base-content text-[12px] font-bold text-black">
                                     {item.quantity}
                                  </div>
                               </div>
-                              <div className="flex py-2 ml-4">
+                              <div className="ml-4 flex py-2">
                                  <div>
                                     <p className="font-semibold">{item.product.name}</p>
                                     {/*<p className="text-sm -mt-1 text-gray-400 tracking-tight">White / 6 x 8*/}
@@ -216,10 +216,10 @@ const Checkout = () => {
                            </div>
                         </div>
                      ))}
-                     <div className="pt-4 pb-4 border-t border-b border-neutral-200 dark:border-neutral-700">
+                     <div className="border-b border-t border-neutral-200 pb-4 pt-4 dark:border-neutral-700">
                         {!display ? (
                            <button
-                              className="cursor-pointer underline tracking-wide font-semibold text-lg hover:opacity-70"
+                              className="cursor-pointer text-lg font-semibold tracking-wide underline hover:opacity-70"
                               onClick={() => setDisplay(true)}
                            >
                               Have a discount code?
@@ -228,10 +228,10 @@ const Checkout = () => {
                            <div className="flex justify-between">
                               <div className="space-x-4">
                                  <label className="form-control w-full max-w-xs">
-                                    <span className="font-semibold tracking-wide mb-1">Discount Code</span>
+                                    <span className="mb-1 font-semibold tracking-wide">Discount Code</span>
                                     <div className="flex space-x-2">
                                        <input type="text" className="input input-bordered w-full max-w-xs" />
-                                       <button onClick={() => alert('Apply')} className="btn btn-neutral btn-outline">
+                                       <button onClick={() => alert('Apply')} className="btn btn-outline btn-neutral">
                                           Apply
                                        </button>
                                     </div>
@@ -239,7 +239,7 @@ const Checkout = () => {
                               </div>
                               <div>
                                  <button
-                                    className="cursor-pointer underline tracking-wide font-semibold text-lg hover:opacity-70"
+                                    className="cursor-pointer text-lg font-semibold tracking-wide underline hover:opacity-70"
                                     onClick={() => setDisplay(false)}
                                  >
                                     Cancel
@@ -248,21 +248,21 @@ const Checkout = () => {
                            </div>
                         )}
                      </div>
-                     <div className="border-b border-neutral-200 dark:border-neutral-700 pb-4">
-                        <div className="flex justify-between items-center">
+                     <div className="border-b border-neutral-200 pb-4 dark:border-neutral-700">
+                        <div className="flex items-center justify-between">
                            <div>Subtotal</div>
                            <div>99.99 zł</div>
                         </div>
-                        <div className="flex justify-between items-center">
+                        <div className="flex items-center justify-between">
                            <div>Shipping</div>
                            <div>9.99 zł</div>
                         </div>
-                        <div className="flex justify-between items-center">
+                        <div className="flex items-center justify-between">
                            <div>Tax</div>
                            <div>23.00 zł</div>
                         </div>
                      </div>
-                     <div className="flex justify-between items-center text-lg font-bold">
+                     <div className="flex items-center justify-between text-lg font-bold">
                         <div>Total</div>
                         <div>{totalPrice} zł</div>
                      </div>

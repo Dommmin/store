@@ -9,7 +9,7 @@ export default function AdminLayout({ children }) {
    return (
       <div>
          <div className={`flex h-full overflow-hidden ${isOpen ? 'md:ml-[250px]' : ''}`}>
-            <div className="w-full bg-base-200 text-white z-10">
+            <div className="z-10 w-full bg-base-200 text-white">
                <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
             </div>
          </div>

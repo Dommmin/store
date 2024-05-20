@@ -11,15 +11,15 @@ export default function Review({ review }) {
    return (
       <motion.div
          variants={variants}
-         className="border border-neutral-200 dark:border-neutral-700 rounded-xl p-4 bg-base-100"
+         className="rounded-xl border border-neutral-200 bg-base-100 p-4 dark:border-neutral-700"
       >
-         <div className="flex space-x-2 items-center">
+         <div className="flex items-center space-x-2">
             <Image
                src={review.user.profile_photo_url}
                alt={review.title}
                width={50}
                height={50}
-               className="rounded-full w-10 h-10"
+               className="h-10 w-10 rounded-full"
                objectFit="cover"
                layout="fixed"
                priority
@@ -31,7 +31,7 @@ export default function Review({ review }) {
                <p className="label-text">{review.confirmed_purchase ? 'Purchase Confirmed ✅' : ''}</p>
             </div>
          </div>
-         <div className="flex space-x-2 mt-2">
+         <div className="mt-2 flex space-x-2">
             <div className="flex">
                {Array.from({ length: 5 }, (_, i) => (
                   <StarIcon
@@ -44,13 +44,13 @@ export default function Review({ review }) {
             </div>
             <div>{review.created_at}</div>
          </div>
-         <div className="w-full max-w-4xl text-sm tracking-wide mt-4">
+         <div className="mt-4 w-full max-w-4xl text-sm tracking-wide">
             <h1 className="text-xl font-bold">{review.title}</h1>
             {review.body}
          </div>
          {review.image && (
             <div>
-               <Image src={review.image} alt={review.title} width={100} height={100} className="rounded-xl mt-4" />
+               <Image src={review.image} alt={review.title} width={100} height={100} className="mt-4 rounded-xl" />
             </div>
          )}
       </motion.div>

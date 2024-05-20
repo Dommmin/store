@@ -92,8 +92,8 @@ export default function Associations({ params }) {
 
    return (
       <>
-         <h1 className="text-3xl font-bold p-2">Associations for {product.name}</h1>
-         <div className="flex justify-end p-2 max-w-6xl mx-auto sm:px-6 lg:px-8">
+         <h1 className="p-2 text-3xl font-bold">Associations for {product.name}</h1>
+         <div className="mx-auto flex max-w-6xl justify-end p-2 sm:px-6 lg:px-8">
             <Link
                href={'/admin/products/' + productUrl + '/associations/create'}
                className="btn btn-success btn-wide text-white"
@@ -160,25 +160,25 @@ export default function Associations({ params }) {
                                     </div>
                                  </td>
                                  <td>
-                                    <button className="btn btn-error btn-outline btn-xs">Delete</button>
+                                    <button className="btn btn-outline btn-error btn-xs">Delete</button>
                                  </td>
                               </motion.tr>
                            ))}
                         </motion.tbody>
                      </table>
                      {(data.prev_page_url || data.next_page_url) && (
-                        <div className="join grid grid-cols-2 mt-4">
+                        <div className="join mt-4 grid grid-cols-2">
                            <button
                               disabled={!data.prev_page_url}
                               onClick={() => setUrl(data.prev_page_url)}
-                              className="join-item btn btn-outline"
+                              className="btn btn-outline join-item"
                            >
                               Previous page
                            </button>
                            <button
                               disabled={!data.next_page_url}
                               onClick={() => setUrl(data.next_page_url)}
-                              className="join-item btn btn-outline"
+                              className="btn btn-outline join-item"
                            >
                               Next
                            </button>

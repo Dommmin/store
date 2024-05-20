@@ -73,8 +73,8 @@ export default function TwoFactorChallenge() {
    }
 
    return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-         <section className="max-w-xl w-full">
+      <div className="flex min-h-screen flex-col items-center justify-center">
+         <section className="w-full max-w-xl">
             <Wrapper>
                <div className="mb-4 text-gray-600 dark:text-gray-400">
                   {recovery
@@ -121,10 +121,10 @@ export default function TwoFactorChallenge() {
                      </>
                   )}
 
-                  <div className="flex items-center justify-end mt-4">
+                  <div className="mt-4 flex items-center justify-end">
                      <button
                         type="button"
-                        className="text-gray-600 dark:text-gray-400 hover:text-gray-900 underline cursor-pointer"
+                        className="cursor-pointer text-gray-600 underline hover:text-gray-900 dark:text-gray-400"
                         onClick={toggleRecovery}
                      >
                         {recovery ? 'Use an authentication code' : 'Use a recovery code'}

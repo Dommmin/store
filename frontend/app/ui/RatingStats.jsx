@@ -6,7 +6,7 @@ const RatingStats = ({ ratings, averageRating = 0, ratingsCount = 0, className =
 
    return (
       <div className={className}>
-         <div className="w-full grid grid-cols-2 p-4 mx-auto bg-dark-500 rounded-xl flex items-center space-x-4 text-white">
+         <div className="bg-dark-500 mx-auto flex grid w-full grid-cols-2 items-center space-x-4 rounded-xl p-4 text-white">
             <div className="flex justify-center">
                <div className="text-center">
                   <p className="text-2xl font-bold">{averageRating}/5</p>
@@ -30,7 +30,7 @@ const RatingStats = ({ ratings, averageRating = 0, ratingsCount = 0, className =
                         <p>★</p>
                         <p>{5 - i}</p>
                      </div>
-                     <div className="bg-gray-700 w-full h-2 rounded-full overflow-hidden">
+                     <div className="h-2 w-full overflow-hidden rounded-full bg-gray-700">
                         <div style={{ width: `${(rating / totalRatings) * 100}%` }} className="h-full bg-yellow-500" />
                      </div>
                      <div className="flex justify-start" style={{ width: '30px', textAlign: 'right' }}>

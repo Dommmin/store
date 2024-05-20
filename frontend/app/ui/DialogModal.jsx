@@ -38,7 +38,7 @@ const Footer = ({ children }) => {
    const { isOpen } = useContext(DialogModalContext);
 
    return isOpen ? (
-      <div className="flex flex-row justify-end mt-4 bg-gray-100 dark:bg-gray-800 text-end">{children}</div>
+      <div className="mt-4 flex flex-row justify-end bg-gray-100 text-end dark:bg-gray-800">{children}</div>
    ) : null;
 };
 

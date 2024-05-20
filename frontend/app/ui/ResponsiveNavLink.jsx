@@ -4,11 +4,11 @@ export default function ResponsiveNavLink({ active = false, className = '', chil
    return (
       <Link
          {...props}
-         className={`w-full flex items-start ps-3 pe-4 py-2 border-l-4 ${
+         className={`flex w-full items-start border-l-4 py-2 pe-4 ps-3 ${
             active
-               ? 'border-info text-white dark:text-white bg-info dark:bg-info focus:white dark:focus:text-white focus:bg-info dark:focus:bg-info focus:border-info dark:focus:border-info'
-               : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-600 focus:text-gray-800 dark:focus:text-gray-200 focus:bg-gray-50 dark:focus:bg-gray-700 focus:border-gray-300 dark:focus:border-gray-600'
-         } text-base font-medium focus:outline-none transition duration-150 ease-in-out ${className}`}
+               ? 'focus:white border-info bg-info text-white focus:border-info focus:bg-info dark:bg-info dark:text-white dark:focus:border-info dark:focus:bg-info dark:focus:text-white'
+               : 'border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800 focus:border-gray-300 focus:bg-gray-50 focus:text-gray-800 dark:text-gray-400 dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:hover:text-gray-200 dark:focus:border-gray-600 dark:focus:bg-gray-700 dark:focus:text-gray-200'
+         } text-base font-medium transition duration-150 ease-in-out focus:outline-none ${className}`}
       >
          {children}
       </Link>

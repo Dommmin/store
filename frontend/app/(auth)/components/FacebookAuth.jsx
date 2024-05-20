@@ -2,9 +2,9 @@ function FacebookAuth(props) {
    return (
       <button
          onClick={props.onClick}
-         className="flex justify-center items-center bg-white border border-gray-300 rounded-lg shadow-md max-w-md w-full px-6 py-2 text-sm font-medium text-gray-800 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+         className="flex w-full max-w-md items-center justify-center rounded-lg border border-gray-300 bg-white px-6 py-2 text-sm font-medium text-gray-800 shadow-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
       >
-         <svg className="h-6 w-6 mr-2" viewBox="0 0 48 48" version="1.1">
+         <svg className="mr-2 h-6 w-6" viewBox="0 0 48 48" version="1.1">
             <g id="Icons" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
                <g id="Color-" transform="translate(-200.000000, -160.000000)" fill="#4460A0">
                   <path

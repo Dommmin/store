@@ -113,8 +113,8 @@ export default function Products() {
 
    return (
       <>
-         <h1 className="text-3xl font-bold p-2">Products</h1>
-         <div className="flex space-x-4 justify-between p-2 max-w-[1920px] mx-auto sm:px-6 lg:px-8">
+         <h1 className="p-2 text-3xl font-bold">Products</h1>
+         <div className="mx-auto flex max-w-[1920px] justify-between space-x-4 p-2 sm:px-6 lg:px-8">
             <div className="flex w-full max-w-xs space-x-2">
                <select
                   onChange={(e) => setAction(e.target.value)}
@@ -126,7 +126,7 @@ export default function Products() {
                   </option>
                   <option value="delete">Delete selected</option>
                </select>
-               <button onClick={handleMassAction} className="btn btn-default">
+               <button onClick={handleMassAction} className="btn-default btn">
                   Apply
                </button>
             </div>
@@ -174,7 +174,7 @@ export default function Products() {
                               <motion.tr
                                  variants={childVariants}
                                  key={item.id}
-                                 className="even:bg-base-300 odd:bg-base-100"
+                                 className="odd:bg-base-100 even:bg-base-300"
                               >
                                  <td>
                                     <label>
@@ -197,7 +197,7 @@ export default function Products() {
                                  <td>
                                     <div className="flex items-center gap-3">
                                        <div className="avatar">
-                                          <Link href={`/p/${item.url}`} className="mask mask-squircle w-12 h-12">
+                                          <Link href={`/p/${item.url}`} className="mask mask-squircle h-12 w-12">
                                              <Image
                                                 src={item.main_image}
                                                 alt={item.name}
@@ -237,22 +237,22 @@ export default function Products() {
                                     </div>
                                  </td>
                                  <td>
-                                    <div className="grid grid-cols-2 gap-2 items-center">
+                                    <div className="grid grid-cols-2 items-center gap-2">
                                        <Link
                                           href={'/admin/products/' + item.url + '/edit'}
-                                          className="btn btn-info btn-outline btn-xs"
+                                          className="btn btn-outline btn-info btn-xs"
                                        >
                                           Edit
                                        </Link>
                                        <button
                                           onClick={() => handleDelete(item.url)}
-                                          className="btn btn-error btn-outline btn-xs"
+                                          className="btn btn-outline btn-error btn-xs"
                                        >
                                           Delete
                                        </button>
                                        <Link
                                           href={'/admin/products/' + item.url + '/associations'}
-                                          className="col-span-2 btn btn-accent btn-outline btn-xs "
+                                          className="btn btn-outline btn-accent btn-xs col-span-2 "
                                        >
                                           Associations
                                        </Link>
@@ -263,18 +263,18 @@ export default function Products() {
                         </motion.tbody>
                      </table>
                      {(data.prev_page_url || data.next_page_url) && (
-                        <div className="join grid grid-cols-2 mt-4">
+                        <div className="join mt-4 grid grid-cols-2">
                            <button
                               disabled={!data.prev_page_url}
                               onClick={() => setUrl(data.prev_page_url)}
-                              className="join-item btn btn-outline"
+                              className="btn btn-outline join-item"
                            >
                               Previous page
                            </button>
                            <button
                               disabled={!data.next_page_url}
                               onClick={() => setUrl(data.next_page_url)}
-                              className="join-item btn btn-outline"
+                              className="btn btn-outline join-item"
                            >
                               Next
                            </button>

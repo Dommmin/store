@@ -100,7 +100,7 @@ export default function Reviews() {
 
    return (
       <>
-         <h1 className="text-3xl font-bold p-2">Reviews</h1>
+         <h1 className="p-2 text-3xl font-bold">Reviews</h1>
          <Wrapper maxWidth="max-w-[1920px]">
             <div className="overflow-x-auto">
                {data.data.length > 0 ? (
@@ -151,7 +151,7 @@ export default function Reviews() {
                                  <td>
                                     <div className="flex items-center gap-3">
                                        <div>
-                                          <div className="font-bold truncate">{item.title}</div>
+                                          <div className="truncate font-bold">{item.title}</div>
                                        </div>
                                     </div>
                                  </td>
@@ -160,7 +160,7 @@ export default function Reviews() {
                                        <ul className="avatar">
                                           <Link
                                              href={'/p/' + item.product.url}
-                                             className="mask mask-squircle w-12 h-12"
+                                             className="mask mask-squircle h-12 w-12"
                                           >
                                              <Image
                                                 src={item.product.main_image}
@@ -181,7 +181,7 @@ export default function Reviews() {
                                  <td>
                                     <div className="flex items-center gap-3">
                                        <ul className="avatar">
-                                          <li className="mask mask-squircle w-12 h-12">
+                                          <li className="mask mask-squircle h-12 w-12">
                                              <Image
                                                 src={item.user.profile_photo_url}
                                                 alt={item.user.name}
@@ -201,7 +201,7 @@ export default function Reviews() {
                                  <td>
                                     <div className="flex items-center gap-3">
                                        <div>
-                                          <div className="font-bold truncate">{item.created_at}</div>
+                                          <div className="truncate font-bold">{item.created_at}</div>
                                        </div>
                                     </div>
                                  </td>
@@ -223,7 +223,7 @@ export default function Reviews() {
                                  <td>
                                     <button
                                        onClick={() => handleDelete(item.id)}
-                                       className="btn btn-error btn-outline btn-xs"
+                                       className="btn btn-outline btn-error btn-xs"
                                     >
                                        Delete
                                     </button>
@@ -233,18 +233,18 @@ export default function Reviews() {
                         </motion.tbody>
                      </table>
                      {(data.links.prev || data.links.next) && (
-                        <div className="join grid grid-cols-2 mt-4">
+                        <div className="join mt-4 grid grid-cols-2">
                            <button
                               disabled={!data.links.prev}
                               onClick={() => setUrl(data.links.prev)}
-                              className="join-item btn btn-outline"
+                              className="btn btn-outline join-item"
                            >
                               Previous page
                            </button>
                            <button
                               disabled={!data.links.next}
                               onClick={() => setUrl(data.links.next)}
-                              className="join-item btn btn-outline"
+                              className="btn btn-outline join-item"
                            >
                               Next
                            </button>

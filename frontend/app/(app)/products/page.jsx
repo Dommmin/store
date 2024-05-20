@@ -90,10 +90,10 @@ export default function Page() {
    // }
 
    return (
-      <div className="grid grid-cols-1 2xl:grid-cols-8 gap-4 py-4 px-4 sm:px-6 lg:px-8">
-         <div className="w-full hidden 2xl:block max-w-xs col-span-2">
-            <div className="sticky top-4 border border-neutral-200 dark:border-neutral-700 p-4 bg-white dark:bg-base-300 rounded-lg">
-               <h2 className="font-bold mb-4">Filters</h2>
+      <div className="grid grid-cols-1 gap-4 px-4 py-4 sm:px-6 lg:px-8 2xl:grid-cols-8">
+         <div className="col-span-2 hidden w-full max-w-xs 2xl:block">
+            <div className="sticky top-4 rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-700 dark:bg-base-300">
+               <h2 className="mb-4 font-bold">Filters</h2>
                <div>
                   <label className="form-control w-full max-w-xs">
                      <div className="label">
@@ -136,7 +136,7 @@ export default function Page() {
 
                <div className="py-2">
                   <span className="label-text">Price Range</span>
-                  <div className="flex space-x-2 mt-1 mb-4">
+                  <div className="mb-4 mt-1 flex space-x-2">
                      <input
                         min={0}
                         max={value[1]}
@@ -156,7 +156,7 @@ export default function Page() {
                   </div>
                   <RangeSlider step={1} min={1} max={10000} value={value} onInput={setValue} />
                </div>
-               <div className="mt-8 border border-natural-200 dark:border-neutral-700 rounded-lg p-4">
+               <div className="border-natural-200 mt-8 rounded-lg border p-4 dark:border-neutral-700">
                   <span className="label-text">Sort by</span>
                   <div>
                      <select
@@ -176,9 +176,9 @@ export default function Page() {
             </div>
          </div>
 
-         <div className="w-full flex-grow col-span-4 max-2xl:mx-auto">
+         <div className="col-span-4 w-full flex-grow max-2xl:mx-auto">
             <div className="mb-4">
-               <label className="input input-bordered flex items-center w-full">
+               <label className="input input-bordered flex w-full items-center">
                   <input
                      type="text"
                      className="grow"
@@ -190,7 +190,7 @@ export default function Page() {
                      xmlns="http://www.w3.org/2000/svg"
                      viewBox="0 0 16 16"
                      fill="currentColor"
-                     className="w-4 h-4 opacity-70"
+                     className="h-4 w-4 opacity-70"
                   >
                      <path
                         fillRule="evenodd"
@@ -207,7 +207,7 @@ export default function Page() {
                <>
                   <motion.div
                      layout
-                     className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 min-[1920px]:grid-cols-4 min-[3440px]:grid-cols-5 gap-4"
+                     className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 min-[1920px]:grid-cols-4 min-[3440px]:grid-cols-5"
                   >
                      <AnimatePresence>
                         {data.data?.map((product) => (
@@ -218,19 +218,19 @@ export default function Page() {
                      </AnimatePresence>
                      {!data.data?.length && <p>No products found</p>}
                   </motion.div>
-                  <div className="flex justify-center items-center mt-8 join">
+                  <div className="join mt-8 flex items-center justify-center">
                      <button
                         disabled={!data.prev_page_url}
                         onClick={() => setUrl(data.prev_page_url)}
-                        className="join-item btn"
+                        className="btn join-item"
                      >
                         «
                      </button>
-                     <button className="join-item btn btn-disabled">{data?.current_page} Page</button>
+                     <button className="btn btn-disabled join-item">{data?.current_page} Page</button>
                      <button
                         disabled={!data.next_page_url}
                         onClick={() => setUrl(data.next_page_url)}
-                        className="join-item btn"
+                        className="btn join-item"
                      >
                         »
                      </button>

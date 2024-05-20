@@ -60,9 +60,9 @@ export default function AttributeEdit({ params }) {
 
    return (
       <>
-         <h1 className="text-3xl font-bold p-2">Edit {attribute.name}</h1>
+         <h1 className="p-2 text-3xl font-bold">Edit {attribute.name}</h1>
          <Wrapper maxWidth="max-w-xl">
-            <form className="flex justify-center items-center" onSubmit={handleUpdate}>
+            <form className="flex items-center justify-center" onSubmit={handleUpdate}>
                <div className="space-y-2">
                   <input
                      className={'input input-bordered w-full ' + (errors.name ? ' input-error' : '')}
@@ -81,11 +81,11 @@ export default function AttributeEdit({ params }) {
                      onChange={(e) => setDescription(e.target.value)}
                      rows={5}
                      value={description}
-                     className="w-full textarea textarea-bordered"
+                     className="textarea textarea-bordered w-full"
                      placeholder="Description"
                   />
                   <InputError messages={errors.description} className="mt-2" />
-                  <button type="submit" className="w-full btn btn-success text-white mt-8">
+                  <button type="submit" className="btn btn-success mt-8 w-full text-white">
                      Update
                   </button>
                </div>

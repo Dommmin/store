@@ -44,9 +44,9 @@ export default function Success() {
    if (error) return <PageNotFound />;
 
    return (
-      <div className="h-screen flex justify-center items-center text-center">
+      <div className="flex h-screen items-center justify-center text-center">
          <Wrapper className="px-24 sm:px-32">
-            <h1 className="text-xl mb-2">Your order has been confirmed!</h1>
+            <h1 className="mb-2 text-xl">Your order has been confirmed!</h1>
             <Link href="/" className="btn btn-info text-white">
                Back to homepage
             </Link>

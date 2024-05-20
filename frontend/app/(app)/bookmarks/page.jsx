@@ -38,11 +38,11 @@ const Page = () => {
    return (
       <Wrapper>
          {!data.length && <p>No bookmarks yet...</p>}
-         <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+         <ul className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
             {data.map((bookmark) => (
                <li key={bookmark.id}>
                   <Link
-                     className="flex max-w-xs space-x-2 border border-neutral-200 dark:border-neutral-700 p-4 bg-base-100 rounded-xl"
+                     className="flex max-w-xs space-x-2 rounded-xl border border-neutral-200 bg-base-100 p-4 dark:border-neutral-700"
                      href={`/p/${bookmark.product.url}`}
                   >
                      <Image

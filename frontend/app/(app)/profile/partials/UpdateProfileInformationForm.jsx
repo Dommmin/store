@@ -77,19 +77,19 @@ export default function UpdateProfileInformation({ className = '', user, resendE
 
             {user.email_verified_at === null && (
                <div>
-                  <p className="text-sm mt-2 text-gray-800 dark:text-gray-200">
+                  <p className="mt-2 text-sm text-gray-800 dark:text-gray-200">
                      Your email address is unverified.
                      <button
                         type="button"
                         onClick={() => resendEmailVerification({ setStatus })}
-                        className="btn btn-primary text-white btn-sm ml-2"
+                        className="btn btn-primary btn-sm ml-2 text-white"
                      >
                         Click here to re-send the verification email.
                      </button>
                   </p>
 
                   {status === 'verification-link-sent' && (
-                     <div className="mt-2 font-medium text-sm text-green-600 dark:text-green-400">
+                     <div className="mt-2 text-sm font-medium text-green-600 dark:text-green-400">
                         A new verification link has been sent to your email address.
                      </div>
                   )}

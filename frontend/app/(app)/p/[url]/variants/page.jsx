@@ -36,15 +36,15 @@ export default function Variants({ params }) {
          <div className="space-y-4">
             {variants.map((variant) => (
                <div
-                  className="w-full bg-base-200 border border-neutral-200 dark:border-neutral-700 rounded-lg relative"
+                  className="relative w-full rounded-lg border border-neutral-200 bg-base-200 dark:border-neutral-700"
                   key={variant.id}
                >
                   <Link
                      href={'/p/' + variant.url}
-                     className="flex flex-col sm:flex-row space-x-0 space-y-2 sm:space-x-4 sm:space-y-0 p-4"
+                     className="flex flex-col space-x-0 space-y-2 p-4 sm:flex-row sm:space-x-4 sm:space-y-0"
                   >
                      <Image
-                        className="rounded-lg w-full sm:w-1/4"
+                        className="w-full rounded-lg sm:w-1/4"
                         layout="cover"
                         src={variant.main_image}
                         alt={variant.name}
@@ -73,7 +73,7 @@ export default function Variants({ params }) {
                         ))}
                      </div>
                   </Link>
-                  <div className="absolute bottom-4 right-4 bg-info px-4 py-2 rounded-3xl mt-2">
+                  <div className="absolute bottom-4 right-4 mt-2 rounded-3xl bg-info px-4 py-2">
                      ${variant.formatted_price}
                   </div>
                </div>

@@ -14,7 +14,7 @@ export default function InformationForm({ ...props }) {
                   placeholder="First name"
                   autoComplete="given-name"
                />
-               <p className="label-text text-error p-1">{props.errors.firstName}</p>
+               <p className="label-text p-1 text-error">{props.errors.firstName}</p>
             </div>
             <div className="w-full">
                <input
@@ -28,7 +28,7 @@ export default function InformationForm({ ...props }) {
                   placeholder="Last name"
                   autoComplete="family-name"
                />
-               <p className="label-text text-error p-1">{props.errors.lastName}</p>
+               <p className="label-text p-1 text-error">{props.errors.lastName}</p>
             </div>
          </div>
          <div>
@@ -43,7 +43,7 @@ export default function InformationForm({ ...props }) {
                placeholder="Address"
                autoComplete="address-line1"
             />
-            <p className="label-text text-error p-1">{props.errors.address}</p>
+            <p className="label-text p-1 text-error">{props.errors.address}</p>
          </div>
          <div>
             <input
@@ -53,7 +53,7 @@ export default function InformationForm({ ...props }) {
                autoComplete="address-line2"
             />
          </div>
-         <div className="w-full max-w-xl grid grid-cols-3 gap-4">
+         <div className="grid w-full max-w-xl grid-cols-3 gap-4">
             <div className="col-span-1">
                <input
                   onChange={(e) => {
@@ -66,7 +66,7 @@ export default function InformationForm({ ...props }) {
                   placeholder="ZIP code"
                   autoComplete="postal-code"
                />
-               <p className="label-text text-error p-1">{props.errors.zipCode}</p>
+               <p className="label-text p-1 text-error">{props.errors.zipCode}</p>
             </div>
 
             <div className="col-span-2">
@@ -81,7 +81,7 @@ export default function InformationForm({ ...props }) {
                   placeholder="City"
                   autoComplete="address-level2"
                />
-               <p className="label-text text-error p-1">{props.errors.city}</p>
+               <p className="label-text p-1 text-error">{props.errors.city}</p>
             </div>
          </div>
       </div>

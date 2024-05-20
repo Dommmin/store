@@ -36,7 +36,7 @@ export default function Home() {
             {collections.map((collection, index) => (
                <div key={collection.id} className="space-y-4">
                   <Link href={'/c/' + collection.slug} className={'block'}>
-                     <div className={`p-4 rounded-md text-center ${index % 2 === 0 ? 'bg-info/50' : 'bg-accent/50'}`}>
+                     <div className={`rounded-md p-4 text-center ${index % 2 === 0 ? 'bg-info/50' : 'bg-accent/50'}`}>
                         <p className="text-7xl">{collection.name}</p>
                      </div>
                   </Link>

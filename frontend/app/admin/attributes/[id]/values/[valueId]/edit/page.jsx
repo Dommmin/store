@@ -57,9 +57,9 @@ export default function AttributeValueEdit({ params }) {
 
    return (
       <>
-         <h1 className="text-3xl font-bold p-2">Edit {attributeValue.name}</h1>
+         <h1 className="p-2 text-3xl font-bold">Edit {attributeValue.name}</h1>
          <Wrapper maxWidth="max-w-xl">
-            <form className="flex justify-center items-center" onSubmit={handleUpdate}>
+            <form className="flex items-center justify-center" onSubmit={handleUpdate}>
                <div className="space-y-2">
                   <input
                      className={'input input-bordered w-full ' + (errors.name ? ' input-error' : '')}
@@ -74,7 +74,7 @@ export default function AttributeValueEdit({ params }) {
                      placeholder="Name"
                   />
                   <InputError messages={errors.name} className="mt-2" />
-                  <button type="submit" className="w-full btn btn-success text-white mt-8">
+                  <button type="submit" className="btn btn-success mt-8 w-full text-white">
                      Update
                   </button>
                </div>

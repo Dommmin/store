@@ -24,9 +24,9 @@ export default function Navbar() {
    return (
       <nav>
          <div className="mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between h-16">
+            <div className="flex h-16 justify-between">
                <div className="hidden lg:flex">
-                  <div className="shrink-0 flex items-center">
+                  <div className="flex shrink-0 items-center">
                      <Link href="/">
                         <ShoppingBagIcon className="block h-9 w-auto dark:text-gray-400" />
                      </Link>
@@ -43,14 +43,14 @@ export default function Navbar() {
                {/*   <SearchInput />*/}
                {/*</div>*/}
 
-               <div className="hidden lg:flex sm:items-center sm:ms-6 space-x-2">
+               <div className="hidden space-x-2 sm:ms-6 sm:items-center lg:flex">
                   {user && <Bookmark />}
                   <CartMenu />
                   <div className="relative">
                      {!user ? (
                         <Link
                            className={
-                              'btn btn-default btn-outline btn-sm tracking-widest font-bold ' +
+                              'btn-default btn btn-outline btn-sm font-bold tracking-widest ' +
                               (isFetching ? 'hidden' : '')
                            }
                            href={'/login'}
@@ -63,7 +63,7 @@ export default function Navbar() {
                               <div className="min-w-10">
                                  <Image
                                     title={user.name}
-                                    className="rounded-full object-cover w-10 h-10 cursor-pointer"
+                                    className="h-10 w-10 cursor-pointer rounded-full object-cover"
                                     src={user.profile_photo_url}
                                     alt={user.name}
                                     width={36}
@@ -85,11 +85,11 @@ export default function Navbar() {
                   </div>
                </div>
 
-               <div className="flex w-full justify-between items-center lg:hidden">
+               <div className="flex w-full items-center justify-between lg:hidden">
                   <div>
                      <button
                         onClick={() => setShowingNavigationDropdown((previousState) => !previousState)}
-                        className="btn border-gray-700 hover:border-gray-700 inline-flex items-center justify-center p-2 transition-all ease-in-out"
+                        className="btn inline-flex items-center justify-center border-gray-700 p-2 transition-all ease-in-out hover:border-gray-700"
                      >
                         <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                            <path
@@ -114,7 +114,7 @@ export default function Navbar() {
                   {/*   <SearchInput />*/}
                   {/*</div>*/}
 
-                  <div className="block flex lg:hidden space-x-2">
+                  <div className="block flex space-x-2 lg:hidden">
                      <Suspense fallback={null}>
                         {user && <Bookmark />}
                         <CartMenu />
@@ -125,7 +125,7 @@ export default function Navbar() {
          </div>
 
          <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' lg:hidden'}>
-            <div className="pt-2 pb-3 space-y-1">
+            <div className="space-y-1 pb-3 pt-2">
                <ResponsiveNavLink href="/" active={pathname === '/'}>
                   Home
                </ResponsiveNavLink>
@@ -137,14 +137,14 @@ export default function Navbar() {
                </ResponsiveNavLink>
             </div>
 
-            <div className="pt-3 pb-1 border-t border-gray-200 dark:border-gray-600">
+            <div className="border-t border-gray-200 pb-1 pt-3 dark:border-gray-600">
                {!user ? (
                   <ResponsiveNavLink href="/login">Login</ResponsiveNavLink>
                ) : (
                   <div>
                      <div className="px-4">
-                        <div className="font-medium text-base text-gray-800 dark:text-gray-200">{user.name}</div>
-                        <div className="font-medium text-sm text-gray-500">{user.email}</div>
+                        <div className="text-base font-medium text-gray-800 dark:text-gray-200">{user.name}</div>
+                        <div className="text-sm font-medium text-gray-500">{user.email}</div>
                      </div>
 
                      <div className="mt-3 space-y-1">

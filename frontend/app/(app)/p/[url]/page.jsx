@@ -199,9 +199,9 @@ export default function Page({ params }) {
 
    return (
       <Wrapper>
-         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+         <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
             <div className="relative lg:col-span-2">
-               <button className="absolute top-2 right-2">
+               <button className="absolute right-2 top-2">
                   {product?.bookmark_id ? (
                      <BookmarkIcon
                         onClick={(event) => handleDeleteBookmark(event)}
@@ -224,7 +224,7 @@ export default function Page({ params }) {
                   className="rounded-lg"
                />
 
-               <div className="grid grid-cols-5 gap-4 mt-4">
+               <div className="mt-4 grid grid-cols-5 gap-4">
                   {product.images.map((image) => (
                      <Image
                         key={image.url}
@@ -234,7 +234,7 @@ export default function Page({ params }) {
                         height={200}
                         onClick={() => setSelectedImage(image.url)}
                         className={
-                           'w-full h-12 sm:h-24 object-cover cursor-pointer rounded-lg ' +
+                           'h-12 w-full cursor-pointer rounded-lg object-cover sm:h-24 ' +
                            (selectedImage === image.url ? 'border-2 border-info' : '')
                         }
                      />
@@ -243,11 +243,11 @@ export default function Page({ params }) {
             </div>
             <div className="lg:col-span-1">
                <h1 className="text-3xl font-bold">{product.name}</h1>
-               <div className="flex items-center justify-start mt-2">
-                  <span className="px-4 py-2 bg-info/80 rounded-3xl">{product.formatted_price} PLN</span>
+               <div className="mt-2 flex items-center justify-start">
+                  <span className="rounded-3xl bg-info/80 px-4 py-2">{product.formatted_price} PLN</span>
                </div>
 
-               <div className="border-t border-gray-400 mt-8 mb-8" />
+               <div className="mb-8 mt-8 border-t border-gray-400" />
 
                {product.sizes.length > 0 && (
                   <div className="mb-8">
@@ -255,7 +255,7 @@ export default function Page({ params }) {
                      <select
                         value={size}
                         onChange={(e) => setSize(e.target.value)}
-                        className="select select-info w-full text-lg mt-2"
+                        className="select select-info mt-2 w-full text-lg"
                      >
                         <option value="" disabled>
                            Select Size
@@ -279,10 +279,10 @@ export default function Page({ params }) {
             </div>
             {Object.entries(product.associations).length > 0 && (
                <div>
-                  <p className="font-bold text-xl">Variants</p>
+                  <p className="text-xl font-bold">Variants</p>
                   {Object.entries(product.associations).map(([key, value]) => (
                      <div key={key}>
-                        <div className="font-bold py-2">
+                        <div className="py-2 font-bold">
                            {key}: {product.attributes.find((attribute) => attribute.name === key)?.value}
                         </div>
                         <div className="flex space-x-2">
@@ -308,15 +308,15 @@ export default function Page({ params }) {
          </div>
          {product.attributes.length > 0 && (
             <div className="mt-8">
-               <p className="font-bold text-xl">Additional information</p>
-               <div className="flex justify-center overflow-x-auto overflow-y-hidden mt-4 rounded-b-box">
+               <p className="text-xl font-bold">Additional information</p>
+               <div className="mt-4 flex justify-center overflow-x-auto overflow-y-hidden rounded-b-box">
                   <table className="table table-zebra">
                      <tbody>
                         {product.attributes.map((attribute, index) => (
                            <tr className="odd:bg-info/10" key={index}>
                               <td>
                                  <span
-                                    className="underline decoration-dotted underline-offset-4 tracking-widest"
+                                    className="tracking-widest underline decoration-dotted underline-offset-4"
                                     title={attribute.description}
                                  >
                                     {attribute.name}
@@ -331,14 +331,14 @@ export default function Page({ params }) {
             </div>
          )}
          <div className="mt-8">
-            <p className="font-bold text-xl">Description</p>
+            <p className="text-xl font-bold">Description</p>
             <div dangerouslySetInnerHTML={{ __html: product.description }} />
          </div>
 
          {reviews.data.length > 0 ? (
             <div className="mt-8">
-               <p className="font-bold text-xl">Ratings</p>
-               <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+               <p className="text-xl font-bold">Ratings</p>
+               <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
                   <RatingStats
                      ratings={ratings}
                      ratingsCount={product.reviews_count}
@@ -346,17 +346,17 @@ export default function Page({ params }) {
                      className="col-span-2"
                   />
                   {!product.review ? (
-                     <div className="flex justify-center items-center col-span-1">
+                     <div className="col-span-1 flex items-center justify-center">
                         <button
-                           className="btn btn-accent btn-wide w-full lg:max-w-xs text-white"
+                           className="btn btn-accent btn-wide w-full text-white lg:max-w-xs"
                            onClick={() => setIsOpen(true)}
                         >
                            Post review
                         </button>
                      </div>
                   ) : (
-                     <div className="flex justify-center items-center col-span-1">
-                        <div className="flex space-x-2 lg:flex-col text-center">
+                     <div className="col-span-1 flex items-center justify-center">
+                        <div className="flex space-x-2 text-center lg:flex-col">
                            <p className="text-2xl">Your rating:</p>
                            <div className="flex">
                               {Array.from({ length: 5 }, (_, i) => (
@@ -373,25 +373,25 @@ export default function Page({ params }) {
                   )}
                </div>
                <div className="mt-8">
-                  <p className="font-bold text-xl">Ratings</p>
+                  <p className="text-xl font-bold">Ratings</p>
                   <motion.div className="mt-4 space-y-4" variants={variants} initial="hidden" animate="show">
                      {reviews.data.map((review) => (
                         <Review key={review.id} review={review} />
                      ))}
                      {(reviews.links.prev || reviews.links.next) && (
-                        <div className="flex justify-center join">
+                        <div className="join flex justify-center">
                            <button
                               disabled={!reviews.links.prev}
                               onClick={() => setReviewUrl(reviews.links.prev)}
-                              className="join-item btn"
+                              className="btn join-item"
                            >
                               «
                            </button>
-                           <button className="join-item btn">Page {reviews.meta.current_page}</button>
+                           <button className="btn join-item">Page {reviews.meta.current_page}</button>
                            <button
                               disabled={!reviews.links.next}
                               onClick={() => setReviewUrl(reviews.links.next)}
-                              className="join-item btn"
+                              className="btn join-item"
                            >
                               »
                            </button>
@@ -401,10 +401,10 @@ export default function Page({ params }) {
                </div>
             </div>
          ) : (
-            <div className="mt-8 text-center space-y-2">
-               <p className="tracking-widest text-xl">No reviews yet...</p>
+            <div className="mt-8 space-y-2 text-center">
+               <p className="text-xl tracking-widest">No reviews yet...</p>
                <button
-                  className="btn btn-accent btn-wide w-full lg:max-w-xs text-white"
+                  className="btn btn-accent btn-wide w-full text-white lg:max-w-xs"
                   onClick={() => setIsOpen(true)}
                >
                   Post review
@@ -442,12 +442,12 @@ export default function Page({ params }) {
                   {/*<InputError messages={errors.password} className="mt-2" />*/}
                </div>
 
-               <div className="flex mt-6 space-x-4">
+               <div className="mt-6 flex space-x-4">
                   {!filePreview ? (
                      <div>
                         <label
                            htmlFor="image"
-                           className="flex items-center justify-center w-16 h-16 bg-base-100 border-2 border-dashed border-gray-200 text-gray-500 font-medium cursor-pointer rounded-lg dark:text-gray-300 dark:border-gray-600 dark:placeholder-gray-400"
+                           className="flex h-16 w-16 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-gray-200 bg-base-100 font-medium text-gray-500 dark:border-gray-600 dark:text-gray-300 dark:placeholder-gray-400"
                         >
                            <PlusIcon className="h-6 w-6" />
                         </label>
@@ -476,7 +476,7 @@ export default function Page({ params }) {
                            alt={product.name}
                            width={64}
                            height={64}
-                           className="w-16 h-16 rounded-lg"
+                           className="h-16 w-16 rounded-lg"
                         />
                      </div>
                   )}
@@ -487,7 +487,7 @@ export default function Page({ params }) {
                   </div>
                </div>
 
-               <div className="flex justify-center mt-4">
+               <div className="mt-4 flex justify-center">
                   <div className="flex flex-col justify-center text-center">
                      <StarRating maxRating={5} size={40} onSetRating={handleRate} />
                   </div>

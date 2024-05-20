@@ -241,7 +241,7 @@ export default function Edit({ params }) {
    return (
       <>
          <div className="p-4">
-            <Link href={'/admin/products'} className="btn btn-default btn-outline">
+            <Link href={'/admin/products'} className="btn-default btn btn-outline">
                <ChevronDoubleLeftIcon className="h-6" />
             </Link>
          </div>
@@ -316,7 +316,7 @@ export default function Edit({ params }) {
 
             <div className="bottom-2 right-2 space-x-2">
                <div className="flex justify-center pt-4">
-                  <button onClick={handleUpdate} className="w-full max-w-3xl btn btn-success text-white">
+                  <button onClick={handleUpdate} className="btn btn-success w-full max-w-3xl text-white">
                      Update
                   </button>
                </div>

@@ -7,7 +7,7 @@ export default function Images({ ...props }) {
          <div>
             <label
                htmlFor="image"
-               className="flex items-center justify-center w-full h-44 bg-base-100 border-2 border-dashed border-gray-200 text-gray-500 font-medium cursor-pointer rounded-lg dark:text-gray-300 dark:border-gray-600 dark:placeholder-gray-400"
+               className="flex h-44 w-full cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-gray-200 bg-base-100 font-medium text-gray-500 dark:border-gray-600 dark:text-gray-300 dark:placeholder-gray-400"
                onDragOver={(e) => e.preventDefault()}
                onDrop={(e) => {
                   e.preventDefault();

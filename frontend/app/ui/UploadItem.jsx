@@ -17,9 +17,9 @@ const UploadItem = ({ image, onRemove }) => {
 
    return (
       <>
-         <div className="bg-white dark:bg-base-100 rounded-lg shadow p-4 flex space-x-4">
+         <div className="flex space-x-4 rounded-lg bg-white p-4 shadow dark:bg-base-100">
             <Image
-               className="h-24 w-24 object-cover rounded-lg"
+               className="h-24 w-24 rounded-lg object-cover"
                src={imagePreview}
                width={100}
                height={100}
@@ -32,8 +32,8 @@ const UploadItem = ({ image, onRemove }) => {
                blurDataURL={imagePreview}
                onLoadingComplete={() => setImagePreview(imagePreview)}
             />
-            <div className="flex-1 min-w-0 mt-1">
-               <h2 className="text-lg font-medium dark:text-gray-300 text-gray-900 text-ellipsis overflow-hidden">
+            <div className="mt-1 min-w-0 flex-1">
+               <h2 className="overflow-hidden text-ellipsis text-lg font-medium text-gray-900 dark:text-gray-300">
                   {image.name}
                </h2>
                <p className="text-sm text-gray-500">{(image.size / 1024).toFixed(2)} KB</p>
@@ -41,7 +41,7 @@ const UploadItem = ({ image, onRemove }) => {
             <div className="relative">
                <button
                   onClick={onRemove}
-                  className="btn btn-square btn-error btn-xs absolute -top-2 -right-2 z-10 text-white"
+                  className="btn btn-square btn-error btn-xs absolute -right-2 -top-2 z-10 text-white"
                >
                   <svg
                      xmlns="http://www.w3.org/2000/svg"

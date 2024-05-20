@@ -36,7 +36,7 @@ export default function Order({ params }) {
                <Link
                   href={`/p/${item.product.url}`}
                   key={item.id}
-                  className="flex space-x-4 border border-neutral-200 dark:border-neutral-700 p-4 bg-base-100 rounded-xl"
+                  className="flex space-x-4 rounded-xl border border-neutral-200 bg-base-100 p-4 dark:border-neutral-700"
                >
                   <Image
                      className="rounded-xl"
@@ -45,7 +45,7 @@ export default function Order({ params }) {
                      width={150}
                      height={150}
                   />
-                  <div className="flex flex-col w-full justify-between">
+                  <div className="flex w-full flex-col justify-between">
                      <div>{item.product.name}</div>
                      <div />
                      <div className="flex justify-between">
