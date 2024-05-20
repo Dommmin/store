@@ -132,7 +132,8 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function (): void {
         'show' => 'admin.categories.show',
         'update' => 'admin.categories.update',
         'destroy' => 'admin.categories.destroy',
-    ]);;
+    ]);
+
     Route::apiResource('products', Admin\ProductController::class)->names([
         'index' => 'admin.products.index',
         'store' => 'admin.products.store',
