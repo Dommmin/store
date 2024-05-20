@@ -19,19 +19,19 @@ export const useTwoFactor = () => {
    const { refetch: refetchUser } = useAuth();
 
    const showQrCode = () => {
-      return axios.get('/user/two-factor-qr-code').then((response) => {
+      return axios.get('/api/v1/user/two-factor-qr-code').then((response) => {
          setQrCode(response.data.svg);
       });
    };
 
    const showSetupKey = () => {
-      return axios.get('/user/two-factor-secret-key').then((response) => {
+      return axios.get('/api/v1/user/two-factor-secret-key').then((response) => {
          setSetupKey(response.data.secretKey);
       });
    };
 
    const showRecoveryCodes = () => {
-      return axios.get('/user/two-factor-recovery-codes').then((response) => {
+      return axios.get('/api/v1/user/two-factor-recovery-codes').then((response) => {
          setRecoveryCodes(response.data);
       });
    };
@@ -41,7 +41,7 @@ export const useTwoFactor = () => {
       setErrors({});
 
       axios
-         .post('/user/confirmed-two-factor-authentication', { code: confirmationCode })
+         .post('/api/v1/user/confirmed-two-factor-authentication', { code: confirmationCode })
          .then(() => {
             setQrCode(null);
             setSetupKey(null);
@@ -58,13 +58,13 @@ export const useTwoFactor = () => {
    };
 
    const regenerateRecoveryCodes = () => {
-      axios.post('/user/two-factor-recovery-codes').then(() => showRecoveryCodes());
+      axios.post('/api/v1/user/two-factor-recovery-codes').then(() => showRecoveryCodes());
    };
    const enableTwoFactorAuthentication = () => {
       setEnabling(true);
 
       axios
-         .post('/user/two-factor-authentication')
+         .post('/api/v1/user/two-factor-authentication')
          .then(async () => {
             await showQrCode();
             await showSetupKey();
@@ -83,7 +83,7 @@ export const useTwoFactor = () => {
       setErrors({});
 
       axios
-         .delete('/user/two-factor-authentication')
+         .delete('/api/v1/user/two-factor-authentication')
          .then(async () => {
             await refetchUser();
             await setDisabling(false);
