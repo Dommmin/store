@@ -15,7 +15,7 @@ class OrderController extends Controller
     {
         $orders = Order::query()
             ->withCount('items')
-            ->where('user_id', 1)
+            ->where('user_id', $request->user()->id)
             ->latest()
             ->simplePaginate();
 
