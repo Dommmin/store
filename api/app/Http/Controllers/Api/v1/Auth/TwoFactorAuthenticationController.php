@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\v1\Auth;
 
+use App\Http\Controllers\Controller;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Http\Requests\TwoFactorLoginRequest;
 
