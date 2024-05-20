@@ -146,7 +146,7 @@ jobs:
           docker push $FRONTEND_IMAGE
 
   deploy:
-    needs: [ build-frontend, build-proxy, build-nginx, remove-images ]
+    needs: [ build-frontend, build-proxy, build-nginx ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
