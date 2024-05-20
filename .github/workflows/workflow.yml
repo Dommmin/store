@@ -162,4 +162,4 @@ jobs:
             export DB_PASSWORD=${{ secrets.DB_PASSWORD }}
             chmod +x /root/deployment/bin/deploy.sh
             /root/deployment/bin/deploy.sh
-    EOF
+          EOF
