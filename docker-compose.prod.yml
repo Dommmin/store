@@ -1,4 +1,7 @@
-version: "3.8"
+networks:
+  laravel:
+    driver: bridge
+
 services:
   proxy:
     image: dommin/store-proxy:${IMAGE_TAG}
@@ -8,6 +11,8 @@ services:
     depends_on:
       - frontend
       - nginx
+    networks:
+      - laravel
 
   frontend:
     image: dommin/store-frontend:${IMAGE_TAG}
@@ -26,10 +31,13 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
+    networks:
+      - laravel
 
   scheduler:
     image: dommin/store-scheduler:${IMAGE_TAG}
     restart: unless-stopped
+    command: sh -c "chmod +x /usr/src/scheduler.sh && /usr/src/scheduler.sh"
     volumes:
       - type: volume
         source: storage
@@ -39,10 +47,13 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
+    networks:
+      - laravel
 
   worker:
     image: dommin/store-worker:${IMAGE_TAG}
     restart: unless-stopped
+    command: sh -c "chmod +x /usr/src/worker.sh && /usr/src/worker.sh"
     volumes:
       - type: volume
         source: storage
@@ -52,12 +63,16 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
+    networks:
+      - laravel
 
   nginx:
     image: dommin/store-nginx:${IMAGE_TAG}
     restart: unless-stopped
     depends_on:
       - api
+    networks:
+      - laravel
 
   mysql:
     image: dommin/store-mysql:${IMAGE_TAG}
@@ -74,6 +89,8 @@ services:
         target: /var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+    networks:
+      - laravel
 
   redis:
     image: redis:alpine
@@ -88,6 +105,8 @@ services:
       - type: volume
         source: redisdata
         target: /data
+    networks:
+      - laravel
 
   watchtower:
     image: containrrr/watchtower:1.5.3
@@ -96,6 +115,8 @@ services:
     environment:
       - REPO_USER=${DOCKERHUB_USERNAME}
       - REPO_PASS=${DOCKERHUB_PASSWORD}
+    networks:
+      - laravel
 
 volumes:
   storage:
