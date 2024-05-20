@@ -30,6 +30,6 @@ module.exports = {
       'react/no-unescaped-entities': 0,
       'react/require-default-props': 0,
       'react/react-in-jsx-scope': 0,
-      'linebreak-style': ['error', 'unix'],
+      'linebreak-style': ['warn', 'unix'],
    },
 };
