@@ -1,0 +1,106 @@
+version: "3.8"
+services:
+  proxy:
+    image: dommin/store-proxy:${IMAGE_TAG}
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - nginx
+
+  frontend:
+    image: dommin/store-frontend:${IMAGE_TAG}
+    restart: unless-stopped
+
+  api:
+    image: dommin/store-api:${IMAGE_TAG}
+    command: sh -c "php-fpm"
+    restart: unless-stopped
+    volumes:
+      - ./.env:/usr/src/.env
+      - type: volume
+        source: storage
+        target: /usr/src/storage
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  scheduler:
+    image: dommin/store-scheduler:${IMAGE_TAG}
+    restart: unless-stopped
+    volumes:
+      - ./.env:/usr/src/.env
+      - type: volume
+        source: storage
+        target: /usr/src/storage
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  worker:
+    image: dommin/store-worker:${IMAGE_TAG}
+    restart: unless-stopped
+    volumes:
+      - ./.env:/usr/src/.env
+      - type: volume
+        source: storage
+        target: /usr/src/storage
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  nginx:
+    image: dommin/store-nginx:${IMAGE_TAG}
+    restart: unless-stopped
+    depends_on:
+      - api
+
+  mysql:
+    image: dommin/store-mysql:${IMAGE_TAG}
+    restart: unless-stopped
+    healthcheck:
+      test: mysql -h localhost -u root -psecret -e 'SELECT version();'
+      start_period: 5s
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - type: volume
+        source: mysqldata
+        target: /var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+
+  redis:
+    image: redis:alpine
+    restart: unless-stopped
+    command: [ redis-server, --maxmemory 128mb, --maxmemory-policy volatile-lru, --save "" ]
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    volumes:
+      - type: volume
+        source: redisdata
+        target: /data
+
+  watchtower:
+    image: containrrr/watchtower:1.5.3
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - REPO_USER=${DOCKERHUB_USERNAME}
+      - REPO_PASS=${DOCKERHUB_PASSWORD}
+
+volumes:
+  storage:
+  mysqldata:
+  redisdata:
