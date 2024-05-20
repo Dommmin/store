@@ -4,8 +4,6 @@ set -e
 
 cd /root
 
-cp /api/.env.example /api/.env
-
 sudo docker compose -f docker-compose.prod.yml down
 sudo docker compose -f docker-compose.prod.yml up -d --remove-orphans
 
