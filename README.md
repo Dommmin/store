@@ -6,3 +6,4 @@
 - user registration temporary error
 - notifications
 - animations
+- add shipments
