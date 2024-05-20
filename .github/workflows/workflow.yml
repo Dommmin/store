@@ -145,19 +145,19 @@ jobs:
           docker build -t $FRONTEND_IMAGE --target=prod -f ./frontend/Dockerfile .
           docker push $FRONTEND_IMAGE
 
-deploy:
-  needs: [build-frontend, build-proxy, build-nginx]
-  runs-on: ubuntu-latest
-  steps:
-    - uses: actions/checkout@v4
-    - name: Copy files to remote server
-      run: |
-        sshpass -p ${{ secrets.DIGITALOCEAN_SSH_PASSWORD }} scp -o StrictHostKeyChecking=no -r ./* root@${{ secrets.DROPLET_IP }}:/root/
-    - name: Run deploy script on remote server
-      run: |
-        sshpass -p ${{ secrets.DIGITALOCEAN_SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no root@${{ secrets.DROPLET_IP }} '
-        export IMAGE_TAG=${{ github.sha }};
-        export DOCKERHUB_USERNAME=${{ secrets.DOCKER_USERNAME }};
-        export DOCKERHUB_PASSWORD=${{ secrets.DOCKER_PASSWORD }};
-        export DB_PASSWORD=${{ secrets.DB_PASSWORD }};
-        chmod +x /root/deployment/bin/deploy.sh && /root/deployment/bin/deploy.sh'
+  deploy:
+    needs: [build-frontend, build-proxy, build-nginx]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Copy files to remote server
+        run: |
+          sshpass -p ${{ secrets.DIGITALOCEAN_SSH_PASSWORD }} scp -o StrictHostKeyChecking=no -r ./* root@${{ secrets.DROPLET_IP }}:/root/
+      - name: Run deploy script on remote server
+        run: |
+          sshpass -p ${{ secrets.DIGITALOCEAN_SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no root@${{ secrets.DROPLET_IP }} '
+          export IMAGE_TAG=${{ github.sha }};
+          export DOCKERHUB_USERNAME=${{ secrets.DOCKER_USERNAME }};
+          export DOCKERHUB_PASSWORD=${{ secrets.DOCKER_PASSWORD }};
+          export DB_PASSWORD=${{ secrets.DB_PASSWORD }};
+          chmod +x /root/deployment/bin/deploy.sh && /root/deployment/bin/deploy.sh'
