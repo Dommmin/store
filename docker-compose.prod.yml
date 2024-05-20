@@ -18,7 +18,6 @@ services:
     command: php-fpm
     restart: unless-stopped
     volumes:
-      - ./.env.prod.template:/usr/src/
       - type: volume
         source: storage
         target: /usr/src/storage
@@ -32,7 +31,6 @@ services:
     image: dommin/store-scheduler:${IMAGE_TAG}
     restart: unless-stopped
     volumes:
-      - ./.env.prod.template:/usr/src/
       - type: volume
         source: storage
         target: /usr/src/storage
@@ -46,7 +44,6 @@ services:
     image: dommin/store-worker:${IMAGE_TAG}
     restart: unless-stopped
     volumes:
-      - ./.env.prod.template:/usr/src/
       - type: volume
         source: storage
         target: /usr/src/storage
