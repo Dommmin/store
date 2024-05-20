@@ -16,134 +16,134 @@ env:
   DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
 jobs:
-  build-backend-images:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Build images
-        run: |
-          docker build -t $API_IMAGE --target=api --build-arg user=dominik --build-arg uid=1000 -f ./api/Dockerfile .
-          docker build -t $SCHEDULER_IMAGE --target=scheduler --build-arg user=dominik --build-arg uid=1000 -f ./api/Dockerfile .
-          docker build -t $WORKER_IMAGE --target=worker --build-arg user=dominik --build-arg uid=1000 -f ./api/Dockerfile .
-      - name: Install dependencies
-        run: docker run --rm -t $API_IMAGE composer install --prefer-dist --no-progress
-      - name: Push images
-        run: |
-          docker push $API_IMAGE
-          docker push $SCHEDULER_IMAGE
-          docker push $WORKER_IMAGE
-
-  build-mysql:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Build MySQL image
-        run: docker build -t $MYSQL_IMAGE --build-arg password=${{ secrets.DB_PASSWORD }} -f ./Dockerfile.mysql .
-      - name: Push Mysql image
-        run: docker push $MYSQL_IMAGE
-
-  analyze:
-    needs: [build-backend-images, build-mysql]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Pull API image
-        run: docker pull $API_IMAGE
-      - name: Pull MySQL image
-        run: docker pull $MYSQL_IMAGE
-      - name: Install dependencies
-        run: docker run --rm -t $API_IMAGE composer install --prefer-dist --no-progress
-      - name: Run phpinsights
-        run: |
-          docker compose -f docker-compose.ci.yml up -d
-          docker compose -f docker-compose.ci.yml exec -T api php artisan insights --no-interaction --min-quality=90 --min-complexity=90 --min-architecture=90 --min-style=90 --ansi --format=github-action
-
-  test:
-    needs: [ build-backend-images, build-mysql ]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Pull API image
-        run: docker pull $API_IMAGE
-      - name: Pull MySQL image
-        run: docker pull $MYSQL_IMAGE
-      - name: Install dependencies
-        run: docker run --rm -t $API_IMAGE composer install --prefer-dist --no-progress
-      - name: Run tests
-        run: |
-          docker compose -f docker-compose.ci.yml up -d
-          docker compose -f docker-compose.ci.yml exec -T api php artisan test
-
-  remove-images:
-    needs: [ analyze, test ]
-    runs-on: ubuntu-latest
-    if: ${{ always() && contains(needs.*.result, 'failure') }}
-    steps:
-      - uses: actions/checkout@v4
-      - name: Remove images
-        run: |
-          ./deployment/bin/remove-image.sh dommin/store-api ${{ github.sha }} ${{ secrets.DOCKER_USERNAME }} ${{ secrets.DOCKER_PASSWORD }}
-          ./deployment/bin/remove-image.sh dommin/store-mysql ${{ github.sha }} ${{ secrets.DOCKER_USERNAME }} ${{ secrets.DOCKER_PASSWORD }}
-          ./deployment/bin/remove-image.sh dommin/store-worker ${{ github.sha }} ${{ secrets.DOCKER_USERNAME }} ${{ secrets.DOCKER_PASSWORD }}
-          ./deployment/bin/remove-image.sh dommin/store-scheduler ${{ github.sha }} ${{ secrets.DOCKER_USERNAME }} ${{ secrets.DOCKER_PASSWORD }}
-
-  build-nginx:
-    needs: [ analyze, test ]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Build nginx image
-        run: |
-          docker build -t $NGINX_IMAGE -f ./Dockerfile.nginx .
-          docker push $NGINX_IMAGE
-
-  build-proxy:
-    needs: [ analyze, test ]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Build proxy image
-        run: |
-          docker build -t $PROXY_IMAGE -f ./Dockerfile.proxy .
-          docker push $PROXY_IMAGE
-
-  build-frontend:
-    needs: [ analyze, test ]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Build frontend image
-        run: |
-          docker build -t $FRONTEND_IMAGE --target=prod -f ./frontend/Dockerfile .
-          docker push $FRONTEND_IMAGE
+#  build-backend-images:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v4
+#      - uses: docker/login-action@v3
+#        with:
+#          username: ${{ secrets.DOCKER_USERNAME }}
+#          password: ${{ secrets.DOCKER_PASSWORD }}
+#      - name: Build images
+#        run: |
+#          docker build -t $API_IMAGE --target=api --build-arg user=dominik --build-arg uid=1000 -f ./api/Dockerfile .
+#          docker build -t $SCHEDULER_IMAGE --target=scheduler --build-arg user=dominik --build-arg uid=1000 -f ./api/Dockerfile .
+#          docker build -t $WORKER_IMAGE --target=worker --build-arg user=dominik --build-arg uid=1000 -f ./api/Dockerfile .
+#      - name: Install dependencies
+#        run: docker run --rm -t $API_IMAGE composer install --prefer-dist --no-progress
+#      - name: Push images
+#        run: |
+#          docker push $API_IMAGE
+#          docker push $SCHEDULER_IMAGE
+#          docker push $WORKER_IMAGE
+#
+#  build-mysql:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v4
+#      - uses: docker/login-action@v3
+#        with:
+#          username: ${{ secrets.DOCKER_USERNAME }}
+#          password: ${{ secrets.DOCKER_PASSWORD }}
+#      - name: Build MySQL image
+#        run: docker build -t $MYSQL_IMAGE --build-arg password=${{ secrets.DB_PASSWORD }} -f ./Dockerfile.mysql .
+#      - name: Push Mysql image
+#        run: docker push $MYSQL_IMAGE
+#
+#  analyze:
+#    needs: [build-backend-images, build-mysql]
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v4
+#      - uses: docker/login-action@v3
+#        with:
+#          username: ${{ secrets.DOCKER_USERNAME }}
+#          password: ${{ secrets.DOCKER_PASSWORD }}
+#      - name: Pull API image
+#        run: docker pull $API_IMAGE
+#      - name: Pull MySQL image
+#        run: docker pull $MYSQL_IMAGE
+#      - name: Install dependencies
+#        run: docker run --rm -t $API_IMAGE composer install --prefer-dist --no-progress
+#      - name: Run phpinsights
+#        run: |
+#          docker compose -f docker-compose.ci.yml up -d
+#          docker compose -f docker-compose.ci.yml exec -T api php artisan insights --no-interaction --min-quality=90 --min-complexity=90 --min-architecture=90 --min-style=90 --ansi --format=github-action
+#
+#  test:
+#    needs: [ build-backend-images, build-mysql ]
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v4
+#      - uses: docker/login-action@v3
+#        with:
+#          username: ${{ secrets.DOCKER_USERNAME }}
+#          password: ${{ secrets.DOCKER_PASSWORD }}
+#      - name: Pull API image
+#        run: docker pull $API_IMAGE
+#      - name: Pull MySQL image
+#        run: docker pull $MYSQL_IMAGE
+#      - name: Install dependencies
+#        run: docker run --rm -t $API_IMAGE composer install --prefer-dist --no-progress
+#      - name: Run tests
+#        run: |
+#          docker compose -f docker-compose.ci.yml up -d
+#          docker compose -f docker-compose.ci.yml exec -T api php artisan test
+#
+#  remove-images:
+#    needs: [ analyze, test ]
+#    runs-on: ubuntu-latest
+#    if: ${{ always() && contains(needs.*.result, 'failure') }}
+#    steps:
+#      - uses: actions/checkout@v4
+#      - name: Remove images
+#        run: |
+#          ./deployment/bin/remove-image.sh dommin/store-api ${{ github.sha }} ${{ secrets.DOCKER_USERNAME }} ${{ secrets.DOCKER_PASSWORD }}
+#          ./deployment/bin/remove-image.sh dommin/store-mysql ${{ github.sha }} ${{ secrets.DOCKER_USERNAME }} ${{ secrets.DOCKER_PASSWORD }}
+#          ./deployment/bin/remove-image.sh dommin/store-worker ${{ github.sha }} ${{ secrets.DOCKER_USERNAME }} ${{ secrets.DOCKER_PASSWORD }}
+#          ./deployment/bin/remove-image.sh dommin/store-scheduler ${{ github.sha }} ${{ secrets.DOCKER_USERNAME }} ${{ secrets.DOCKER_PASSWORD }}
+#
+#  build-nginx:
+#    needs: [ analyze, test ]
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v4
+#      - uses: docker/login-action@v3
+#        with:
+#          username: ${{ secrets.DOCKER_USERNAME }}
+#          password: ${{ secrets.DOCKER_PASSWORD }}
+#      - name: Build nginx image
+#        run: |
+#          docker build -t $NGINX_IMAGE -f ./Dockerfile.nginx .
+#          docker push $NGINX_IMAGE
+#
+#  build-proxy:
+#    needs: [ analyze, test ]
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v4
+#      - uses: docker/login-action@v3
+#        with:
+#          username: ${{ secrets.DOCKER_USERNAME }}
+#          password: ${{ secrets.DOCKER_PASSWORD }}
+#      - name: Build proxy image
+#        run: |
+#          docker build -t $PROXY_IMAGE -f ./Dockerfile.proxy .
+#          docker push $PROXY_IMAGE
+#
+#  build-frontend:
+#    needs: [ analyze, test ]
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v4
+#      - uses: docker/login-action@v3
+#        with:
+#          username: ${{ secrets.DOCKER_USERNAME }}
+#          password: ${{ secrets.DOCKER_PASSWORD }}
+#      - name: Build frontend image
+#        run: |
+#          docker build -t $FRONTEND_IMAGE --target=prod -f ./frontend/Dockerfile .
+#          docker push $FRONTEND_IMAGE
 
   deploy:
     needs: [build-frontend, build-proxy, build-nginx]
