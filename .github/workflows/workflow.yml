@@ -144,17 +144,3 @@ jobs:
         run: |
           docker build -t $FRONTEND_IMAGE --target=prod -f ./frontend/Dockerfile .
           docker push $FRONTEND_IMAGE
-
-  deploy:
-    needs: [ build-frontend, build-nginx, build-proxy, build-backend-images, build-mysql, analyze, test ]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install sshpass
-        run: sudo apt-get install -y sshpass
-      - name: Sync files to DigitalOcean
-        run: |
-          sshpass -p ${{ secrets.DIGITALOCEAN_SSH_PASSWORD }} rsync -avz --exclude '.git*' --exclude 'node_modules' --exclude 'vendor' ./ ${{ secrets.DIGITALOCEAN_USER }}@${{ secrets.DROPLET_IP }}:~/project
-      - name: Run deploy script
-        run: |
-          sshpass -p ${{ secrets.DIGITALOCEAN_PASSWORD }} ssh -o StrictHostKeyChecking=no ${{ secrets.DIGITALOCEAN_USER }}@${{ secrets.DROPLET_IP }} 'bash -s' < ./deployment/bin/deploy.sh
