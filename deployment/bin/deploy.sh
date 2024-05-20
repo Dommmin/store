@@ -2,6 +2,9 @@
 
 set -e
 
+# Zmień katalog na główny katalog projektu
+cd /root
+
 sudo docker compose -f docker-compose.prod.yml down
 sudo docker compose -f docker-compose.prod.yml up -d --remove-orphans
 

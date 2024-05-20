@@ -153,13 +153,24 @@ jobs:
       - name: Copy files to remote server
         run: |
           sshpass -p ${{ secrets.DIGITALOCEAN_SSH_PASSWORD }} scp -o StrictHostKeyChecking=no -r ./* root@${{ secrets.DROPLET_IP }}:/root/
-      - name: Run deploy script on remote server
+      - name: Update .env and run deploy script on remote server
         run: |
           sshpass -p ${{ secrets.DIGITALOCEAN_SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no root@${{ secrets.DROPLET_IP }} << 'EOF'
-            export IMAGE_TAG=${{ github.sha }}
-            export DOCKERHUB_USERNAME=${{ secrets.DOCKER_USERNAME }}
-            export DOCKERHUB_PASSWORD=${{ secrets.DOCKER_PASSWORD }}
-            export DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            # Remove existing lines with the environment variables
+            sed -i '/^IMAGE_TAG=/d' /root/.env
+            sed -i '/^DOCKERHUB_USERNAME=/d' /root/.env
+            sed -i '/^DOCKERHUB_PASSWORD=/d' /root/.env
+            sed -i '/^DB_PASSWORD=/d' /root/.env
+  
+            # Add the environment variables to the .env file
+            echo "IMAGE_TAG=${{ github.sha }}" >> /root/.env
+            echo "DOCKERHUB_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> /root/.env
+            echo "DOCKERHUB_PASSWORD=${{ secrets.DOCKER_PASSWORD }}" >> /root/.env
+            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> /root/.env
+          
+            # Make sure the deploy script is executable
             chmod +x /root/deployment/bin/deploy.sh
+          
+            # Run the deploy script
             /root/deployment/bin/deploy.sh
           EOF
