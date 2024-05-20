@@ -63,7 +63,7 @@ export default function DeleteUserForm({ className = '' }) {
 
                <div className="mt-6">
                   <input
-                     className="input input-bordered input-info w-full max-w-xs"
+                     className="input input-bordered w-full max-w-xs"
                      id="password"
                      type="password"
                      name="password"
