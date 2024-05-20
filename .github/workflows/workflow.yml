@@ -67,8 +67,8 @@ jobs:
         run: docker run --rm -t $API_IMAGE composer install --prefer-dist --no-progress
       - name: Run phpinsights
         run: |
-          docker-compose -f docker-compose.ci.yml up -d
-          docker-compose -f docker-compose.ci.yml exec -T api php artisan insights --no-interaction --min-quality=90 --min-complexity=90 --min-architecture=90 --min-style=90 --ansi --format=github-action
+          docker compose -f docker-compose.ci.yml up -d
+          docker compose -f docker-compose.ci.yml exec -T api php artisan insights --no-interaction --min-quality=90 --min-complexity=90 --min-architecture=90 --min-style=90 --ansi --format=github-action
 
   test:
     needs: [ build-backend-images, build-mysql ]
@@ -87,8 +87,8 @@ jobs:
         run: docker run --rm -t $API_IMAGE composer install --prefer-dist --no-progress
       - name: Run tests
         run: |
-          docker-compose -f docker-compose.ci.yml up -d
-          docker-compose -f docker-compose.ci.yml exec -T api php artisan test
+          docker compose -f docker-compose.ci.yml up -d
+          docker compose -f docker-compose.ci.yml exec -T api php artisan test
 
   remove-images:
     needs: [ analyze, test ]
@@ -155,4 +155,4 @@ jobs:
           sshpass -p ${{ secrets.DIGITALOCEAN_SSH_PASSWORD }} scp -o StrictHostKeyChecking=no -r ./* root@${{ secrets.DROPLET_IP }}:/root/
       - name: Run deploy script on remote server
         run: |
-          sshpass -p ${{ secrets.DIGITALOCEAN_SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no root@${{ secrets.DROPLET_IP }} 'export IMAGE_TAG=${{ github.sha }}; export DOCKERHUB_USERNAME=${{ secrets.DOCKER_USERNAME }}; export DOCKERHUB_PASSWORD=${{ secrets.DOCKER_PASSWORD }}; export DB_PASSWORD=${{ secrets.DB_PASSWORD }}; chmod +x /deployment/bin/deploy.sh && /deployment/bin/deploy.sh'
+          sshpass -p ${{ secrets.DIGITALOCEAN_SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no root@${{ secrets.DROPLET_IP }} 'export IMAGE_TAG=${{ github.sha }}; export DOCKERHUB_USERNAME=${{ secrets.DOCKER_USERNAME }}; export DOCKERHUB_PASSWORD=${{ secrets.DOCKER_PASSWORD }}; export DB_PASSWORD=${{ secrets.DB_PASSWORD }}; chmod +x /root/deployment/bin/deploy.sh && /root/deployment/bin/deploy.sh'
