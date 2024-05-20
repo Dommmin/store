@@ -22,7 +22,7 @@ export default function ConfirmPassword({
    const { refetch } = useAuth();
 
    const startConfirmingPassword = () => {
-      axios.get('/user/confirmed-password-status').then((response) => {
+      axios.get('/api/v1/user/confirmed-password-status').then((response) => {
          if (response.data.confirmed) {
             onConfirm();
          } else {
@@ -37,7 +37,7 @@ export default function ConfirmPassword({
       setErrors({});
 
       axios
-         .post('/user/confirm-password', {
+         .post('/api/v1/user/confirm-password', {
             password: password,
          })
          .then(() => {
