@@ -27,7 +27,7 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->instance(LoginResponse::class, new class implements LoginResponse {
+        $this->app->instance(LoginResponse::class, new class() implements LoginResponse {
             public function toResponse($request): JsonResponse|RedirectResponse
             {
                 if ($request->wantsJson()) {
@@ -43,7 +43,7 @@ class FortifyServiceProvider extends ServiceProvider
             }
         });
 
-        $this->app->instance(RegisterResponse::class, new class implements LoginResponse {
+        $this->app->instance(RegisterResponse::class, new class() implements LoginResponse {
             public function toResponse($request): JsonResponse|RedirectResponse
             {
                 $user = User::where('email', $request->email)->first();
