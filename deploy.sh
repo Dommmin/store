@@ -11,6 +11,6 @@ sudo docker compose -f docker-compose.prod.yml exec -T api php artisan config:ca
 sudo docker compose -f docker-compose.prod.yml exec -T api php artisan route:cache
 sudo docker compose -f docker-compose.prod.yml exec -T api php artisan view:cache
 
-cd api && cp .env.prod .env
+cd api && cp .env.prod .env && cd ..
 
 sudo docker compose -f docker-compose.prod.yml exec -T api bash migration.sh
