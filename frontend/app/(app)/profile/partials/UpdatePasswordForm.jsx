@@ -27,7 +27,7 @@ export default function UpdatePasswordForm({ className = '' }) {
       setProcessing(true);
 
       axios
-         .put('/user/password', data)
+         .put('/api/v1/user/password', data)
          .then(() => {
             setRecentlySuccessful(true);
          })

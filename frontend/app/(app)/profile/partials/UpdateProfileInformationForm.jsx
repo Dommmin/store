@@ -16,7 +16,7 @@ export default function UpdateProfileInformation({ className = '', user, resendE
       setProcessing(true);
 
       axios
-         .put('/user/profile-information', data)
+         .put('/api/v1/user/profile-information', data)
          .then(() => {
             setRecentlySuccessful(true);
             refetchUser();

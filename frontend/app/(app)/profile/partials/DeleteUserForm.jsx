@@ -19,7 +19,7 @@ export default function DeleteUserForm({ className = '' }) {
       setErrors({});
 
       axios
-         .delete('/user', {
+         .delete('/api/v1/user', {
             data: {
                password,
             },
