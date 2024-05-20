@@ -155,9 +155,11 @@ jobs:
           sshpass -p ${{ secrets.DIGITALOCEAN_SSH_PASSWORD }} scp -o StrictHostKeyChecking=no -r ./* root@${{ secrets.DROPLET_IP }}:/root/
       - name: Run deploy script on remote server
         run: |
-          sshpass -p ${{ secrets.DIGITALOCEAN_SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no root@${{ secrets.DROPLET_IP }} '
-          export IMAGE_TAG=${{ github.sha }};
-          export DOCKERHUB_USERNAME=${{ secrets.DOCKER_USERNAME }};
-          export DOCKERHUB_PASSWORD=${{ secrets.DOCKER_PASSWORD }};
-          export DB_PASSWORD=${{ secrets.DB_PASSWORD }};
-          chmod +x /root/deployment/bin/deploy.sh && /root/deployment/bin/deploy.sh'
+          sshpass -p ${{ secrets.DIGITALOCEAN_SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no root@${{ secrets.DROPLET_IP }} << 'EOF'
+            export IMAGE_TAG=${{ github.sha }}
+            export DOCKERHUB_USERNAME=${{ secrets.DOCKER_USERNAME }}
+            export DOCKERHUB_PASSWORD=${{ secrets.DOCKER_PASSWORD }}
+            export DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            chmod +x /root/deployment/bin/deploy.sh
+            /root/deployment/bin/deploy.sh
+    EOF
