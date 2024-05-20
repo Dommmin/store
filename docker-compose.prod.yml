@@ -17,6 +17,11 @@ services:
   frontend:
     image: dommin/store-frontend:${IMAGE_TAG}
     restart: unless-stopped
+    command: sh -c "npm run start"
+    depends_on:
+      - api
+    networks:
+      - laravel
 
   api:
     image: dommin/store-api:${IMAGE_TAG}

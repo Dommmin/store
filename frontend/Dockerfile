@@ -13,7 +13,9 @@ RUN npm install
 RUN npm run build
 
 FROM nginx:alpine AS prod
-COPY --from=build /usr/src/.next /usr/share/nginx/html
+COPY --from=builder /usr/src/.next /usr/share/nginx/html
+COPY --from=builder /usr/src/public /usr/share/nginx/html
+COPY --from=builder /usr/src/next.config.js /usr/share/nginx/html
 COPY ./deployment/config/nginx-frontend.conf /etc/nginx/nginx.conf
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
