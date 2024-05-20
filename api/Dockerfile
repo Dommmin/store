@@ -59,11 +59,8 @@ COPY ./api ./
 # Install application dependencies
 RUN composer install --prefer-dist --no-progress
 
-RUN chown -R www-data:www-data /usr/src \
-    && chmod -R 755 /usr/src
-
-RUN chown -R www-data:www-data /usr/src/storage \
-    && chmod -R 755 /usr/src/storage \
+RUN chown -R $user:$user /usr/src && \
+    chmod -R 775 ./storage ./bootstrap/cache
 
 # Stage 2: Build the Worker image
 FROM api AS worker
