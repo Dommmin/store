@@ -145,41 +145,67 @@ jobs:
           docker build -t $FRONTEND_IMAGE --target=prod -f ./frontend/Dockerfile .
           docker push $FRONTEND_IMAGE
 
-  deploy:
-    needs: [ build-frontend, build-nginx, build-proxy, build-backend-images, build-mysql, analyze, test ]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install SSH client and sshpass
-        run: sudo apt-get install -y openssh-client sshpass
-      - name: Deploy to DigitalOcean Droplet
-        env:
-          API_IMAGE: ${{ env.API_IMAGE }}
-          SCHEDULER_IMAGE: ${{ env.SCHEDULER_IMAGE }}
-          WORKER_IMAGE: ${{ env.WORKER_IMAGE }}
-          NGINX_IMAGE: ${{ env.NGINX_IMAGE }}
-          PROXY_IMAGE: ${{ env.PROXY_IMAGE }}
-          MYSQL_IMAGE: ${{ env.MYSQL_IMAGE }}
-          FRONTEND_IMAGE: ${{ env.FRONTEND_IMAGE }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-        run: |
-          sshpass -p ${{ secrets.DIGITALOCEAN_SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no root@${{ secrets.DROPLET_IP }} << 'EOF'
-            docker pull ${{ env.API_IMAGE }}
-            docker pull ${{ env.SCHEDULER_IMAGE }}
-            docker pull ${{ env.WORKER_IMAGE }}
-            docker pull ${{ env.NGINX_IMAGE }}
-            docker pull ${{ env.PROXY_IMAGE }}
-            docker pull ${{ env.MYSQL_IMAGE }}
-            docker pull ${{ env.FRONTEND_IMAGE }}
-          
-            docker stop api scheduler worker nginx proxy mysql frontend || true
-            docker rm api scheduler worker nginx proxy mysql frontend || true
-          
-            docker run -d --name mysql -e MYSQL_ROOT_PASSWORD=${{ secrets.DB_PASSWORD }} ${{ env.MYSQL_IMAGE }}
-            docker run -d --name api --link mysql:mysql ${{ env.API_IMAGE }}
-            docker run -d --name scheduler --link mysql:mysql ${{ env.SCHEDULER_IMAGE }}
-            docker run -d --name worker --link mysql:mysql ${{ env.WORKER_IMAGE }}
-            docker run -d --name nginx --link api:api --link scheduler:scheduler --link worker:worker ${{ env.NGINX_IMAGE }}
-            docker run -d --name proxy --link nginx:nginx ${{ env.PROXY_IMAGE }}
-            docker run -d --name frontend --link api:api ${{ env.FRONTEND_IMAGE }}
-          EOF
+deploy:
+  needs: [ build-frontend, build-nginx, build-proxy, build-backend-images, build-mysql, analyze, test ]
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v4
+    - name: Install SSH client and sshpass
+      run: sudo apt-get install -y openssh-client sshpass
+    - name: Copy SSH key
+      run: |
+        echo "${{ secrets.SSH_KEY }}" > id_rsa
+        chmod 600 id_rsa
+    - name: Deploy to DigitalOcean Droplet
+      env:
+        API_IMAGE: ${{ env.API_IMAGE }}
+        SCHEDULER_IMAGE: ${{ env.SCHEDULER_IMAGE }}
+        WORKER_IMAGE: ${{ env.WORKER_IMAGE }}
+        NGINX_IMAGE: ${{ env.NGINX_IMAGE }}
+        PROXY_IMAGE: ${{ env.PROXY_IMAGE }}
+        MYSQL_IMAGE: ${{ env.MYSQL_IMAGE }}
+        FRONTEND_IMAGE: ${{ env.FRONTEND_IMAGE }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      run: |
+        sshpass -p ${{ secrets.DIGITALOCEAN_SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no root@${{ secrets.DROPLET_IP }} << 'EOF'
+          # Pull Docker images
+          docker pull $API_IMAGE
+          docker pull $SCHEDULER_IMAGE
+          docker pull $WORKER_IMAGE
+          docker pull $NGINX_IMAGE
+          docker pull $PROXY_IMAGE
+          docker pull $MYSQL_IMAGE
+          docker pull $FRONTEND_IMAGE
+        
+          # Stop and remove existing containers
+          docker stop api scheduler worker nginx proxy mysql frontend || true
+          docker rm api scheduler worker nginx proxy mysql frontend || true
+
+          # Start containers with Docker Compose
+          docker run -d --name mysql -e MYSQL_ROOT_PASSWORD=$DB_PASSWORD $MYSQL_IMAGE
+          docker run -d --name api --link mysql:mysql $API_IMAGE
+          docker run -d --name scheduler --link mysql:mysql $SCHEDULER_IMAGE
+          docker run -d --name worker --link mysql:mysql $WORKER_IMAGE
+          docker run -d --name nginx --link api:api --link scheduler:scheduler --link worker:worker $NGINX_IMAGE
+          docker run -d --name proxy --link nginx:nginx $PROXY_IMAGE
+          docker run -d --name frontend --link api:api $FRONTEND_IMAGE
+        EOF
+    - name: Copy Docker Compose and Env File
+      run: |
+        sshpass -p ${{ secrets.DIGITALOCEAN_SSH_PASSWORD }} scp -o StrictHostKeyChecking=no -i ./id_rsa ./docker-compose.prod.yml root@${{ secrets.DROPLET_IP }}:/root/docker-compose.prod.yml
+        sshpass -p ${{ secrets.DIGITALOCEAN_SSH_PASSWORD }} scp -o StrictHostKeyChecking=no -i ./id_rsa ./.env.prod.template root@${{ secrets.DROPLET_IP }}:/root/.env
+    - name: Update Environment Variables and Start Services
+      run: |
+        sshpass -p ${{ secrets.DIGITALOCEAN_SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no root@${{ secrets.DROPLET_IP }} << 'EOF'
+          sed -i "/IMAGE_TAG/c\IMAGE_TAG=${{ github.sha }}" /root/.env
+          sed -i "/COMPOSE_PROJECT_NAME/c\COMPOSE_PROJECT_NAME=posts" /root/.env
+          sed -i "/DOCKERHUB_USERNAME/c\DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" /root/.env
+          sed -i "/DOCKERHUB_PASSWORD/c\DOCKERHUB_PASSWORD=${{ secrets.DOCKERHUB_PASSWORD }}" /root/.env
+          sed -i "/DB_PASSWORD/c\DB_PASSWORD=${{ secrets.DB_PASSWORD }}" /root/.env
+          sed -i "/AWS_ACCESS_KEY_ID/c\AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" /root/.env
+          sed -i "/AWS_SECRET_ACCESS_KEY/c\AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" /root/.env
+          sed -i "/APP_KEY/c\APP_KEY=${{ secrets.APP_KEY }}" /root/.env
+
+          docker-compose -f /root/docker-compose.prod.yml down
+          docker-compose -f /root/docker-compose.prod.yml up -d
+        EOF
