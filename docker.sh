@@ -90,9 +90,9 @@ docker exec -it "$DOCKER_PREFIX"_frontend npm run lint:fix
 # Prettier
 echo "${BOLD}${RED}--------------------------------------------------------------------------------${RESET}"
 echo -e "${BOLD}${YELLOW}PRETTIER${RESET}\n"
-docker exec -it "$DOCKER_PREFIX"_frontend npm run format
+docker exec -it "$DOCKER_PREFIX"_frontend npm run format:fix
 
 # Panel
 echo "${BOLD}${RED}--------------------------------------------------------------------------------${RESET}"
-echo "${YELLOW}API jest dostępne pod adresem: ${BOLD}${GREEN}http://localhost:8000/api${RESET}"
+echo "${YELLOW}API jest dostępne pod adresem: ${BOLD}${GREEN}http://localhost:3000/api${RESET}"
 echo "${YELLOW}Strona jest dostępna pod adresem: ${BOLD}${GREEN}http://localhost:3000${RESET}"
