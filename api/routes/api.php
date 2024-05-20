@@ -60,7 +60,13 @@ Route::get('products/{product}/ratings', [ReviewController::class, 'ratings']);
 Route::apiResource('products', ProductController::class);
 Route::apiResource('cart-items', CartController::class)->only('index', 'store');
 Route::apiResource('bookmarks', BookmarkController::class);
-Route::apiResource('brands', BrandController::class);
+Route::apiResource('brands', BrandController::class)->names([
+    'index' => 'public.brands.index',
+    'store' => 'public.brands.store',
+    'show' => 'public.brands.show',
+    'update' => 'public.brands.update',
+    'destroy' => 'public.brands.destroy',
+]);
 Route::apiResource('categories', CategoryController::class);
 Route::apiResource('products/{product}/reviews', ReviewController::class);
 Route::apiResource('collections', CollectionController::class);
@@ -76,7 +82,13 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function (): void {
     Route::get('products/get-products-by-attributes', [Admin\ProductController::class, 'getProductsByTheirAttributes']);
     Route::post('images/bulk-insert', [ImageController::class, 'bulkInsert']);
     Route::apiResource('images', ImageController::class);
-    Route::apiResource('brands', Admin\BrandController::class);
+    Route::apiResource('brands', Admin\BrandController::class)->names([
+        'index' => 'admin.brands.index',
+        'store' => 'admin.brands.store',
+        'show' => 'admin.brands.show',
+        'update' => 'admin.brands.update',
+        'destroy' => 'admin.brands.destroy',
+    ]);
     Route::apiResource('collections', Admin\CollectionController::class);
     Route::apiResource('categories', Admin\CategoryController::class);
     Route::apiResource('products', Admin\ProductController::class);
