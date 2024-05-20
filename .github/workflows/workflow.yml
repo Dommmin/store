@@ -148,11 +148,11 @@ jobs:
   deploy:
     needs: [ build-frontend, build-proxy, build-nginx ]
     runs-on: ubuntu-latest
-  steps:
-    - uses: actions/checkout@v4
-    - name: Copy files to remote server
-      run: |
-        sshpass -p ${{ secrets.DIGITALOCEAN_SSH_PASSWORD }} scp -o StrictHostKeyChecking=no -r ./* root@${{ secrets.DROPLET_IP }}:/root/
-    - name: Run deploy script on remote server
-      run: |
-        sshpass -p ${{ secrets.DIGITALOCEAN_SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no root@${{ secrets.DROPLET_IP }} 'chmod +x /root/deploy.sh && /root/deploy.sh'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Copy files to remote server
+        run: |
+          sshpass -p ${{ secrets.DIGITALOCEAN_SSH_PASSWORD }} scp -o StrictHostKeyChecking=no -r ./* root@${{ secrets.DROPLET_IP }}:/root/
+      - name: Run deploy script on remote server
+        run: |
+          sshpass -p ${{ secrets.DIGITALOCEAN_SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no root@${{ secrets.DROPLET_IP }} 'chmod +x /root/deploy.sh && /root/deploy.sh'
