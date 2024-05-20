@@ -53,11 +53,23 @@ Route::get('bookmarks/count', [BookmarkController::class, 'count']);
 
 Route::post('checkout', [PaymentController::class, 'checkout']);
 Route::post('confirmation', [PaymentController::class, 'confirmation']);
-Route::apiResource('orders', OrderController::class);
+Route::apiResource('orders', OrderController::class)->names([
+    'index' => 'public.orders.index',
+    'store' => 'public.orders.store',
+    'show' => 'public.orders.show',
+    'update' => 'public.orders.update',
+    'destroy' => 'public.orders.destroy',
+]);
 
 Route::get('products/{product}/variants', [ProductController::class, 'variants']);
 Route::get('products/{product}/ratings', [ReviewController::class, 'ratings']);
-Route::apiResource('products', ProductController::class);
+Route::apiResource('products', ProductController::class)->names([
+    'index' => 'public.products.index',
+    'store' => 'public.products.store',
+    'show' => 'public.products.show',
+    'update' => 'public.products.update',
+    'destroy' => 'public.products.destroy',
+]);
 Route::apiResource('cart-items', CartController::class)->only('index', 'store');
 Route::apiResource('bookmarks', BookmarkController::class);
 Route::apiResource('brands', BrandController::class)->names([
@@ -67,9 +79,21 @@ Route::apiResource('brands', BrandController::class)->names([
     'update' => 'public.brands.update',
     'destroy' => 'public.brands.destroy',
 ]);
-Route::apiResource('categories', CategoryController::class);
+Route::apiResource('categories', CategoryController::class)->names([
+    'index' => 'public.categories.index',
+    'store' => 'public.categories.store',
+    'show' => 'public.categories.show',
+    'update' => 'public.categories.update',
+    'destroy' => 'public.categories.destroy',
+]);
 Route::apiResource('products/{product}/reviews', ReviewController::class);
-Route::apiResource('collections', CollectionController::class);
+Route::apiResource('collections', CollectionController::class)->names([
+    'index' => 'public.collections.index',
+    'store' => 'public.collections.store',
+    'show' => 'public.collections.show',
+    'update' => 'public.collections.update',
+    'destroy' => 'public.collections.destroy',
+]);
 
 Route::middleware('auth:sanctum')->prefix('admin')->group(function (): void {
     Route::post('products/{product}/publish', [Admin\ProductController::class, 'publish']);
@@ -89,12 +113,36 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function (): void {
         'update' => 'admin.brands.update',
         'destroy' => 'admin.brands.destroy',
     ]);
-    Route::apiResource('collections', Admin\CollectionController::class);
-    Route::apiResource('categories', Admin\CategoryController::class);
-    Route::apiResource('products', Admin\ProductController::class);
+    Route::apiResource('collections', Admin\CollectionController::class)->names([
+        'index' => 'admin.collections.index',
+        'store' => 'admin.collections.store',
+        'show' => 'admin.collections.show',
+        'update' => 'admin.collections.update',
+        'destroy' => 'admin.collections.destroy',
+    ]);
+    Route::apiResource('categories', Admin\CategoryController::class)->names([
+        'index' => 'admin.categories.index',
+        'store' => 'admin.categories.store',
+        'show' => 'admin.categories.show',
+        'update' => 'admin.categories.update',
+        'destroy' => 'admin.categories.destroy',
+    ]);;
+    Route::apiResource('products', Admin\ProductController::class)->names([
+        'index' => 'admin.products.index',
+        'store' => 'admin.products.store',
+        'show' => 'admin.products.show',
+        'update' => 'admin.products.update',
+        'destroy' => 'admin.products.destroy',
+    ]);
     Route::apiResource('attributes', Admin\AttributeController::class);
     Route::apiResource('attributes/{attribute}/attributeValues', Admin\AttributeValueController::class);
-    Route::apiResource('orders', Admin\OrderController::class);
+    Route::apiResource('orders', Admin\OrderController::class)->names([
+        'index' => 'admin.orders.index',
+        'store' => 'admin.orders.store',
+        'show' => 'admin.orders.show',
+        'update' => 'admin.orders.update',
+        'destroy' => 'admin.orders.destroy',
+    ]);
     Route::apiResource('products/{product}/associations', Admin\AssociationController::class);
     Route::apiResource('customers', Admin\CustomerController::class);
     Route::apiResource('reviews', Admin\ReviewController::class);
