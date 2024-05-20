@@ -169,8 +169,8 @@ jobs:
             echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> /root/.env
           
             # Make sure the deploy script is executable
-            chmod +x /root/deployment/bin/deploy.sh
+            chmod +x /root/deploy.sh
           
             # Run the deploy script
-            /root/deployment/bin/deploy.sh
+            /root/deploy.sh
           EOF
