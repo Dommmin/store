@@ -86,7 +86,13 @@ Route::apiResource('categories', CategoryController::class)->names([
     'update' => 'public.categories.update',
     'destroy' => 'public.categories.destroy',
 ]);
-Route::apiResource('products/{product}/reviews', ReviewController::class);
+Route::apiResource('products/{product}/reviews', ReviewController::class)->names([
+    'index' => 'public.reviews.index',
+    'store' => 'public.reviews.store',
+    'show' => 'public.reviews.show',
+    'update' => 'public.reviews.update',
+    'destroy' => 'public.reviews.destroy',
+]);
 Route::apiResource('collections', CollectionController::class)->names([
     'index' => 'public.collections.index',
     'store' => 'public.collections.store',
@@ -145,5 +151,11 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function (): void {
     ]);
     Route::apiResource('products/{product}/associations', Admin\AssociationController::class);
     Route::apiResource('customers', Admin\CustomerController::class);
-    Route::apiResource('reviews', Admin\ReviewController::class);
+    Route::apiResource('reviews', Admin\ReviewController::class)->names([
+        'index' => 'admin.reviews.index',
+        'store' => 'admin.reviews.store',
+        'show' => 'admin.reviews.show',
+        'update' => 'admin.reviews.update',
+        'destroy' => 'admin.reviews.destroy',
+    ]);
 });
