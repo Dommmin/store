@@ -2,12 +2,10 @@ FROM node:20-alpine AS base
 
 WORKDIR /usr/src
 
-COPY ./frontend/package*.json ./
-
 COPY ./frontend .
 
 FROM base AS dev
-EXPOSE 3000
+EXPOSE 80
 CMD ["npm", "run", "dev"]
 
 FROM base AS build

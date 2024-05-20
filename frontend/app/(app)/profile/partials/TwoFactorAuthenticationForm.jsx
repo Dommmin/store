@@ -5,7 +5,7 @@ import DangerButton from '../../../ui/DangerButton.jsx';
 import SecondaryButton from '../../../ui/SecondaryButton.jsx';
 import PrimaryButton from '../../../ui/PrimaryButton.jsx';
 import SuccessButton from '../../../ui/SuccessButton.jsx';
-import ConfirmPassword from '../../../ui/ConfirmPassword.jsx';
+import ConfirmPassword from '../../../(auth)/components/ConfirmPassword.jsx';
 import { useTwoFactor } from '../../../hooks/two-factor.js';
 
 export default function TwoFactorAuthenticationForm({ className = '', user }) {
@@ -31,7 +31,7 @@ export default function TwoFactorAuthenticationForm({ className = '', user }) {
    } = useTwoFactor();
 
    const twoFactorAuthenticationEnabled = () => {
-      return axios.get('/two-factor-authentication-enabled').then((response) => {
+      return axios.get('/api/v1/two-factor-authentication-enabled').then((response) => {
          setRequiresConfirmation(response.data);
       });
    };

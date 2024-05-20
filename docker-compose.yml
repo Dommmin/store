@@ -3,6 +3,21 @@ networks:
     driver: bridge
 
 services:
+  proxy:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.proxy
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    volumes:
+      - ./deployment/config/proxy.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - frontend
+      - nginx
+    networks:
+      - laravel
+
   frontend:
     build:
       context: .
@@ -13,12 +28,8 @@ services:
     restart: unless-stopped
     volumes:
       - ./frontend:/usr/src
-    environment:
-      - NODE_ENV=development
     depends_on:
       - api
-    ports:
-      - "3000:3000"
     networks:
       - laravel
 
@@ -31,10 +42,9 @@ services:
       dockerfile: ./api/Dockerfile
       target: api
     container_name: ${DOCKER_PREFIX}_api
-    command: sh -c "php artisan octane:start --workers=16 --host=0.0.0.0 --port=8000 --watch"
+#    command: sh -c "php artisan octane:start --workers=16 --host=0.0.0.0 --port=8000 --watch"
+#    command: php fpm
     restart: unless-stopped
-    ports:
-      - "8000:8000"
     volumes:
       - ./api:/usr/src
       - ./deployment/config/php-fpm/php-dev.ini:/usr/local/etc/php/conf.d/php.ini

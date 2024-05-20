@@ -32,7 +32,7 @@ export default function TwoFactorChallenge() {
 
    const challenge = () => {
       axios
-         .get('/two-factor-authentication-challenge')
+         .get('/api/v1/two-factor-authentication-challenge')
          .then((response) => {
             console.log(response);
          })
@@ -56,7 +56,7 @@ export default function TwoFactorChallenge() {
       const data = recovery ? { recovery_code: recoveryCode } : { code: code };
 
       axios
-         .post('/two-factor-challenge', data)
+         .post('/api/v1/two-factor-challenge', data)
          .then(() => refetch())
          .catch((error) => {
             setErrors(error.response.data.errors);

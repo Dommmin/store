@@ -1,10 +1,10 @@
 import React, { useRef, useState } from 'react';
-import axios from '../lib/axios.js';
-import DialogModal from './/DialogModal.jsx';
-import InputError from './/InputError.jsx';
-import SecondaryButton from './/SecondaryButton.jsx';
-import SuccessButton from './/SuccessButton.jsx';
-import { useAuth } from '../hooks/auth.js';
+import axios from '../../lib/axios.js';
+import DialogModal from '../../ui/DialogModal.jsx';
+import InputError from '../../ui/InputError.jsx';
+import SecondaryButton from '../../ui/SecondaryButton.jsx';
+import SuccessButton from '../../ui/SuccessButton.jsx';
+import { useAuth } from '../../hooks/auth.js';
 
 export default function ConfirmPassword({
    title = 'Confirm Password',

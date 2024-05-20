@@ -28,7 +28,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
       { focusThrottleInterval: 15000 },
    );
 
-   const getCsrfToken = () => axios.get('/sanctum/csrf-cookie');
+   const getCsrfToken = () => axios.get('/api/v1/sanctum/csrf-cookie');
 
    const register = async ({ setErrors, ...props }) => {
       setIsLoading(true);
@@ -37,7 +37,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
       setErrors([]);
 
       axios
-         .post('/register', props)
+         .post('/api/v1/register', props)
          .then(() => refetch())
          .catch((error) => {
             if (error.response.status !== 422) throw error;
@@ -55,7 +55,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
       setStatus(null);
 
       axios
-         .post('/login', props)
+         .post('/api/v1/login', props)
          .then((response) => {
             if (response.data?.two_factor) {
                return router.push('/two-factor-challenge');
@@ -77,7 +77,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
       setStatus(null);
 
       axios
-         .post('/forgot-password', { email })
+         .post('/api/v1/forgot-password', { email })
          .then((response) => setStatus(response.data.status))
          .catch((error) => {
             if (error.response.status !== 422) throw error;
@@ -93,7 +93,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
       setStatus(null);
 
       axios
-         .post('/reset-password', { token: params.token, ...props })
+         .post('/api/v1/reset-password', { token: params.token, ...props })
          .then((response) => router.push('/login?reset=' + btoa(response.data.status)))
          .catch((error) => {
             if (error.response.status !== 422) throw error;
@@ -103,12 +103,12 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
    };
 
    const resendEmailVerification = ({ setStatus }) => {
-      axios.post('/email/verification-notification').then((response) => setStatus(response.data.status));
+      axios.post('/api/v1/email/verification-notification').then((response) => setStatus(response.data.status));
    };
 
    const logout = async () => {
       if (!error) {
-         await axios.post('/logout').then(() => refetch());
+         await axios.post('/api/v1/logout').then(() => refetch());
       }
 
       window.location.pathname = '/';
