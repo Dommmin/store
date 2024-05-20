@@ -59,6 +59,12 @@ COPY ./api ./
 # Install application dependencies
 RUN composer install --prefer-dist --no-progress
 
+RUN chown -R www-data:www-data /usr/src \
+    && chmod -R 755 /usr/src
+
+RUN chown -R www-data:www-data /usr/src/storage \
+    && chmod -R 755 /usr/src/storage \
+
 # Stage 2: Build the Worker image
 FROM api AS worker
 COPY ./deployment/config/supervisor/worker/supervisord.conf /etc/supervisor/conf.d/worker_supervisor.conf
@@ -67,7 +73,6 @@ CMD ["/bin/sh", "/usr/src/worker.sh"]
 # Stage 3: Build the Scheduler image
 FROM api AS scheduler
 CMD ["/bin/sh", "/usr/src/scheduler.sh"]
-
 
 # Stage 4: Build the Reverb image
 FROM api AS reverb
