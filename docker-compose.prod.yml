@@ -5,6 +5,7 @@ networks:
 services:
   proxy:
     image: dommin/store-proxy:${IMAGE_TAG}
+    container_name: ${DOCKER_PREFIX}_proxy
     restart: unless-stopped
     ports:
       - "80:80"
@@ -16,6 +17,7 @@ services:
 
   frontend:
     image: dommin/store-frontend:${IMAGE_TAG}
+    container_name: ${DOCKER_PREFIX}_frontend
     restart: unless-stopped
     command: sh -c "npm run start"
     depends_on:
@@ -25,6 +27,7 @@ services:
 
   api:
     image: dommin/store-api:${IMAGE_TAG}
+    container_name: ${DOCKER_PREFIX}_api
     command: php-fpm
     restart: unless-stopped
     volumes:
@@ -41,6 +44,7 @@ services:
 
   scheduler:
     image: dommin/store-scheduler:${IMAGE_TAG}
+    container_name: ${DOCKER_PREFIX}_scheduler
     restart: unless-stopped
     command: sh -c "chmod +x /usr/src/scheduler.sh && /usr/src/scheduler.sh"
     volumes:
@@ -57,6 +61,7 @@ services:
 
   worker:
     image: dommin/store-worker:${IMAGE_TAG}
+    container_name: ${DOCKER_PREFIX}_worker
     restart: unless-stopped
     command: sh -c "chmod +x /usr/src/worker.sh && /usr/src/worker.sh"
     volumes:
@@ -73,6 +78,7 @@ services:
 
   nginx:
     image: dommin/store-nginx:${IMAGE_TAG}
+    container_name: ${DOCKER_PREFIX}_nginx
     restart: unless-stopped
     depends_on:
       - api
@@ -81,6 +87,7 @@ services:
 
   mysql:
     image: dommin/store-mysql:${IMAGE_TAG}
+    container_name: ${DOCKER_PREFIX}_mysql
     restart: unless-stopped
     healthcheck:
       test: mysql -h localhost -u root -p${DB_PASSWORD} -e 'SELECT version();'
@@ -99,6 +106,7 @@ services:
 
   redis:
     image: redis:alpine
+    container_name: ${DOCKER_PREFIX}_redis
     restart: unless-stopped
     command: redis-server --maxmemory 128mb --maxmemory-policy volatile-lru --save ""
     healthcheck:

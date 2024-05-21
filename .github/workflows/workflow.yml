@@ -156,6 +156,9 @@ jobs:
       - name: Update .env and run deploy script on remote server
         run: |
           sshpass -p ${{ secrets.DIGITALOCEAN_SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no root@${{ secrets.DROPLET_IP }} << 'EOF'
+            # Copy .env.prod to .env
+            cp /root/api/.env.prod /root/api/.env
+          
             # Remove existing lines with the environment variables
             sed -i '/^IMAGE_TAG=/d' /root/.env
             sed -i '/^DOCKERHUB_USERNAME=/d' /root/.env
@@ -167,6 +170,7 @@ jobs:
             echo "DOCKERHUB_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> /root/.env
             echo "DOCKERHUB_PASSWORD=${{ secrets.DOCKER_PASSWORD }}" >> /root/.env
             echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> /root/.env
+            echo "DOCKER_PREFIX=store" >> /root/.env
           
             # Make sure the deploy script is executable
             chmod +x /root/deploy.sh
