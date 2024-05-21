@@ -24,7 +24,7 @@ services:
       dockerfile: ./frontend/Dockerfile
       target: dev
     container_name: ${DOCKER_PREFIX}_frontend
-    command: sh -c "npm run dev"
+#    command: npm run start
     restart: unless-stopped
     volumes:
       - ./frontend:/usr/src
