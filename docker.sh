@@ -59,7 +59,7 @@ docker exec -it -u root "${DOCKER_PREFIX}_api" chown -R $USER:$USER /home/$USER
 # Instalacja Composera
 echo "${BOLD}${RED}--------------------------------------------------------------------------------${RESET}"
 echo -e "${BOLD}${YELLOW}Instalacja Composera${RESET}\n"
-docker exec -it -u $USER "${DOCKER_PREFIX}_api" composer install --no-scripts
+docker exec -it -u $USER "${DOCKER_PREFIX}_api" composer install --no-scripts --no-interaction
 
 ## Instalacja zależności npm
 #echo "${BOLD}${RED}--------------------------------------------------------------------------------${RESET}"
@@ -80,7 +80,7 @@ docker exec -u root "$DOCKER_PREFIX"_api bash migration.sh
 # Insights
 echo "${BOLD}${RED}--------------------------------------------------------------------------------${RESET}"
 echo -e "${BOLD}${YELLOW}Insights${RESET}\n"
-docker exec -it "$DOCKER_PREFIX"_api php artisan insights --fix
+docker exec -it "$DOCKER_PREFIX"_api php artisan insights --fix -n
 
 # Lint
 echo "${BOLD}${RED}--------------------------------------------------------------------------------${RESET}"
