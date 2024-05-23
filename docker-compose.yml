@@ -31,6 +31,8 @@ services:
       - api
     networks:
       - laravel
+    ports:
+      - "3000"
 
   api:
     build:

@@ -5,7 +5,7 @@ WORKDIR /usr/src
 COPY ./frontend .
 
 FROM base AS dev
-EXPOSE 80
+EXPOSE 3000
 CMD ["npm", "run", "dev"]
 
 FROM base AS build
