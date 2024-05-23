@@ -94,5 +94,5 @@ docker exec -it "$DOCKER_PREFIX"_frontend npm run format:fix
 
 # Panel
 echo "${BOLD}${RED}--------------------------------------------------------------------------------${RESET}"
-echo "${YELLOW}API jest dostępne pod adresem: ${BOLD}${GREEN}http://localhost:3000/api${RESET}"
-echo "${YELLOW}Strona jest dostępna pod adresem: ${BOLD}${GREEN}http://localhost:3000${RESET}"
+echo "${YELLOW}API jest dostępne pod adresem: ${BOLD}${GREEN}http://localhost:80/api${RESET}"
+echo "${YELLOW}Strona jest dostępna pod adresem: ${BOLD}${GREEN}http://localhost:80${RESET}"
