@@ -30,7 +30,7 @@ jobs:
           docker build -t $SCHEDULER_IMAGE --target=scheduler -f ./api/Dockerfile .
           docker build -t $WORKER_IMAGE --target=worker -f ./api/Dockerfile .
       - name: Install dependencies
-        run: docker run --rm -t $PHP_IMAGE composer install --prefer-dist --no-progress --no-interaction
+        run: docker run --rm -t $API_IMAGE composer install --prefer-dist --no-progress --no-interaction
       - name: Push images
         run: |
           docker push $API_IMAGE
