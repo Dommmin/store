@@ -12,8 +12,6 @@ services:
     depends_on:
       - frontend
       - nginx
-    networks:
-      - laravel
 
   frontend:
     image: dommin/store-frontend:${IMAGE_TAG}
@@ -22,8 +20,6 @@ services:
     command: sh -c "npm run start"
     depends_on:
       - api
-    networks:
-      - laravel
 
   api:
     image: dommin/store-api:${IMAGE_TAG}
@@ -39,8 +35,6 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
-    networks:
-      - laravel
 
   scheduler:
     image: dommin/store-scheduler:${IMAGE_TAG}
@@ -56,8 +50,6 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
-    networks:
-      - laravel
 
   worker:
     image: dommin/store-worker:${IMAGE_TAG}
@@ -73,20 +65,18 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
-    networks:
-      - laravel
 
   nginx:
     image: dommin/store-nginx:${IMAGE_TAG}
     container_name: ${DOCKER_PREFIX}_nginx
-    restart: unless-stopped
+    command: sh -c "nginx -g \"daemon off;\""
+    volumes:
+      - ./public:/usr/src/public
     depends_on:
       - api
-    networks:
-      - laravel
 
   mysql:
-    image: dommin/store-mysql:${IMAGE_TAG}
+    image: dommin/starter-mysql:${IMAGE_TAG}
     container_name: ${DOCKER_PREFIX}_mysql
     restart: unless-stopped
     healthcheck:
@@ -95,14 +85,12 @@ services:
       interval: 15s
       timeout: 5s
       retries: 5
-    volumes:
-      - type: volume
-        source: mysqldata
-        target: /var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
-    networks:
-      - laravel
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
 
   redis:
     image: redis:alpine
@@ -118,20 +106,8 @@ services:
       - type: volume
         source: redisdata
         target: /data
-    networks:
-      - laravel
-
-  watchtower:
-    image: containrrr/watchtower:1.5.3
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-      - REPO_USER=${DOCKERHUB_USERNAME}
-      - REPO_PASS=${DOCKERHUB_PASSWORD}
-    networks:
-      - laravel
 
 volumes:
   storage:
-  mysqldata:
+  mysql-data:
   redisdata:

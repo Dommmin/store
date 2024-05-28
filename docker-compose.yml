@@ -36,9 +36,6 @@ services:
 
   api:
     build:
-      args:
-        user: dominik
-        uid: 1000
       context: .
       dockerfile: ./api/Dockerfile
       target: api
@@ -57,16 +54,11 @@ services:
 
   scheduler:
     build:
-      args:
-        user: dominik
-        uid: 1000
       context: .
       dockerfile: ./api/Dockerfile
       target: scheduler
     command: sh -c "chmod +x /usr/src/scheduler.sh && /usr/src/scheduler.sh"
     restart: unless-stopped
-    env_file:
-      - ./api/.env
     volumes:
       - ./api:/usr/src
     depends_on:
@@ -79,15 +71,10 @@ services:
 
   worker:
     build:
-      args:
-        user: dominik
-        uid: 1000
       context: .
       dockerfile: ./api/Dockerfile
       target: worker
     command: sh -c "chmod +x /usr/src/worker.sh && /usr/src/worker.sh"
-    env_file:
-      - ./api/.env
     restart: unless-stopped
     volumes:
       - ./api:/usr/src
@@ -210,16 +197,11 @@ services:
 
   reverb:
     build:
-      args:
-        user: dominik
-        uid: 1000
       context: .
       dockerfile: ./api/Dockerfile
       target: reverb
     command: sh -c "chmod +x /usr/src/reverb.sh && /usr/src/reverb.sh"
     restart: unless-stopped
-    env_file:
-      - ./api/.env
     volumes:
       - ./api:/usr/src
     ports:
@@ -239,7 +221,6 @@ services:
       - "4242:4242"
     networks:
       - laravel
-
 
 volumes:
   storage-minio:

@@ -13,7 +13,7 @@ RUN apk update && apk add --no-cache \
     pcre-dev \
     zlib-dev \
     file \
-    bash  \
+    bash \
     linux-headers \
     git \
     curl \
@@ -28,13 +28,12 @@ RUN apk update && apk add --no-cache \
     supervisor \
     mysql-client \
     imagemagick-dev \
-    libtool
+    libtool \
+    nodejs \
+    npm
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip intl
-
-# Install Node.js and npm
-RUN apk add --no-cache nodejs npm
 
 # Install npm package chokidar
 RUN npm install --save-dev chokidar
@@ -57,7 +56,7 @@ COPY ./api/worker.sh ./api/reverb.sh ./api/scheduler.sh ./api/migration.sh ./
 COPY ./api ./
 
 # Install application dependencies
-RUN composer install --prefer-dist --no-progress
+RUN composer install --prefer-dist --no-scripts --no-progress --no-suggest --optimize-autoloader
 
 RUN chown -R www-data:www-data /usr/src && \
     chmod -R 775 ./storage ./bootstrap/cache

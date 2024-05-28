@@ -26,11 +26,11 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Build images
         run: |
-          docker build -t $API_IMAGE --target=api --build-arg user=dominik --build-arg uid=1000 -f ./api/Dockerfile .
-          docker build -t $SCHEDULER_IMAGE --target=scheduler --build-arg user=dominik --build-arg uid=1000 -f ./api/Dockerfile .
-          docker build -t $WORKER_IMAGE --target=worker --build-arg user=dominik --build-arg uid=1000 -f ./api/Dockerfile .
+          docker build -t $API_IMAGE --target=api -f ./api/Dockerfile .
+          docker build -t $SCHEDULER_IMAGE --target=scheduler -f ./api/Dockerfile .
+          docker build -t $WORKER_IMAGE --target=worker -f ./api/Dockerfile .
       - name: Install dependencies
-        run: docker run --rm -t $API_IMAGE composer install --prefer-dist --no-progress
+        run: docker run --rm -t $PHP_IMAGE composer install --prefer-dist --no-progress --no-interaction
       - name: Push images
         run: |
           docker push $API_IMAGE
@@ -90,19 +90,6 @@ jobs:
           docker compose -f docker-compose.ci.yml up -d
           docker compose -f docker-compose.ci.yml exec -T api php artisan test
 
-  remove-images:
-    needs: [ analyze, test ]
-    runs-on: ubuntu-latest
-    if: ${{ always() && contains(needs.*.result, 'failure') }}
-    steps:
-      - uses: actions/checkout@v4
-      - name: Remove images
-        run: |
-          ./deployment/bin/remove-image.sh dommin/store-api ${{ github.sha }} ${{ secrets.DOCKER_USERNAME }} ${{ secrets.DOCKER_PASSWORD }}
-          ./deployment/bin/remove-image.sh dommin/store-mysql ${{ github.sha }} ${{ secrets.DOCKER_USERNAME }} ${{ secrets.DOCKER_PASSWORD }}
-          ./deployment/bin/remove-image.sh dommin/store-worker ${{ github.sha }} ${{ secrets.DOCKER_USERNAME }} ${{ secrets.DOCKER_PASSWORD }}
-          ./deployment/bin/remove-image.sh dommin/store-scheduler ${{ github.sha }} ${{ secrets.DOCKER_USERNAME }} ${{ secrets.DOCKER_PASSWORD }}
-
   build-nginx:
     needs: [ analyze, test ]
     runs-on: ubuntu-latest
@@ -146,35 +133,18 @@ jobs:
           docker push $FRONTEND_IMAGE
 
   deploy:
-    needs: [build-frontend, build-proxy, build-nginx]
+    needs: [ build-frontend, build-nginx, build-proxy ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Copy files to remote server
         run: |
-          sshpass -p ${{ secrets.DIGITALOCEAN_SSH_PASSWORD }} scp -o StrictHostKeyChecking=no -r ./* root@${{ secrets.DROPLET_IP }}:/root/
-      - name: Update .env and run deploy script on remote server
+          sshpass -p ${{ secrets.DIGITALOCEAN_SSH_PASSWORD }} scp -o StrictHostKeyChecking=no deploy.sh docker-compose.prod.yml root@${{ secrets.DROPLET_IP }}:/root/
+      - name: Run deploy script on remote server
         run: |
           sshpass -p ${{ secrets.DIGITALOCEAN_SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no root@${{ secrets.DROPLET_IP }} << 'EOF'
-            # Copy .env.prod to .env
-            cp /root/api/.env.prod /root/api/.env
-          
-            # Remove existing lines with the environment variables
-            sed -i '/^IMAGE_TAG=/d' /root/.env
-            sed -i '/^DOCKERHUB_USERNAME=/d' /root/.env
-            sed -i '/^DOCKERHUB_PASSWORD=/d' /root/.env
-            sed -i '/^DB_PASSWORD=/d' /root/.env
-  
-            # Add the environment variables to the .env file
-            echo "IMAGE_TAG=${{ github.sha }}" >> /root/.env
-            echo "DOCKERHUB_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> /root/.env
-            echo "DOCKERHUB_PASSWORD=${{ secrets.DOCKER_PASSWORD }}" >> /root/.env
-            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> /root/.env
-            echo "DOCKER_PREFIX=store" >> /root/.env
-          
-            # Make sure the deploy script is executable
-            chmod +x /root/deploy.sh
-          
-            # Run the deploy script
-            /root/deploy.sh
+          sed -i "/IMAGE_TAG/c\IMAGE_TAG=${{ github.sha }}" /root/.env
+          chmod +x /root/deploy.sh
+          /root/deploy.sh
+          exit
           EOF

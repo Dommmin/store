@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-undef
 module.exports = {
    extends: ['eslint:recommended', 'plugin:react/recommended', 'prettier'],
    plugins: ['react'],
@@ -14,7 +13,7 @@ module.exports = {
       'no-nested-ternary': 0,
       'no-underscore-dangle': 0,
       'no-unused-expressions': 0,
-      'camelcase': 0,
+      camelcase: 0,
       'react/self-closing-comp': 1,
       'react/jsx-filename-extension': [
          1,
