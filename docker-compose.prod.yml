@@ -21,13 +21,15 @@ services:
   api:
     image: dommin/store-api:${IMAGE_TAG}
     container_name: ${DOCKER_PREFIX}_api
+    restart: unless-stopped
     volumes:
-      - ./.env:/usr/src/.env:ro
+      - ./.env:/usr/src/.env
+      - type: volume
+        source: storage
+        target: /usr/src/storage
     environment:
       - APP_ENV=production
       - APP_DEBUG=false
-    env_file:
-      - ./.env
     depends_on:
       mysql:
         condition: service_healthy
@@ -36,8 +38,8 @@ services:
     image: dommin/store-scheduler:${IMAGE_TAG}
     container_name: ${DOCKER_PREFIX}_scheduler
     restart: unless-stopped
-    command: sh -c "chmod +x /usr/src/scheduler.sh && /usr/src/scheduler.sh"
     volumes:
+      - ./.env:/usr/src/.env
       - type: volume
         source: storage
         target: /usr/src/storage
@@ -51,8 +53,8 @@ services:
     image: dommin/store-worker:${IMAGE_TAG}
     container_name: ${DOCKER_PREFIX}_worker
     restart: unless-stopped
-    command: sh -c "chmod +x /usr/src/worker.sh && /usr/src/worker.sh"
     volumes:
+      - ./.env:/usr/src/.env
       - type: volume
         source: storage
         target: /usr/src/storage
@@ -65,9 +67,6 @@ services:
   nginx:
     image: dommin/store-nginx:${IMAGE_TAG}
     container_name: ${DOCKER_PREFIX}_nginx
-    command: sh -c "nginx -g \"daemon off;\""
-    volumes:
-      - ./public:/usr/src/public
     depends_on:
       - api
 
