@@ -1,7 +1,3 @@
-networks:
-  laravel:
-    driver: bridge
-
 services:
   proxy:
     image: dommin/store-proxy:${IMAGE_TAG}
