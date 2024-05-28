@@ -76,7 +76,7 @@ services:
       - api
 
   mysql:
-    image: dommin/starter-mysql:${IMAGE_TAG}
+    image: dommin/store-mysql:${IMAGE_TAG}
     container_name: ${DOCKER_PREFIX}_mysql
     restart: unless-stopped
     healthcheck:
