@@ -7,16 +7,18 @@ services:
       - "80:80"
     depends_on:
       - frontend
-      - nginx
+      - api
 
   frontend:
     image: dommin/store-frontend:${IMAGE_TAG}
     container_name: ${DOCKER_PREFIX}_frontend
     restart: unless-stopped
-    volumes:
-      - ./frontend/.next:/usr/share/nginx/html
     depends_on:
       - api
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "3000:3000"
 
   api:
     image: dommin/store-api:${IMAGE_TAG}
