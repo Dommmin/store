@@ -8,24 +8,26 @@ services:
     depends_on:
       - frontend
       - api
+    volumes:
+      - ./deployment/config/proxy.conf:/etc/nginx/nginx.conf
 
   frontend:
     image: dommin/store-frontend:${IMAGE_TAG}
     container_name: ${DOCKER_PREFIX}_frontend
     restart: unless-stopped
-    depends_on:
-      - api
     environment:
       - NODE_ENV=production
     ports:
       - "3000:3000"
+    depends_on:
+      - api
 
   api:
     image: dommin/store-api:${IMAGE_TAG}
     container_name: ${DOCKER_PREFIX}_api
     restart: unless-stopped
     volumes:
-      - ./api/.env:/usr/src/.env
+      - ./api/.env:/usr/src/.env:ro
       - type: volume
         source: storage
         target: /usr/src/storage
