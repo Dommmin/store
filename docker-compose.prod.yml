@@ -14,7 +14,7 @@ services:
     container_name: ${DOCKER_PREFIX}_frontend
     restart: unless-stopped
     volumes:
-      - ./public:/usr/share/nginx/html
+      - ./frontend/.next:/usr/share/nginx/html
     depends_on:
       - api
 
@@ -23,7 +23,7 @@ services:
     container_name: ${DOCKER_PREFIX}_api
     restart: unless-stopped
     volumes:
-      - ./.env:/usr/src/.env
+      - ./api/.env:/usr/src/.env
       - type: volume
         source: storage
         target: /usr/src/storage
@@ -39,7 +39,7 @@ services:
     container_name: ${DOCKER_PREFIX}_scheduler
     restart: unless-stopped
     volumes:
-      - ./.env:/usr/src/.env
+      - ./api/.env:/usr/src/.env
       - type: volume
         source: storage
         target: /usr/src/storage
@@ -54,7 +54,7 @@ services:
     container_name: ${DOCKER_PREFIX}_worker
     restart: unless-stopped
     volumes:
-      - ./.env:/usr/src/.env
+      - ./api/.env:/usr/src/.env
       - type: volume
         source: storage
         target: /usr/src/storage
