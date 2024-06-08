@@ -30,7 +30,8 @@ RUN apk update && apk add --no-cache \
     imagemagick-dev \
     libtool \
     nodejs \
-    npm
+    npm \
+    brotli-dev
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip intl
