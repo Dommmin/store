@@ -8,8 +8,6 @@ services:
     depends_on:
       - frontend
       - api
-    volumes:
-      - ./deployment/config/proxy.conf:/etc/nginx/nginx.conf
 
   frontend:
     image: dommin/store-frontend:${IMAGE_TAG}
