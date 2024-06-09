@@ -104,7 +104,21 @@ services:
         source: redisdata
         target: /data
 
+    meilisearch:
+      image: getmeili/meilisearch:latest
+      ports:
+        - 7700:7700
+      volumes:
+        - ./data.ms:/data.ms
+
+    stripe-cli:
+      image: stripe/stripe-cli:latest
+      command: listen --forward-to api:8000/stripe/webhook --format JSON --api-key sk_test_51PGGRERtk6LWYh9Nopr9EQ4r8UjXGQ48LbgeFofJDO8rf9Zn7lwKbaw5QHijXTUlCnmHrg0Ych5C06qZLIqITH1E00DKijZLGD
+      ports:
+        - "4242:4242"
+
 volumes:
   storage:
   mysql-data:
+  data.ms:
   redisdata:
