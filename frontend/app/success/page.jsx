@@ -17,11 +17,17 @@ export default function Success() {
 
    const { isFetching } = useAuth();
 
-   if (!sessionId) {
-      return <PageNotFound />;
-   }
+    useEffect(() => {
+        fetchOrder();
+    }, [fetchOrder, isFetching]);
+
+
 
    const fetchOrder = async () => {
+       if (!sessionId) {
+           return <PageNotFound />;
+       }
+
       try {
          const response = await axios.post('/api/v1/confirmation', {
             session_id: sessionId,
@@ -36,9 +42,7 @@ export default function Success() {
       }
    };
 
-   useEffect(() => {
-      fetchOrder();
-   }, [isFetching]);
+
 
    if (isLoading || isFetching) return;
    if (error) return <PageNotFound />;
