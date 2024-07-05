@@ -13,12 +13,12 @@ import { useRouter } from 'next/navigation';
 import useSWR from 'swr';
 import { useBookmark } from '../../../hooks/bookmark';
 import RatingStats from '../../../ui/RatingStats';
-import InputError from '../../../ui/InputError';
 import SecondaryButton from '../../../ui/SecondaryButton';
 import SuccessButton from '../../../ui/SuccessButton';
 import Modal from '../../../ui/Modal';
 import StarRating from '../../../ui/StarRating';
 import Review from '../../../ui/Review';
+import { useQuery } from '@tanstack/react-query';
 
 export default function Page({ params }) {
    const productUrl = params.url;
@@ -29,17 +29,17 @@ export default function Page({ params }) {
    const [title, setTitle] = useState('');
    const [body, setBody] = useState('');
 
-   const [reviews, setReviews] = useState([]);
-   const [ratings, setRatings] = useState([]);
-   const [isFetchingReviews, setIsFetchingReviews] = useState(true);
-   const [isFetchingRatings, setIsFetchingRatings] = useState(true);
+   // const [reviews, setReviews] = useState([]);
+   // const [ratings, setRatings] = useState([]);
+   // const [isFetchingReviews, setIsFetchingReviews] = useState(true);
+   // const [isFetchingRatings, setIsFetchingRatings] = useState(true);
    const [reviewUrl, setReviewUrl] = useState('/api/v1/products/' + productUrl + '/reviews');
 
    const [size, setSize] = useState('');
    const [selectedImage, setSelectedImage] = useState('');
 
    const { handleAddToCart } = useCart();
-   const { mutateBookmarks } = useBookmark();
+   const { refetchBookmarks } = useBookmark();
    const { user } = useAuth();
    const router = useRouter();
 
@@ -55,31 +55,47 @@ export default function Page({ params }) {
       return response.data.data;
    };
 
-   const fetchReviews = () => {
-      axios
-         .get(reviewUrl)
-         .then((response) => {
-            setReviews(response.data);
-         })
-         .catch((error) => {
-            console.error('Error:', error);
-         })
-         .finally(() => setIsFetchingReviews(false));
+   const fetchReviews = async () => {
+      const response = await axios.get(reviewUrl)
+         // .then((response) => {
+         //    setReviews(response.data);
+         // })
+         // .catch((error) => {
+         //    console.error('Error:', error);
+         // })
+         // .finally(() => setIsFetchingReviews(false));
+
+       return response.data;
    };
 
-   const fetchRatings = () => {
-      axios
-         .get(`/api/v1/products/${productUrl}/ratings`)
-         .then((response) => {
-            setRatings(response.data);
-         })
-         .catch((error) => {
-            console.error('Error:', error);
-         })
-         .finally(() => setIsFetchingRatings(false));
+   const fetchRatings = async () => {
+       const response = await axios.get(`/api/v1/products/${productUrl}/ratings`)
+       // .then((response) => {
+       //    setRatings(response.data);
+       // })
+       // .catch((error) => {
+       //    console.error('Error:', error);
+       // })
+       // .finally(() => setIsFetchingRatings(false));
+
+       return response.data;
    };
 
-   const { data: product, mutate, isLoading } = useSWR(url, () => fetchProduct());
+   // const { data: product, refetch, isLoading } = useSWR(url, () => fetchProduct());
+   const { data: product, refetch: refetchProduct, isPending } = useQuery({
+      queryKey: ['product'],
+      queryFn: fetchProduct,
+   })
+
+   const { data: reviews, refetch: refetchReviews, isPending: isPendingReviews } = useQuery({
+      queryKey: ['reviews'],
+      queryFn: fetchReviews,
+   })
+
+   const { data: ratings, refetch: refetchRatings, isPending: isPendingRatings } = useQuery({
+      queryKey: ['ratings'],
+      queryFn: fetchRatings,
+   })
 
    const disableAddToCart = () => {
       return !product.sizes.length || !size;
@@ -95,8 +111,8 @@ export default function Page({ params }) {
       axios
          .post('/api/v1/bookmarks', { product_id: product.id })
          .then(async () => {
-            await mutateBookmarks();
-            await mutate();
+            await refetchBookmarks();
+            await refetchProduct();
          })
          .catch((error) => {
             console.error('Error:', error);
@@ -109,8 +125,8 @@ export default function Page({ params }) {
       axios
          .delete('/api/v1/bookmarks/' + product.bookmark_id)
          .then(async () => {
-            await mutateBookmarks();
-            await mutate();
+            await refetchBookmarks();
+            await refetchProduct();
          })
          .catch((error) => {
             console.error('Error:', error);
@@ -128,7 +144,7 @@ export default function Page({ params }) {
       setFilePreview('');
    };
 
-   const handleSubmitReview = (event) => {
+   const handleSubmitReview = async (event) => {
       event.preventDefault();
 
       const formData = new FormData();
@@ -141,18 +157,28 @@ export default function Page({ params }) {
          formData.append('image', file);
       }
 
-      axios
-         .post('/api/v1/products/' + productUrl + '/reviews', formData)
-         .then(() => {
-            setIsOpen(false);
-            clearForm();
-            fetchReviews();
-            fetchRatings();
-            mutate();
-         })
-         .catch((error) => {
-            console.error('Error:', error);
-         });
+      try {
+          const response = await axios.post('/api/v1/products/' + productUrl + '/reviews', formData);
+
+          if (response.status === 201) {
+              clearForm();
+              await refetchReviews();
+              await refetchRatings();
+              await refetchProduct();
+          }
+      } catch (error) {
+          console.error('Error:', error);
+      }
+         // .then(() => {
+         //    setIsOpen(false);
+         //    clearForm();
+         //    refetchReviews();
+         //    refetchRatings();
+         //    refetchProduct();
+         // })
+         // .catch((error) => {
+         //    console.error('Error:', error);
+         // });
    };
 
    const clearForm = () => {
@@ -173,17 +199,17 @@ export default function Page({ params }) {
       }
    }, [file]);
 
-   useEffect(() => {
-      fetchRatings();
-   }, []);
+   // useEffect(() => {
+   //    fetchRatings();
+   // }, []);
+
+   // useEffect(() => {
+   //    fetchReviews();
+   // }, [reviewUrl]);
 
    useEffect(() => {
-      fetchReviews();
-   }, [reviewUrl]);
-
-   useEffect(() => {
-      mutate();
-   }, [productUrl, mutate]);
+      refetchProduct();
+   }, [productUrl, refetchProduct]);
 
    const variants = {
       hidden: { opacity: 0 },
@@ -195,7 +221,7 @@ export default function Page({ params }) {
       },
    };
 
-   if (isLoading || isFetchingReviews || isFetchingRatings) return;
+   if (isPending || isPendingReviews || isPendingRatings) return;
 
    return (
       <Wrapper>

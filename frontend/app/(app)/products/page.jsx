@@ -8,16 +8,14 @@ import Product from '../../ui/Product';
 import RangeSlider from 'react-range-slider-input';
 import 'react-range-slider-input/dist/style.css';
 import Link from 'next/link';
-import useSWR from 'swr';
 import ProductSkeleton from '../../ui/ProductSkeleton';
+import { useQuery } from '@tanstack/react-query';
 
 export default function Page() {
    const [searchQuery, setSearchQuery] = useState('');
    const [value, setValue] = useState([1, 10000]);
    const [debouncedSearchQuery] = useDebounce(searchQuery, 500);
    const [debouncedValue] = useDebounce(value, 1000);
-   const [brands, setBrands] = useState([]);
-   const [categories, setCategories] = useState([]);
    const [brand, setBrand] = useState('');
    const [category, setCategory] = useState('');
    const [sort, setSort] = useState(JSON.stringify({ column: 'id', order: 'asc' }));
@@ -34,26 +32,16 @@ export default function Page() {
       });
    };
 
-   const fetchCategories = () => {
-      axios
-         .get('/api/v1/categories')
-         .then((response) => {
-            setCategories(response.data);
-         })
-         .catch((error) => {
-            console.error('Error:', error);
-         });
+   const fetchCategories = async () => {
+      const response = await axios.get('/api/v1/categories')
+
+       return response.data;
    };
 
-   const fetchBrands = () => {
-      axios
-         .get('/api/v1/brands')
-         .then((response) => {
-            setBrands(response.data);
-         })
-         .catch((error) => {
-            console.error('Error:', error);
-         });
+   const fetchBrands = async () => {
+      const response = await axios.get('/api/v1/brands')
+
+       return response.data;
    };
 
    const fetchProducts = async () => {
@@ -74,16 +62,29 @@ export default function Page() {
       return response.data;
    };
 
-   const { data, mutate, isLoading } = useSWR(url, () => fetchProducts());
+   const { data, refetch, isPending } = useQuery({
+      queryKey: ['products'],
+      queryFn: fetchProducts,
+   })
+
+    const { data: brands } = useQuery({
+        queryKey: ['brands'],
+        queryFn: fetchBrands
+    })
+
+    const { data: categories } = useQuery({
+        queryKey: ['categories'],
+        queryFn: fetchCategories
+    })
+
+   // useEffect(() => {
+   //    fetchBrands();
+   //    fetchCategories();
+   // }, []);
 
    useEffect(() => {
-      fetchBrands();
-      fetchCategories();
-   }, []);
-
-   useEffect(() => {
-      mutate();
-   }, [debouncedSearchQuery, brand, category, debouncedValue, sort, url]);
+       refetch();
+   }, [debouncedSearchQuery, brand, category, debouncedValue, sort, url, refetch]);
 
    // if (isLoading) {
    //     return;
@@ -201,7 +202,7 @@ export default function Page() {
                </label>
             </div>
 
-            {isLoading ? (
+            {isPending ? (
                <ProductSkeleton />
             ) : (
                <>
