@@ -1,6 +1,6 @@
 module.exports = {
-   extends: ['eslint:recommended', 'plugin:react/recommended', 'prettier'],
-   plugins: ['react'],
+   extends: ['eslint:recommended', 'plugin:react/recommended', 'prettier', 'next/core-web-vitals'],
+   plugins: ['react', 'prettier'],
    parserOptions: {
       ecmaVersion: 2021,
       sourceType: 'module',
