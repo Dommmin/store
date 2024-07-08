@@ -13,7 +13,7 @@ class FileService
     /**
      * @throws FileNotFoundException
      */
-    public function storeFiles(array $files = [], string $disk = 'local', string $directory = ''): array
+    public function storeFiles(array $files = [], string $disk = 'public', string $directory = ''): array
     {
         $data = [];
 
@@ -24,7 +24,7 @@ class FileService
                     'id' => $file->hashName(),
                     'name' => $file->getClientOriginalName(),
                     'path' => $path,
-                    'url' => Storage::disk($disk)->url($path),
+                    'url' => env('APP_URL') . '/storage/' . $path,
                 ];
             }
         }
@@ -32,24 +32,18 @@ class FileService
         return $data;
     }
 
-    /**
-     * @throws FileNotFoundException
-     */
-    public function storeFile(?UploadedFile $file = null, string $disk = 'local', string $directory = ''): string
+    public function storeFile(?UploadedFile $file = null, string $disk = 'public', string $directory = ''): string
     {
         return $this->store($file, $directory, $disk);
     }
 
-    public function deleteFiles(array $files, string $disk = 'local'): void
+    public function deleteFiles(array $files, string $disk = 'public'): void
     {
         foreach ($files as $file) {
             Storage::disk($disk)->delete($file['path']);
         }
     }
 
-    /**
-     * @throws FileNotFoundException
-     */
     private function store(UploadedFile $file, string $directory, string $disk): string
     {
         $extension = $file->getClientOriginalExtension();
@@ -57,7 +51,7 @@ class FileService
         $fileName = $originalName . '-' . uniqid() . '.' . $extension;
         $path = $directory === '' ? $fileName : $directory . '/' . $fileName;
 
-        Storage::disk($disk)->put($path, $file->get(), 'public');
+        Storage::disk($disk)->put($path, file_get_contents($file->getRealPath()), 'public');
 
         return $path;
     }

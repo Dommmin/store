@@ -31,8 +31,6 @@ services:
       - api
     networks:
       - laravel
-    ports:
-      - "3000:3000"
 
   api:
     build:
@@ -172,19 +170,19 @@ services:
     networks:
       - laravel
 
-  minio:
-    image: minio/minio
-    ports:
-      - "9000:9000"
-      - "9099:9099"
-    volumes:
-      - storage-minio:/data
-    environment:
-      - MINIO_ACCESS_KEY=admin
-      - MINIO_SECRET_KEY=admin123
-    command: server --address ":9099" --console-address ":9000" /data
-    networks:
-      - laravel
+#  minio:
+#    image: minio/minio
+#    ports:
+#      - "9000:9000"
+#      - "9099:9099"
+#    volumes:
+#      - storage-minio:/data
+#    environment:
+#      - MINIO_ACCESS_KEY=admin
+#      - MINIO_SECRET_KEY=admin123
+#    command: server --address ":9099" --console-address ":9000" /data
+#    networks:
+#      - laravel
 
   meilisearch:
     image: getmeili/meilisearch:latest
