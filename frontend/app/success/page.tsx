@@ -17,27 +17,26 @@ export default function Success() {
 
    const { isPending } = useAuth();
 
-    const fetchOrder = async () => {
-        if (!sessionId) {
-            return <PageNotFound />;
-        }
+   const fetchOrder = async () => {
+      if (!sessionId) {
+         return <PageNotFound />;
+      }
 
-        try {
-            const response = await axios.post('/api/v1/confirmation', {
-                session_id: sessionId,
-            });
-            setOrder(response.data);
-        } catch (error) {
-            if (error.response.status === 404) {
-                setError(true);
-            }
-        } finally {
-            setIsLoading(false);
-        }
-    };
+      try {
+         const response = await axios.post('/api/v1/confirmation', {
+            session_id: sessionId,
+         });
+         setOrder(response.data);
+      } catch (error) {
+         if (error.response.status === 404) {
+            setError(true);
+         }
+      } finally {
+         setIsLoading(false);
+      }
+   };
 
-
-    useEffect(() => {
+   useEffect(() => {
       fetchOrder();
    }, [fetchOrder, isPending]);
 

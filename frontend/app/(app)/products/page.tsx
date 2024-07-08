@@ -34,18 +34,18 @@ export default function Page() {
    const [url, setUrl] = useState('/api/v1/products');
 
    const updateUrl = () => {
-       const query = {
-           searchQuery: debouncedSearchQuery,
-           min_price: debouncedValue[0].toString(),
-           max_price: debouncedValue[1].toString(),
-           brand: brand || '',
-           category: category || '',
-           orderBy: JSON.parse(sort).column,
-           order: JSON.parse(sort).order,
-       };
+      const query = {
+         searchQuery: debouncedSearchQuery,
+         min_price: debouncedValue[0].toString(),
+         max_price: debouncedValue[1].toString(),
+         brand: brand || '',
+         category: category || '',
+         orderBy: JSON.parse(sort).column,
+         order: JSON.parse(sort).order,
+      };
 
-       const queryString = new URLSearchParams(query).toString();
-       router.push(`/products?${queryString}`);
+      const queryString = new URLSearchParams(query).toString();
+      router.push(`/products?${queryString}`);
    };
 
    const handleInputChange = (index, event) => {

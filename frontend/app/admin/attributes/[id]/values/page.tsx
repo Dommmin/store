@@ -12,36 +12,36 @@ import { useQuery } from '@tanstack/react-query';
 
 export default function AttributeValues({ params }) {
    const [url, setUrl] = useState('/api/v1/admin/attributes/' + params.id + '/attributeValues');
-    const [selectedItems, setSelectedItems] = useState<number[]>([]);
+   const [selectedItems, setSelectedItems] = useState<number[]>([]);
 
-    const fetchData = async () => {
-        const response = await axios.get(url, {
-            params: {
-                perPage: 5,
-            },
-        });
+   const fetchData = async () => {
+      const response = await axios.get(url, {
+         params: {
+            perPage: 5,
+         },
+      });
 
-        return response.data;
-    };
+      return response.data;
+   };
 
-    const {
-        data,
-        isPending,
-        refetch: refetchData,
-        isError,
-        error,
-    } = useQuery({
-        queryKey: ['data'],
-        queryFn: fetchData,
-    });
+   const {
+      data,
+      isPending,
+      refetch: refetchData,
+      isError,
+      error,
+   } = useQuery({
+      queryKey: ['data'],
+      queryFn: fetchData,
+   });
 
-    const handleSelectAll = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.checked) {
-            setSelectedItems(data.data.map((item: Brand) => item.id));
-            return;
-        }
-        setSelectedItems([]);
-    };
+   const handleSelectAll = (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (event.target.checked) {
+         setSelectedItems(data.data.map((item: Brand) => item.id));
+         return;
+      }
+      setSelectedItems([]);
+   };
 
    const handleSelectOne = (id) => {
       if (selectedItems.includes(id)) {
@@ -57,10 +57,7 @@ export default function AttributeValues({ params }) {
       return response.data;
    };
 
-   const {
-      data: attribute,
-      isPending: isPendingAttribute,
-   } = useQuery({
+   const { data: attribute, isPending: isPendingAttribute } = useQuery({
       queryKey: ['attribute'],
       queryFn: fetchAttribute,
    });
@@ -92,12 +89,12 @@ export default function AttributeValues({ params }) {
          });
    };
 
-    useEffect(() => {
-        refetchData();
-    }, [refetchData, url]);
+   useEffect(() => {
+      refetchData();
+   }, [refetchData, url]);
 
-    if (isPending || isPendingAttribute) return <LoadingSpinner className="h-screen" />;
-    if (isError) return <div>{error.message}</div>;
+   if (isPending || isPendingAttribute) return <LoadingSpinner className="h-screen" />;
+   if (isError) return <div>{error.message}</div>;
 
    return (
       <>

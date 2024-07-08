@@ -69,27 +69,27 @@ export default function Edit({ params }) {
       setSelectedAttributes(newAttributes);
    };
 
-    const handleDroppedFiles = (files: FileList | null) => {
-        Array.from(files).forEach((file) => {
-            if (!file.type.startsWith('image/')) {
-                // TODO: show notification
-                return;
+   const handleDroppedFiles = (files: FileList | null) => {
+      Array.from(files).forEach((file) => {
+         if (!file.type.startsWith('image/')) {
+            // TODO: show notification
+            return;
+         }
+
+         setImages((prevImages) => {
+            if (!prevImages.some((image) => image.name === file.name)) {
+               return [...prevImages, file];
+            } else {
+               // TODO: show notification
+               return prevImages;
             }
+         });
+      });
+   };
 
-            setImages((prevImages) => {
-                if (!prevImages.some((image) => image.name === file.name)) {
-                    return [...prevImages, file];
-                } else {
-                    // TODO: show notification
-                    return prevImages;
-                }
-            });
-        });
-    };
-
-    const handleRemoveImage = (index: number) => {
-        setImages((prevImages) => prevImages.filter((image, i) => i !== index));
-    };
+   const handleRemoveImage = (index: number) => {
+      setImages((prevImages) => prevImages.filter((image, i) => i !== index));
+   };
 
    const removeImage = (index) => {
       setImages((prevImages) => prevImages.filter((image, i) => i !== index));
@@ -311,10 +311,10 @@ export default function Edit({ params }) {
             )}
             {selectedTab === 'Images' && (
                <Images
-                   images={images}
-                   setImages={setImages}
-                   handleDroppedFiles={handleDroppedFiles}
-                   handleRemoveImage={handleRemoveImage}
+                  images={images}
+                  setImages={setImages}
+                  handleDroppedFiles={handleDroppedFiles}
+                  handleRemoveImage={handleRemoveImage}
                />
             )}
 

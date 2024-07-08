@@ -19,31 +19,35 @@ export default function Create({ params }) {
    // const [errors, setErrors] = useState([]);
 
    const fetchData = async () => {
-      const response = await axios.get('/api/v1/admin/products/' + params.url + '/attributes')
+      const response = await axios.get('/api/v1/admin/products/' + params.url + '/attributes');
 
-       return response.data
+      return response.data;
    };
 
    const { data, isPending, isError, error } = useQuery({
       queryKey: ['attributes'],
       queryFn: fetchData,
-   })
+   });
 
    const fetchProducts = async () => {
-       const response = await axios.get('/api/v1/admin/products', {
-           params: {
-               attribute: attribute,
-               product: params.url,
-           },
-       })
+      const response = await axios.get('/api/v1/admin/products', {
+         params: {
+            attribute: attribute,
+            product: params.url,
+         },
+      });
 
-       return response.data
+      return response.data;
    };
 
-   const { data: products, isPending: isProductsPending, refetch } = useQuery({
+   const {
+      data: products,
+      isPending: isProductsPending,
+      refetch,
+   } = useQuery({
       queryKey: ['products'],
       queryFn: fetchProducts,
-      enabled: !!attribute
+      enabled: !!attribute,
    });
 
    const handleSubmit = (event) => {
@@ -64,7 +68,6 @@ export default function Create({ params }) {
    useEffect(() => {
       refetch();
    }, [attribute, refetch]);
-
 
    if (isPending || isProductsPending) return <LoadingSpinner className="h-screen" />;
    if (isError) return <PageNotFound />;

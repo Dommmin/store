@@ -1,5 +1,5 @@
 export interface Product {
-   id: number|string;
+   id: number | string;
    url: string;
    main_image: string;
    collection: Collection;
@@ -19,10 +19,10 @@ export interface Product {
          id: number;
          path: string;
          url: string;
-      }
+      },
    ];
    associations: {
-       [key: string]: Association[]
+      [key: string]: Association[];
    };
    sizes: Size[];
    attributes: Attribute[];
@@ -34,7 +34,7 @@ export interface Product {
       name: string;
       comment: string;
       rating: number;
-   }
+   };
 }
 
 export interface Association {
@@ -53,7 +53,7 @@ export interface Association {
       };
       attributes: Attribute[];
       formatted_price: string;
-   }
+   };
 }
 
 export interface Size {

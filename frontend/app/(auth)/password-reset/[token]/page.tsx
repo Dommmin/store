@@ -8,7 +8,7 @@ import { useSearchParams } from 'next/navigation';
 import { ValidationErrors } from '../../../types/validation-errors';
 
 export default function PasswordReset() {
-    const searchParams = useSearchParams();
+   const searchParams = useSearchParams();
    const { resetPassword } = useAuth({ middleware: 'guest' });
 
    const [email, setEmail] = useState('');

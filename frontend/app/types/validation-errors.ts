@@ -1,3 +1,3 @@
 export interface ValidationErrors {
-    [key: string]: string[];
+   [key: string]: string[];
 }

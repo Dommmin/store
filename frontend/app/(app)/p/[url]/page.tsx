@@ -191,11 +191,11 @@ const Page: React.FC<{ params: { url: string } }> = ({ params }) => {
       },
    };
 
-    useEffect(() => {
-        if (product) {
-            setSelectedImage(product.main_image);
-        }
-    }, [product]);
+   useEffect(() => {
+      if (product) {
+         setSelectedImage(product.main_image);
+      }
+   }, [product]);
 
    if (isPending || isPendingReviews || isPendingRatings) return <LoadingSpinner className="h-screen" />;
 
@@ -217,18 +217,19 @@ const Page: React.FC<{ params: { url: string } }> = ({ params }) => {
                      />
                   )}
                </button>
-                {selectedImage
-                    ? <Image
-                      src={selectedImage}
-                      alt={product.name}
-                      width={600}
-                      height={600}
-                      blurDataURL={selectedImage}
-                      placeholder="blur"
-                      className="rounded-lg"
-                   />
-                    : <MainImageSkeleton />
-                }
+               {selectedImage ? (
+                  <Image
+                     src={selectedImage}
+                     alt={product.name}
+                     width={600}
+                     height={600}
+                     blurDataURL={selectedImage}
+                     placeholder="blur"
+                     className="rounded-lg"
+                  />
+               ) : (
+                  <MainImageSkeleton />
+               )}
 
                <div className="mt-4 grid grid-cols-5 gap-4">
                   {product.images.map((image) => (
@@ -512,6 +513,6 @@ const Page: React.FC<{ params: { url: string } }> = ({ params }) => {
          </Modal>
       </Wrapper>
    );
-}
+};
 
 export default Page;

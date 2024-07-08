@@ -10,10 +10,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ChevronDoubleLeftIcon } from '@heroicons/react/24/outline';
 import { useForm } from 'react-hook-form';
-import {
-   Product,
-   SelectedAttribute,
-} from '../../../types/product';
+import { Product, SelectedAttribute } from '../../../types/product';
 import { useQuery } from '@tanstack/react-query';
 import LoadingSpinner from '../../../ui/LoadingSpinner';
 

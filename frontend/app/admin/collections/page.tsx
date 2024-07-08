@@ -12,15 +12,15 @@ import { toast } from 'react-toastify';
 
 export default function Collections() {
    const [url, setUrl] = useState('/api/v1/admin/collections');
-    const [selectedItems, setSelectedItems] = useState<number[]>([]);
+   const [selectedItems, setSelectedItems] = useState<number[]>([]);
 
-    const handleSelectAll = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.checked) {
-            setSelectedItems(data.data.map((item: Brand) => item.id));
-            return;
-        }
-        setSelectedItems([]);
-    };
+   const handleSelectAll = (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (event.target.checked) {
+         setSelectedItems(data.data.map((item: Brand) => item.id));
+         return;
+      }
+      setSelectedItems([]);
+   };
 
    const handleSelectOne = (id: number) => {
       if (selectedItems.includes(id)) {
@@ -30,26 +30,26 @@ export default function Collections() {
       }
    };
 
-    const fetchData = async () => {
-        const response = await axios.get(url, {
-            params: {
-                perPage: 5,
-            },
-        });
+   const fetchData = async () => {
+      const response = await axios.get(url, {
+         params: {
+            perPage: 5,
+         },
+      });
 
-        return response.data;
-    };
+      return response.data;
+   };
 
-    const {
-        data,
-        isPending,
-        refetch: refetchData,
-        isError,
-        error,
-    } = useQuery({
-        queryKey: ['data'],
-        queryFn: fetchData,
-    });
+   const {
+      data,
+      isPending,
+      refetch: refetchData,
+      isError,
+      error,
+   } = useQuery({
+      queryKey: ['data'],
+      queryFn: fetchData,
+   });
 
    const variants = {
       hidden: { opacity: 0 },
@@ -66,38 +66,38 @@ export default function Collections() {
       show: { opacity: 1 },
    };
 
-    const handleDelete = async (id: number) => {
-        try {
-            const response = await axios.delete(`/api/v1/admin/collections/${id}`);
+   const handleDelete = async (id: number) => {
+      try {
+         const response = await axios.delete(`/api/v1/admin/collections/${id}`);
 
-            if (response.status === 200) {
-                toast.success(response.data.message, {
-                    autoClose: 1000,
-                    position: 'bottom-right',
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                });
-                await refetchData();
-            }
-        } catch (error) {
-            toast.error(error.response.data.message, {
-                autoClose: 1000,
-                position: 'bottom-right',
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
+         if (response.status === 200) {
+            toast.success(response.data.message, {
+               autoClose: 1000,
+               position: 'bottom-right',
+               hideProgressBar: true,
+               closeOnClick: true,
+               pauseOnHover: true,
             });
-            console.error(error);
-        }
-    };
+            await refetchData();
+         }
+      } catch (error) {
+         toast.error(error.response.data.message, {
+            autoClose: 1000,
+            position: 'bottom-right',
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+         });
+         console.error(error);
+      }
+   };
 
-    useEffect(() => {
-        refetchData();
-    }, [refetchData, url]);
+   useEffect(() => {
+      refetchData();
+   }, [refetchData, url]);
 
-    if (isPending) return <LoadingSpinner className="h-screen" />;
-    if (isError) return <div>{error.message}</div>;
+   if (isPending) return <LoadingSpinner className="h-screen" />;
+   if (isError) return <div>{error.message}</div>;
 
    return (
       <>

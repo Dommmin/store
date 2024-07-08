@@ -13,7 +13,7 @@ import { Brand } from '../../types/brand';
 
 export default function Brands() {
    const [url, setUrl] = useState<string>('/api/v1/admin/brands');
-    const [selectedItems, setSelectedItems] = useState<number[]>([]);
+   const [selectedItems, setSelectedItems] = useState<number[]>([]);
 
    const handleSelectAll = (event: React.ChangeEvent<HTMLInputElement>) => {
       if (event.target.checked) {

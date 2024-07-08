@@ -29,7 +29,7 @@ export default function AttributeEdit({ params }) {
    const { data: attribute, isPending } = useQuery({
       queryKey: ['attribute'],
       queryFn: fetchAttribute,
-   })
+   });
 
    const handleUpdate = (event: React.FormEvent) => {
       event.preventDefault();

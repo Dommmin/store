@@ -27,7 +27,7 @@ export default function Products() {
       setSelectedItems([]);
    };
 
-   const handleSelectOne = (id: number|string) => {
+   const handleSelectOne = (id: number | string) => {
       if (selectedItems.includes(id)) {
          setSelectedItems(selectedItems.filter((item) => item !== id));
       } else {
