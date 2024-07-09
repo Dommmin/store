@@ -38,7 +38,7 @@ const Page: React.FC<{ params: { url: string } }> = ({ params }) => {
 
    const { handleAddToCart } = useCart();
    const { refetchBookmarksCount } = useBookmark();
-   const { user } = useAuth({ middleware: 'auth' });
+   const { user } = useAuth();
    const router = useRouter();
 
    const url = `/api/v1/products/${productUrl}`;
