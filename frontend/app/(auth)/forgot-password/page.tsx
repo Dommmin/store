@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../../hooks/auth';
 import InputError from '../../ui/InputError';
 import LoadingSpinner from '../../ui/LoadingSpinner';
 import AuthSessionStatus from '../components/AuthSessionStatus';
 import { useRouter } from 'next/navigation';
 import { ValidationErrors } from '../../types/validation-errors';
+import InputSuccess from '../../ui/InputSuccess';
 
 export default function ForgotPassword() {
    const router = useRouter();
@@ -17,12 +18,13 @@ export default function ForgotPassword() {
 
    const [email, setEmail] = useState('');
    const [errors, setErrors] = useState<ValidationErrors>({});
-   const [status, setStatus] = useState(null);
+   const [status, setStatus] = useState<number>(null);
+   const [message, setMessage] = useState<string>('');
 
-   const submitForm = (event) => {
+   const submitForm = async (event: React.FormEvent) => {
       event.preventDefault();
 
-      forgotPassword({ email, setErrors, setStatus });
+      await forgotPassword({ email, setErrors, setStatus, setMessage });
    };
 
    if (isPending) {
@@ -70,6 +72,7 @@ export default function ForgotPassword() {
                />
             </label>
             <InputError messages={errors.email} className="mt-2" />
+             <InputSuccess messages={[message]} className="mt-2" />
 
             <button type="submit" className="btn btn-info w-full max-w-md tracking-wide text-white">
                Reset Password

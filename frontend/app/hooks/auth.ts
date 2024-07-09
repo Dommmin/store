@@ -4,182 +4,200 @@ import { useParams, useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 
 interface User {
-   id: number;
-   name: string;
-   email: string;
-   email_verified_at?: string;
-   two_factor_enabled: boolean;
-   two_factor_confirmed_at?: string;
-   two_factor_recovery_codes?: string;
-   profile_photo_url: string;
+    id: number;
+    name: string;
+    email: string;
+    email_verified_at?: string;
+    two_factor_enabled: boolean;
+    two_factor_confirmed_at?: string;
+    two_factor_recovery_codes?: string;
+    profile_photo_url: string;
 }
 
 interface AuthHook {
-   user: User | null;
-   isLoading: boolean;
-   isPending: boolean;
-   refetch: () => void;
-   register: (params: { setErrors: Function } & Record<string, any>) => Promise<void>;
-   login: (params: { setErrors: Function; setStatus: Function } & Record<string, any>) => Promise<void>;
-   forgotPassword: (params: { setErrors: Function; setStatus: Function; email: string }) => Promise<void>;
-   resetPassword: (params: { setErrors: Function; setStatus: Function } & Record<string, any>) => Promise<void>;
-   resendEmailVerification: (params: { setStatus: Function }) => void;
-   logout: () => Promise<void>;
-   getCsrfToken: () => Promise<void>;
+    user: User | null;
+    isLoading: boolean;
+    isPending: boolean;
+    refetch: () => void;
+    register: (params: { setErrors: Function } & Record<string, any>) => Promise<void>;
+    login: (params: { setErrors: Function; setStatus: Function } & Record<string, any>) => Promise<void>;
+    forgotPassword: (params: { setErrors: Function; setStatus: Function; setMessage: Function; email: string }) => Promise<void>;
+    resetPassword: (params: { setErrors: Function; setStatus: Function } & Record<string, any>) => Promise<void>;
+    resendEmailVerification: (params: { setStatus: Function }) => void;
+    logout: () => Promise<void>;
+    getCsrfToken: () => Promise<void>;
 }
 
 interface AuthOptions {
-   middleware?: string;
-   redirectIfAuthenticated?: string;
+    middleware?: string;
+    redirectIfAuthenticated?: string;
 }
 
 export const useAuth = ({ middleware = 'guest', redirectIfAuthenticated }: AuthOptions = {}): AuthHook => {
-   const [isLoading, setIsLoading] = useState(false);
-   const router = useRouter();
-   const params = useParams<{ token: string }>();
+    const [isLoading, setIsLoading] = useState(false);
+    const router = useRouter();
+    const params = useParams<{ token: string }>();
 
-   const {
-      data: user,
-      refetch,
-      isPending,
-      isError,
-      error,
-   } = useQuery<User | null>({
-      queryKey: ['user'],
-      queryFn: () => axios.get('/api/v1/user').then((res) => res.data),
-      refetchOnWindowFocus: false,
-   });
+    const fetchUser = async () => {
+        const response = await axios.get('/api/v1/user');
+        return response.data;
+    };
 
-   const getCsrfToken = async () => {
-      await axios.get('/api/v1/sanctum/csrf-cookie');
-   };
+    const {
+        data: user,
+        refetch,
+        isPending,
+        isError,
+        error,
+    } = useQuery<User | null>({
+        queryKey: ['user'],
+        queryFn: fetchUser,
+        refetchOnWindowFocus: false,
+        retry: false,
+        staleTime: 5 * 1000,
+    });
 
-   const register = async ({ setErrors, ...props }: { setErrors: Function } & Record<string, any>) => {
-      setIsLoading(true);
-      await getCsrfToken();
+    const getCsrfToken = async () => {
+        await axios.get('/api/v1/sanctum/csrf-cookie');
+    };
 
-      setErrors([]);
+    const register = async ({ setErrors, ...props }: { setErrors: Function } & Record<string, any>): Promise<void> => {
+        setIsLoading(true);
+        await getCsrfToken();
 
-      try {
-         const response = await axios.post('/api/v1/register', props);
-         await refetch();
-      } catch (error) {
-         if (error.response?.status !== 422) throw error;
+        setErrors({});
 
-         setErrors(error.response.data.errors);
-      } finally {
-         setIsLoading(false);
-      }
-   };
+        try {
+            const response = await axios.post('/api/v1/register', props);
+            if (response.status === 200) {
+                router.push('/');
+                return null;
+            }
+        } catch (error) {
+            if (error.response?.status !== 422) throw error;
 
-   const login = async ({
-      setErrors,
-      setStatus,
-      ...props
-   }: {
-      setErrors: Function;
-      setStatus: Function;
-   } & Record<string, any>) => {
-      setIsLoading(true);
-      await getCsrfToken();
+            setErrors(error.response.data.errors);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
-      setErrors([]);
-      setStatus(null);
+    const login = async ({
+         setErrors,
+         setStatus,
+         ...props
+     }: {
+        setErrors: Function;
+        setStatus: Function;
+    } & Record<string, any>) => {
+        setIsLoading(true);
+        await getCsrfToken();
 
-      try {
-         const response = await axios.post('/api/v1/login', props);
-         if (response.data?.two_factor) {
-            return router.push('/two-factor-challenge');
-         }
-         await refetch();
-      } catch (error) {
-         if (error.response?.status !== 422) throw error;
+        setErrors({});
+        setStatus(null);
 
-         setErrors(error.response.data.errors);
-      } finally {
-         setIsLoading(false);
-      }
-   };
+        try {
+            const response = await axios.post('/api/v1/login', props);
+            if (response.data?.two_factor) {
+                router.push('/two-factor-challenge');
+                return null;
+            }
+            if (response.status === 200) {
+                router.push('/');
+                return null;
+            }
+        } catch (error) {
+            if (error.response?.status !== 422) throw error;
 
-   const forgotPassword = async ({
-      setErrors,
-      setStatus,
-      email,
-   }: {
-      setErrors: Function;
-      setStatus: Function;
-      email: string;
-   }) => {
-      await getCsrfToken();
+            setErrors(error.response.data.errors);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
-      setErrors([]);
-      setStatus(null);
+    const forgotPassword = async ({
+          setErrors,
+          setStatus,
+          setMessage,
+          email,
+      }: {
+        setErrors: Function;
+        setStatus: Function;
+        setMessage: Function;
+        email: string;
+    }) => {
+        await getCsrfToken();
 
-      try {
-         const response = await axios.post('/api/v1/forgot-password', { email });
-         setStatus(response.data.status);
-      } catch (error) {
-         if (error.response?.status !== 422) throw error;
+        setErrors({});
+        setMessage('');
+        setStatus(null);
 
-         setErrors(error.response.data.errors);
-      }
-   };
+        try {
+            const response = await axios.post('/api/v1/forgot-password', { email });
+            setStatus(response.data.status);
+            setMessage(response.data.message);
+        } catch (error) {
+            if (error.response?.status !== 422) throw error;
 
-   const resetPassword = async ({
-      setErrors,
-      setStatus,
-      ...props
-   }: {
-      setErrors: Function;
-      setStatus: Function;
-   } & Record<string, any>) => {
-      await getCsrfToken();
+            setErrors(error.response.data.errors);
+        }
+    };
 
-      setErrors([]);
-      setStatus(null);
+    const resetPassword = async ({
+                                     setErrors,
+                                     setStatus,
+                                     ...props
+                                 }: {
+        setErrors: Function;
+        setStatus: Function;
+    } & Record<string, any>) => {
+        await getCsrfToken();
 
-      try {
-         const response = await axios.post('/api/v1/reset-password', {
-            token: params.token,
-            ...props,
-         });
-         router.push('/login?reset=' + btoa(response.data.status));
-      } catch (error) {
-         if (error.response?.status !== 422) throw error;
+        setErrors({});
+        setStatus(null);
 
-         setErrors(error.response.data.errors);
-      }
-   };
+        try {
+            const response = await axios.post('/api/v1/reset-password', {
+                token: params.token,
+                ...props,
+            });
+            router.push('/login?reset=' + btoa(response.data.status));
+        } catch (error) {
+            if (error.response?.status !== 422) throw error;
 
-   const resendEmailVerification = ({ setStatus }: { setStatus: Function }) => {
-      axios.post('/api/v1/email/verification-notification').then((response) => setStatus(response.data.status));
-   };
+            setErrors(error.response.data.errors);
+        }
+    };
 
-   const logout = async () => {
-      if (!error) {
-         await axios.post('/api/v1/logout').then(() => refetch());
-      }
+    const resendEmailVerification = ({ setStatus }: { setStatus: Function }) => {
+        axios.post('/api/v1/email/verification-notification').then((response) => setStatus(response.data.status));
+    };
 
-      window.location.pathname = '/';
-   };
+    const logout = async () => {
+        if (!error) {
+            await axios.post('/api/v1/logout').then(() => refetch());
+        }
 
-   useEffect(() => {
-      if (middleware === 'guest' && redirectIfAuthenticated && user) router.push(redirectIfAuthenticated);
-      if (window.location.pathname === '/verify-email' && user?.email_verified_at) router.push(redirectIfAuthenticated);
-      if (middleware === 'auth' && error) logout();
-   }, [user, error]);
+        window.location.pathname = '/';
+    };
 
-   return {
-      user,
-      isLoading,
-      isPending,
-      refetch,
-      register,
-      login,
-      forgotPassword,
-      resetPassword,
-      resendEmailVerification,
-      logout,
-      getCsrfToken,
-   };
+    useEffect(() => {
+        if (middleware === 'guest' && redirectIfAuthenticated && user) router.push(redirectIfAuthenticated);
+        if (window.location.pathname === '/verify-email' && user?.email_verified_at) router.push(redirectIfAuthenticated);
+        if (middleware === 'auth' && error) logout();
+    }, [user, error]);
+
+    return {
+        user,
+        isLoading,
+        isPending,
+        refetch,
+        register,
+        login,
+        forgotPassword,
+        resetPassword,
+        resendEmailVerification,
+        logout,
+        getCsrfToken,
+    };
 };

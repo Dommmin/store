@@ -1,34 +1,24 @@
 'use client';
 
-import { useEffect } from 'react';
 import DeleteUserForm from './partials/DeleteUserForm';
 import UpdatePasswordForm from './partials/UpdatePasswordForm';
 import UpdateProfileInformationForm from './partials/UpdateProfileInformationForm';
 import TwoFactorAuthenticationForm from './partials/TwoFactorAuthenticationForm';
 import { useAuth } from '../../hooks/auth';
-import { useTwoFactor } from '../../hooks/two-factor';
 import LoadingSpinner from '../../ui/LoadingSpinner';
 import { useRouter } from 'next/navigation';
 
 export default function Edit() {
-   const { disableTwoFactorAuthentication } = useTwoFactor();
    const router = useRouter();
    const { user, resendEmailVerification, isPending, refetch } = useAuth({ middleware: 'auth' });
-
-   useEffect(() => {
-      if (user) {
-         if (!user.two_factor_confirmed_at && user.two_factor_enabled) {
-            disableTwoFactorAuthentication();
-         }
-      }
-   }, []);
 
    if (isPending) {
       return <LoadingSpinner className="h-screen" />;
    }
 
    if (!user) {
-      return router.push('/login');
+      router.push('/login');
+      return null;
    }
 
    return (

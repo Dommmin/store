@@ -5,6 +5,7 @@ import InputError from '../../ui/InputError';
 import SecondaryButton from '../../ui/SecondaryButton';
 import SuccessButton from '../../ui/SuccessButton';
 import { useAuth } from '../../hooks/auth';
+import { ValidationErrors } from '../../types/validation-errors';
 
 export default function ConfirmPassword({
    title = 'Confirm Password',
@@ -15,7 +16,7 @@ export default function ConfirmPassword({
 }) {
    const [confirmingPassword, setConfirmingPassword] = useState(false);
    const [password, setPassword] = useState('');
-   const [errors, setErrors] = useState(null);
+   const [errors, setErrors] = useState<ValidationErrors>({});
    const [processing, setProcessing] = useState(false);
    const passwordInput = useRef(null);
 
@@ -82,7 +83,7 @@ export default function ConfirmPassword({
                            ref={passwordInput}
                            value={password}
                            type="password"
-                           className="input input-bordered max-w-lg"
+                           className="input input-bordered w-full max-w-xs"
                            placeholder="Password"
                            autoComplete="current-password"
                            onKeyUp={(event) => {

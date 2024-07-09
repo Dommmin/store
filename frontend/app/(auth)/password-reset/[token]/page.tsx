@@ -2,10 +2,11 @@
 
 import InputError from '../../../ui/InputError';
 import { useAuth } from '../../../hooks/auth';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AuthSessionStatus from '../../components/AuthSessionStatus';
 import { useSearchParams } from 'next/navigation';
 import { ValidationErrors } from '../../../types/validation-errors';
+import LoadingSpinner from '../../../ui/LoadingSpinner';
 
 export default function PasswordReset() {
    const searchParams = useSearchParams();
@@ -16,11 +17,12 @@ export default function PasswordReset() {
    const [passwordConfirmation, setPasswordConfirmation] = useState('');
    const [errors, setErrors] = useState<ValidationErrors>({});
    const [status, setStatus] = useState(null);
+   const [isLoading, setIsLoading] = useState(true);
 
-   const submitForm = (event) => {
+   const submitForm = async (event: React.FormEvent) => {
       event.preventDefault();
 
-      resetPassword({
+      await resetPassword({
          email,
          password,
          password_confirmation: passwordConfirmation,
@@ -31,7 +33,10 @@ export default function PasswordReset() {
 
    useEffect(() => {
       setEmail(searchParams.get('email'));
-   }, [searchParams.get('email')]);
+      setIsLoading(false);
+   }, [searchParams]);
+
+   if (isLoading) return <LoadingSpinner className="h-screen"/>
 
    return (
       <div className="mx-auto flex min-h-screen max-w-lg items-center justify-center">
@@ -67,8 +72,8 @@ export default function PasswordReset() {
                   onChange={(event) => setPassword(event.target.value)}
                   value={password}
                   autoComplete="new-password"
+                  required
                />
-               <InputError messages={errors.password} className="mt-2" />
             </label>
 
             <label className="form-control w-full max-w-md">
@@ -84,7 +89,6 @@ export default function PasswordReset() {
                   required
                   autoComplete="new-password"
                />
-               <InputError messages={errors.password_confirmation} className="mt-2" />
             </label>
 
             <div className="mt-4 flex w-full max-w-md items-center justify-end">
@@ -92,6 +96,7 @@ export default function PasswordReset() {
                   Reset Password
                </button>
             </div>
+             <InputError messages={errors.password} className="mt-2" />
          </form>
       </div>
    );

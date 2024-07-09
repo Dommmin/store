@@ -125,7 +125,7 @@ export default function TwoFactorChallenge() {
                   <div className="mt-4 flex items-center justify-end">
                      <button
                         type="button"
-                        className="cursor-pointer text-gray-600 underline hover:text-gray-900 dark:text-gray-400"
+                        className="cursor-pointer text-gray-600 underline dark:text-gray-400"
                         onClick={toggleRecovery}
                      >
                         {recovery ? 'Use an authentication code' : 'Use a recovery code'}

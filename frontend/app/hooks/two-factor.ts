@@ -1,6 +1,7 @@
 import axios from '../lib/axios';
 import { useState } from 'react';
 import { useAuth } from './auth';
+import { ValidationErrors } from '../types/validation-errors';
 
 export const useTwoFactor = () => {
    const [enabling, setEnabling] = useState(false);
@@ -12,87 +13,101 @@ export const useTwoFactor = () => {
    const [recoveryCodes, setRecoveryCodes] = useState([]);
    const [confirmationCode, setConfirmationCode] = useState('');
    const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
-   const [requiresConfirmation, setRequiresConfirmation] = useState(false);
-   const [errors, setErrors] = useState({});
+   const [errors, setErrors] = useState<ValidationErrors>({});
    const [isLoading, setIsLoading] = useState(true);
 
    const { refetch: refetchUser } = useAuth();
 
-   const showQrCode = () => {
-      return axios.get('/api/v1/user/two-factor-qr-code').then((response) => {
-         setQrCode(response.data.svg);
-      });
+   const showQrCode = async () => {
+      const response = await axios.get('/api/v1/user/two-factor-qr-code');
+      setQrCode(response.data.svg);
    };
 
-   const showSetupKey = () => {
-      return axios.get('/api/v1/user/two-factor-secret-key').then((response) => {
-         setSetupKey(response.data.secretKey);
-      });
+   const showSetupKey = async () => {
+      const response = await axios.get('/api/v1/user/two-factor-secret-key');
+      setSetupKey(response.data.secretKey);
    };
 
-   const showRecoveryCodes = () => {
-      return axios.get('/api/v1/user/two-factor-recovery-codes').then((response) => {
-         setRecoveryCodes(response.data);
-      });
+   const showRecoveryCodes = async () => {
+      const response = await axios.get('/api/v1/user/two-factor-recovery-codes');
+      setRecoveryCodes(response.data);
    };
 
-   const confirmTwoFactorAuthentication = () => {
+   const confirmTwoFactorAuthentication = async () => {
       setPostConfirming(true);
       setErrors({});
 
-      axios
-         .post('/api/v1/user/confirmed-two-factor-authentication', { code: confirmationCode })
-         .then(() => {
-            setQrCode(null);
-            setSetupKey(null);
-         })
-         .catch((error) => {
-            setErrors(error.response.data.errors);
-         })
-         .finally(() => {
-            setPostConfirming(false);
-            setConfirming(false);
-            setConfirmationCode('');
-            refetchUser();
-         });
+       try {
+           const response = await axios.post('/api/v1/user/confirmed-two-factor-authentication', { code: confirmationCode });
+
+           if (response.status === 200) {
+               setQrCode(null);
+               setSetupKey(null);
+               setConfirmationCode('');
+               setConfirming(false);
+           }
+       } catch(error) {
+           setErrors(error.response.data.errors);
+       } finally {
+           setPostConfirming(false);
+           refetchUser();
+       }
    };
 
-   const regenerateRecoveryCodes = () => {
-      axios.post('/api/v1/user/two-factor-recovery-codes').then(() => showRecoveryCodes());
+   const regenerateRecoveryCodes = async () => {
+       try {
+           const response = await axios.post('/api/v1/user/two-factor-recovery-codes');
+
+           if (response.status === 200) {
+               await showRecoveryCodes();
+           }
+       } catch (error) {
+           setErrors(error.response.data.errors);
+       }
    };
-   const enableTwoFactorAuthentication = () => {
+
+   const enableTwoFactorAuthentication = async () => {
       setEnabling(true);
 
-      axios
-         .post('/api/v1/user/two-factor-authentication')
-         .then(async () => {
-            await showQrCode();
-            await showSetupKey();
-            await showRecoveryCodes();
-            await refetchUser();
-         })
-         .finally(() => {
-            setConfirming(requiresConfirmation);
-            setEnabling(false);
-         });
+      try {
+          const response = await axios.post('/api/v1/user/two-factor-authentication');
+
+          if (response.status === 200) {
+              await showQrCode();
+              await showSetupKey();
+              await showRecoveryCodes();
+          }
+      } catch (error) {
+          setErrors(error.response.data.errors);
+      } finally {
+          setConfirming(true);
+          setEnabling(false);
+          setTwoFactorEnabled(true);
+      }
    };
 
-   const disableTwoFactorAuthentication = () => {
+   const disableTwoFactorAuthentication = async () => {
       setDisabling(true);
       setPostConfirming(true);
       setErrors({});
 
-      axios
-         .delete('/api/v1/user/two-factor-authentication')
-         .then(async () => {
-            await refetchUser();
-            await setDisabling(false);
-            await setIsLoading(false);
-         })
-         .finally(() => {
-            setConfirming(false);
-            setPostConfirming(false);
-         });
+       try {
+           const response = await axios.delete('/api/v1/user/two-factor-authentication');
+
+           if (response.status === 200) {
+               setQrCode(null);
+               setSetupKey(null);
+           }
+       } catch(error) {
+           setErrors(error.response.data.errors);
+       } finally {
+          setPostConfirming(false);
+          setDisabling(false);
+          setConfirmationCode('');
+          setTwoFactorEnabled(false);
+          setConfirming(false);
+          refetchUser();
+      }
    };
 
    return {
@@ -108,7 +123,6 @@ export const useTwoFactor = () => {
       setupKey,
       confirmationCode,
       setTwoFactorEnabled,
-      setRequiresConfirmation,
       setConfirmationCode,
       recoveryCodes,
       showRecoveryCodes,
