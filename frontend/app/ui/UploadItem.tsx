@@ -41,7 +41,7 @@ const UploadItem = ({ image, onRemove }) => {
             <div className="relative">
                <button
                   onClick={onRemove}
-                  className="btn btn-square btn-error btn-xs absolute -right-2 -top-2 z-10 text-white"
+                  className="btn btn-square btn-error btn-xs absolute -right-2 -top-2 text-white"
                >
                   <svg
                      xmlns="http://www.w3.org/2000/svg"

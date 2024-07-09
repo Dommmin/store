@@ -11,6 +11,8 @@ import { ShoppingBagIcon } from '@heroicons/react/24/outline';
 import CartMenu from './CartMenu';
 import Image from 'next/image';
 import Bookmark from './Bookmark';
+import ThemeButton from './ThemeButton';
+import LoginButton from './LoginButton';
 
 export default function Navbar() {
    const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
@@ -42,19 +44,12 @@ export default function Navbar() {
                {/*</div>*/}
 
                <div className="hidden space-x-2 sm:ms-6 sm:items-center lg:flex">
+                  <ThemeButton />
                   {user && <Bookmark />}
                   <CartMenu />
                   <div className="relative">
                      {!user ? (
-                        <Link
-                           className={
-                              'btn-default btn btn-outline btn-sm font-bold tracking-widest ' +
-                              (isPending ? 'hidden' : '')
-                           }
-                           href={'/login'}
-                        >
-                           Login
-                        </Link>
+                       <LoginButton />
                      ) : (
                         <Dropdown>
                            <Dropdown.Trigger>
@@ -115,6 +110,7 @@ export default function Navbar() {
 
                   <div className="block flex space-x-2 lg:hidden">
                      <Suspense fallback={null}>
+                         <ThemeButton />
                         {user && <Bookmark />}
                         <CartMenu />
                      </Suspense>

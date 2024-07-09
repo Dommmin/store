@@ -11,7 +11,7 @@ import Image from 'next/image';
 import { useCart } from '../hooks/cart';
 import axios from '../lib/axios';
 
-export default function CartMenu({ className = '' }) {
+export default function CartMenu() {
    const router = useRouter();
    const pathname = usePathname();
    const searchParams = useSearchParams();
@@ -22,7 +22,6 @@ export default function CartMenu({ className = '' }) {
 
    const {
       cartItems,
-      isLoadingCart,
       cartItemsCount,
       handleRemoveItemFromCart,
       incrementQuantity,
@@ -67,7 +66,7 @@ export default function CartMenu({ className = '' }) {
             </div>
          </button>
          <Transition show={isOpen}>
-            <Dialog onClose={closeCart} className="relative z-50">
+            <Dialog onClose={closeCart} className="relative" style={{ zIndex: 9999 }}>
                <Transition.Child
                   as={Fragment}
                   enter="transition-all ease-in-out duration-300"
