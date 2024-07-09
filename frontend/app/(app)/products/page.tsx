@@ -11,6 +11,8 @@ import Link from 'next/link';
 import ProductSkeleton from '../../ui/ProductSkeleton';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { Brand } from '../../types/brand';
+import { Category } from '../../types/product';
 
 export default function Page() {
    const router = useRouter();
@@ -123,7 +125,7 @@ export default function Page() {
                         onChange={(e) => setBrand(e.target.value)}
                      >
                         <option value="">-- Filter by Brand --</option>
-                        {brands?.map((brand) => (
+                        {brands?.map((brand: Brand) => (
                            <option key={brand.id} value={brand.id}>
                               {brand.name}
                            </option>
@@ -143,7 +145,7 @@ export default function Page() {
                         onChange={(e) => setCategory(e.target.value)}
                      >
                         <option value="">-- Filter by Category --</option>
-                        {categories?.map((category) => (
+                        {categories?.map((category: Category) => (
                            <option key={category.id} value={category.id}>
                               {category.name}
                            </option>
@@ -175,12 +177,12 @@ export default function Page() {
                   <RangeSlider step={1} min={1} max={10000} value={value} onInput={setValue} />
                </div>
                <div className="border-natural-200 mt-8 rounded-lg border p-4 dark:border-neutral-700">
-                  <span className="label-text">Sort by</span>
+                  <span className="label-text">Order By</span>
                   <div>
                      <select
                         value={sort}
                         onChange={(e) => setSort(e.target.value)}
-                        className="select select-bordered w-full"
+                        className="select select-bordered w-full max-w-xs"
                      >
                         <option value={JSON.stringify({ column: 'id', order: 'asc' })}>Default</option>
                         <option value={JSON.stringify({ column: 'price', order: 'asc' })}>Price ASC</option>
@@ -217,6 +219,90 @@ export default function Page() {
                      />
                   </svg>
                </label>
+            </div>
+            <div className="mb-5 rounded-lg border border-neutral-200 bg-white p-3 2xl:hidden dark:border-neutral-700 dark:bg-base-300">
+               <h2 className="pb-8 font-bold">Filters</h2>
+               <div className="flex flex-wrap">
+                  <div className="flex flex-wrap md:flex-nowrap md:space-x-2">
+                     <div className="flex space-x-2">
+                        <label className="form-control w-full max-w-xs">
+                           <div className="label">
+                              <span className="label-text">Brand</span>
+                           </div>
+                           <select
+                              className="select select-bordered"
+                              value={brand}
+                              onChange={(e) => setBrand(e.target.value)}
+                           >
+                              <option value="">All Brands</option>
+                              {brands?.map((brand: Brand) => (
+                                 <option key={brand.id} value={brand.id}>
+                                    {brand.name}
+                                 </option>
+                              ))}
+                           </select>
+                        </label>
+                        <label className="form-control w-full max-w-xs">
+                           <div className="label">
+                              <span className="label-text">Category</span>
+                           </div>
+                           <select
+                              className="select select-bordered"
+                              value={category}
+                              onChange={(e) => setCategory(e.target.value)}
+                           >
+                              <option value="">All Categories</option>
+                              {categories?.map((category: Category) => (
+                                 <option key={category.id} value={category.id}>
+                                    {category.name}
+                                 </option>
+                              ))}
+                           </select>
+                        </label>
+                     </div>
+
+                     <label className="form-control w-full max-w-sm md:pr-2">
+                        <div className="label">
+                           <span className="label-text">Order By</span>
+                        </div>
+                        <select
+                           value={sort}
+                           onChange={(e) => setSort(e.target.value)}
+                           className="select select-bordered w-full max-w-sm"
+                        >
+                           <option value={JSON.stringify({ column: 'id', order: 'asc' })}>Default</option>
+                           <option value={JSON.stringify({ column: 'price', order: 'asc' })}>Price ASC</option>
+                           <option value={JSON.stringify({ column: 'price', order: 'desc' })}>Price DESC</option>
+                           <option value={JSON.stringify({ column: 'name', order: 'asc' })}>Name ASC</option>
+                           <option value={JSON.stringify({ column: 'name', order: 'desc' })}>Name DESC</option>
+                           <option value={JSON.stringify({ column: 'id', order: 'desc' })}>Latest</option>
+                        </select>
+                     </label>
+                  </div>
+
+                  <div className="w-full max-w-sm py-2">
+                     <span className="label-text">Price Range</span>
+                     <div className="mb-4 mt-1 flex space-x-2">
+                        <input
+                           min={0}
+                           max={value[1]}
+                           onChange={(e) => handleInputChange(0, e)}
+                           value={value[0]}
+                           type="text"
+                           className="input input-bordered w-full max-w-xs"
+                        />
+                        <input
+                           min={value[0]}
+                           max={10000}
+                           onChange={(e) => handleInputChange(1, e)}
+                           value={value[1]}
+                           type="text"
+                           className="input input-bordered w-full max-w-xs"
+                        />
+                     </div>
+                     <RangeSlider step={1} min={1} max={10000} value={value} onInput={setValue} />
+                  </div>
+               </div>
             </div>
 
             {isPending ? (
