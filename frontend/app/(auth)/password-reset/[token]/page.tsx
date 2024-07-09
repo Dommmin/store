@@ -36,7 +36,7 @@ export default function PasswordReset() {
       setIsLoading(false);
    }, [searchParams]);
 
-   if (isLoading) return <LoadingSpinner className="h-screen"/>
+   if (isLoading) return <LoadingSpinner className="h-screen" />;
 
    return (
       <div className="mx-auto flex min-h-screen max-w-lg items-center justify-center">
@@ -96,7 +96,7 @@ export default function PasswordReset() {
                   Reset Password
                </button>
             </div>
-             <InputError messages={errors.password} className="mt-2" />
+            <InputError messages={errors.password} className="mt-2" />
          </form>
       </div>
    );

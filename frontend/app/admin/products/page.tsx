@@ -47,8 +47,6 @@ export default function Products() {
    const fetchData = async () => {
       const response = await axios.get(url, { params: { sortBy, sortOrder, perPage } });
 
-      console.log(response.data);
-
       return response.data;
    };
 
@@ -209,8 +207,7 @@ export default function Products() {
                                                 alt={item.name}
                                                 width={100}
                                                 height={100}
-                                                blurDataURL={item.main_image}
-                                                placeholder="blur"
+                                                priority={true}
                                              />
                                           </Link>
                                        </div>

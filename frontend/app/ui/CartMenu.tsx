@@ -20,14 +20,8 @@ export default function CartMenu() {
    const closeCart = () => setIsOpen(false);
    const [isLoading, setIsLoading] = useState(false);
 
-   const {
-      cartItems,
-      cartItemsCount,
-      handleRemoveItemFromCart,
-      incrementQuantity,
-      decrementQuantity,
-      totalPrice,
-   } = useCart();
+   const { cartItems, cartItemsCount, handleRemoveItemFromCart, incrementQuantity, decrementQuantity, totalPrice } =
+      useCart();
 
    const handleCheckout = () => {
       setIsLoading(true);

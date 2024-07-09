@@ -72,7 +72,7 @@ export default function ForgotPassword() {
                />
             </label>
             <InputError messages={errors.email} className="mt-2" />
-             <InputSuccess messages={[message]} className="mt-2" />
+            <InputSuccess messages={[message]} className="mt-2" />
 
             <button type="submit" className="btn btn-info w-full max-w-md tracking-wide text-white">
                Reset Password

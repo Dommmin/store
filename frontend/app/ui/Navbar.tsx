@@ -49,7 +49,7 @@ export default function Navbar() {
                   <CartMenu />
                   <div className="relative">
                      {!user ? (
-                       <LoginButton />
+                        <LoginButton />
                      ) : (
                         <Dropdown>
                            <Dropdown.Trigger>
@@ -110,7 +110,7 @@ export default function Navbar() {
 
                   <div className="block flex space-x-2 lg:hidden">
                      <Suspense fallback={null}>
-                         <ThemeButton />
+                        <ThemeButton />
                         {user && <Bookmark />}
                         <CartMenu />
                      </Suspense>

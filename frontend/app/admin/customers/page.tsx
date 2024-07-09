@@ -168,8 +168,6 @@ export default function Customers() {
                                                 alt={item.name}
                                                 width={100}
                                                 height={100}
-                                                blurDataURL={item.profile_photo_url}
-                                                placeholder="blur"
                                              />
                                           </li>
                                        </ul>
