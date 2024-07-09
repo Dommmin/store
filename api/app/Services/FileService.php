@@ -24,7 +24,7 @@ class FileService
                     'id' => $file->hashName(),
                     'name' => $file->getClientOriginalName(),
                     'path' => $path,
-                    'url' => env('APP_URL') . '/storage/' . $path,
+                    'url' => env('DOCKER_APP_URL') . '/storage/' . $path,
                 ];
             }
         }
