@@ -43,7 +43,7 @@ class FortifyServiceProvider extends ServiceProvider
             }
         });
 
-        $this->app->instance(RegisterResponse::class, new class() implements LoginResponse {
+        $this->app->instance(RegisterResponse::class, new class() implements RegisterResponse {
             public function toResponse($request): JsonResponse|RedirectResponse
             {
                 $user = User::where('email', $request->email)->first();
@@ -75,7 +75,5 @@ class FortifyServiceProvider extends ServiceProvider
         });
 
         RateLimiter::for('two-factor', fn (Request $request) => Limit::perMinute(5)->by($request->session()->get('login.id')));
-
-//        RateLimiter::for('api', fn (Request $request) => Limit::perSecond(10)->by($request->user()?->id ?: $request->ip()));
     }
 }
