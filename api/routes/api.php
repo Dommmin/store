@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\Api\v1\Admin;
 use App\Http\Controllers\Api\v1\Admin\ImageController;
 use App\Http\Controllers\Api\v1\Auth\CurrentUserController;
+use App\Http\Controllers\Api\v1\Auth\PasswordResetController;
 use App\Http\Controllers\Api\v1\Auth\SocialiteLoginController;
 use App\Http\Controllers\Api\v1\Auth\TwoFactorAuthenticationController;
 use App\Http\Controllers\Api\v1\BookmarkController;
@@ -35,6 +36,10 @@ Route::get('/two-factor-authentication-enabled', [
 Route::get('/two-factor-authentication-challenge', [
     TwoFactorAuthenticationController::class, 'challenge',
 ])->name('two-factor-authentication.challenge')
+    ->middleware(['guest:' . config('fortify.guard')]);
+
+Route::get('/password/reset/{token}', PasswordResetController::class)
+    ->name('password.reset')
     ->middleware(['guest:' . config('fortify.guard')]);
 
 Route::prefix('auth/{provider}')->group(function (): void {
