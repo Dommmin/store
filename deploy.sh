@@ -2,7 +2,7 @@
 
 set -e
 
-#cd /root
+cd /root
 
 # Shutdown and remove orphaned containers
 sudo docker compose -f docker-compose.prod.yml down

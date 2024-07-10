@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Notifications\ResetPasswordNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -50,7 +51,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return Features::enabled(Features::twoFactorAuthentication())
             && $this->hasAttribute('two_factor_secret')
-            && $this->two_factor_secret !== null;
+            && ! is_null($this->two_factor_secret);
     }
 
     public function createProfilePhotoUrl(): string
@@ -86,6 +87,18 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isAdmin(): bool
     {
         return $this->hasRole('admin');
+    }
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     *
+     * @return void
+     */
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new ResetPasswordNotification($token));
     }
 
     /**

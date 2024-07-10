@@ -1,66 +1,46 @@
 module.exports = {
    root: true,
-   parser: '@babel/eslint-parser',
+   parser: '@typescript-eslint/parser',
+   parserOptions: {
+      ecmaVersion: 2021,
+      sourceType: 'module',
+      ecmaFeatures: {
+         jsx: true,
+      },
+   },
    settings: {
       react: {
          version: 'detect',
       },
    },
-   env: {
-      node: true,
-      browser: true,
-      es6: true,
-      commonjs: true,
-   },
-   extends: ['eslint:recommended', 'plugin:react/recommended', 'plugin:prettier/recommended'],
+   extends: [
+      'eslint:recommended',
+      'plugin:@typescript-eslint/recommended',
+      'plugin:react/recommended',
+      'prettier',
+      'next/core-web-vitals',
+   ],
+   plugins: ['@typescript-eslint', 'react', 'prettier'],
    rules: {
-      'import/prefer-default-export': 0,
+      'no-unused-vars': 'warn',
+      'no-undef': 'warn',
+      'import/prefer-default-export': 'off',
       'no-console': 'warn',
-      'no-nested-ternary': 0,
-      'no-underscore-dangle': 0,
-      'no-unused-expressions': [
-         'error',
-         {
-            allowTernary: true,
-         },
-      ],
-      camelcase: 0,
-      'react/self-closing-comp': 1,
-      'react/jsx-filename-extension': [
-         1,
-         {
-            extensions: ['.js', 'jsx'],
-         },
-      ],
-      'react/prop-types': 0,
-      'react/destructuring-assignment': 0,
-      'react/jsx-no-comment-textnodes': 0,
-      'react/jsx-props-no-spreading': 0,
-      'react/no-array-index-key': 0,
-      'react/no-unescaped-entities': 0,
-      'react/require-default-props': 0,
+      'no-nested-ternary': 'off',
+      'no-underscore-dangle': 'off',
+      'no-unused-expressions': 'off',
+      camelcase: 'off',
+      'react/self-closing-comp': 'warn',
+      'react/jsx-filename-extension': 'off',
+      'react/prop-types': 'off',
+      'react/destructuring-assignment': 'off',
+      'react/jsx-no-comment-textnodes': 'off',
+      'react/jsx-props-no-spreading': 'off',
+      'react/no-array-index-key': 'off',
+      'react/no-unescaped-entities': 'off',
+      'react/require-default-props': 'off',
       'react/react-in-jsx-scope': 'off',
-      'linebreak-style': ['error', 'unix'],
-      semi: ['error', 'always'],
-      'prettier/prettier': [
-         'error',
-         {
-            endOfLine: 'auto',
-         },
-         {
-            usePrettierrc: true,
-         },
-      ],
+      'linebreak-style': ['warn', 'unix'],
+      '@typescript-eslint/no-unused-vars': 'warn',
    },
-   parserOptions: {
-      ecmaFeatures: {
-         jsx: true,
-      },
-      ecmaVersion: 2020,
-      requireConfigFile: false,
-      babelOptions: {
-         presets: ['@babel/preset-react'],
-      },
-   },
-   plugins: ['react', '@next/eslint-plugin-next', 'prettier'],
 };

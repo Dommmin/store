@@ -1,8 +1,9 @@
-Application in Development!
+1. Clone repository
+2. Run ./docker.sh
 
-APP: https://159.89.214.17
-
-// TODO
-- add domain
-- change host from Digitalocean to another provider
-- fix bugs
+// TODO 
+- fix email verification link and view
+- user registration temporary error
+- notifications
+- animations
+- add shipments

@@ -1,20 +1,28 @@
+# Base image
 FROM node:20-alpine AS base
 
+# Set working directory
 WORKDIR /usr/src
 
-COPY ./frontend/package*.json ./
+# Install dependencies
+COPY ./frontend/package.* ./
+RUN npm install
 
+# Copy frontend files
 COPY ./frontend .
 
+# Development image
 FROM base AS dev
 EXPOSE 3000
 CMD ["npm", "run", "dev"]
 
+# Build image
 FROM base AS build
 RUN npm run build
 
-FROM nginx:alpine AS prod
-COPY --from=build /usr/src/dist /usr/share/nginx/html
-COPY ./deployment/config/nginx-frontend.conf /etc/nginx/nginx.conf
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# Production image
+FROM node:20-alpine AS prod
+COPY --from=build /usr/src /usr/src
+WORKDIR /usr/src
+EXPOSE 3000
+CMD ["npm", "run", "start"]

@@ -3,38 +3,42 @@ networks:
     driver: bridge
 
 services:
+  proxy:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.proxy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./deployment/config/proxy.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - frontend
+      - nginx
+    networks:
+      - laravel
+
   frontend:
     build:
       context: .
       dockerfile: ./frontend/Dockerfile
       target: dev
     container_name: ${DOCKER_PREFIX}_frontend
-    command: sh -c "npm run dev"
     restart: unless-stopped
     volumes:
       - ./frontend:/usr/src
-    environment:
-      - NODE_ENV=development
     depends_on:
       - api
-    ports:
-      - "3000:3000"
     networks:
       - laravel
 
   api:
     build:
-      args:
-        user: dominik
-        uid: 1000
       context: .
       dockerfile: ./api/Dockerfile
       target: api
     container_name: ${DOCKER_PREFIX}_api
-    command: sh -c "php artisan octane:start --workers=16 --host=0.0.0.0 --port=8000 --watch"
     restart: unless-stopped
-    ports:
-      - "8000:8000"
     volumes:
       - ./api:/usr/src
       - ./deployment/config/php-fpm/php-dev.ini:/usr/local/etc/php/conf.d/php.ini
@@ -48,16 +52,11 @@ services:
 
   scheduler:
     build:
-      args:
-        user: dominik
-        uid: 1000
       context: .
       dockerfile: ./api/Dockerfile
       target: scheduler
     command: sh -c "chmod +x /usr/src/scheduler.sh && /usr/src/scheduler.sh"
     restart: unless-stopped
-    env_file:
-      - ./api/.env
     volumes:
       - ./api:/usr/src
     depends_on:
@@ -70,15 +69,10 @@ services:
 
   worker:
     build:
-      args:
-        user: dominik
-        uid: 1000
       context: .
       dockerfile: ./api/Dockerfile
       target: worker
     command: sh -c "chmod +x /usr/src/worker.sh && /usr/src/worker.sh"
-    env_file:
-      - ./api/.env
     restart: unless-stopped
     volumes:
       - ./api:/usr/src
@@ -97,8 +91,6 @@ services:
     container_name: ${DOCKER_PREFIX}_nginx
     command: sh -c "nginx -g \"daemon off;\""
     restart: unless-stopped
-    ports:
-      - "80:8000"
     volumes:
       - ./api:/usr/src
       - ./deployment/config/nginx.conf:/etc/nginx/nginx.conf
@@ -178,19 +170,19 @@ services:
     networks:
       - laravel
 
-  minio:
-    image: minio/minio
-    ports:
-      - "9000:9000"
-      - "9099:9099"
-    volumes:
-      - storage-minio:/data
-    environment:
-      - MINIO_ACCESS_KEY=admin
-      - MINIO_SECRET_KEY=admin123
-    command: server --address ":9099" --console-address ":9000" /data
-    networks:
-      - laravel
+#  minio:
+#    image: minio/minio
+#    ports:
+#      - "9000:9000"
+#      - "9099:9099"
+#    volumes:
+#      - storage-minio:/data
+#    environment:
+#      - MINIO_ACCESS_KEY=admin
+#      - MINIO_SECRET_KEY=admin123
+#    command: server --address ":9099" --console-address ":9000" /data
+#    networks:
+#      - laravel
 
   meilisearch:
     image: getmeili/meilisearch:latest
@@ -203,16 +195,11 @@ services:
 
   reverb:
     build:
-      args:
-        user: dominik
-        uid: 1000
       context: .
       dockerfile: ./api/Dockerfile
       target: reverb
     command: sh -c "chmod +x /usr/src/reverb.sh && /usr/src/reverb.sh"
     restart: unless-stopped
-    env_file:
-      - ./api/.env
     volumes:
       - ./api:/usr/src
     ports:
@@ -232,7 +219,6 @@ services:
       - "4242:4242"
     networks:
       - laravel
-
 
 volumes:
   storage-minio:

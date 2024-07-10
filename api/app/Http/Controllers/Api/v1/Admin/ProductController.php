@@ -31,7 +31,7 @@ class ProductController extends ApiController
             ->when($request->has('attribute'), function ($query) use ($request): void {
                 $query->whereHas('attributes', function ($query) use ($request): void {
                     $query->where('attribute_id', $request->input('attribute'))
-                        ->where('product_id', '!=', $request->get('product'));
+                        ->where('url', '!=', $request->get('product'));
                 });
             })
             ->orderBy($sortBy, $sortOrder);
@@ -52,7 +52,7 @@ class ProductController extends ApiController
             $files = $request->file('images');
 
             $directory = 'images/products';
-            $images = $this->fileService->storeFiles($files, 'minio', $directory);
+            $images = $this->fileService->storeFiles($files, 'public', $directory);
 
             $validated['images'] = $images;
 
@@ -89,7 +89,7 @@ class ProductController extends ApiController
             $files = $request->file('images');
 
             $directory = 'images/products';
-            $images = $this->fileService->storeFiles($files, 'minio', $directory);
+            $images = $this->fileService->storeFiles($files, 'public', $directory);
 
             $validated['images'] = $images;
 

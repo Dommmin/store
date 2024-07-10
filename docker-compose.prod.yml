@@ -1,0 +1,124 @@
+services:
+  proxy:
+    image: dommin/store-proxy:${IMAGE_TAG}
+    container_name: ${DOCKER_PREFIX}_proxy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - api
+
+  frontend:
+    image: dommin/store-frontend:${IMAGE_TAG}
+    container_name: ${DOCKER_PREFIX}_frontend
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+
+  api:
+    image: dommin/store-api:${IMAGE_TAG}
+    container_name: ${DOCKER_PREFIX}_api
+    restart: unless-stopped
+    volumes:
+      - ./api/.env:/usr/src/.env:ro
+      - type: volume
+        source: storage
+        target: /usr/src/storage
+    environment:
+      - APP_ENV=production
+      - APP_DEBUG=false
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  scheduler:
+    image: dommin/store-scheduler:${IMAGE_TAG}
+    container_name: ${DOCKER_PREFIX}_scheduler
+    restart: unless-stopped
+    volumes:
+      - ./api/.env:/usr/src/.env
+      - type: volume
+        source: storage
+        target: /usr/src/storage
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  worker:
+    image: dommin/store-worker:${IMAGE_TAG}
+    container_name: ${DOCKER_PREFIX}_worker
+    restart: unless-stopped
+    volumes:
+      - ./api/.env:/usr/src/.env
+      - type: volume
+        source: storage
+        target: /usr/src/storage
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  nginx:
+    image: dommin/store-nginx:${IMAGE_TAG}
+    container_name: ${DOCKER_PREFIX}_nginx
+    depends_on:
+      - api
+
+  mysql:
+    image: dommin/store-mysql:${IMAGE_TAG}
+    container_name: ${DOCKER_PREFIX}_mysql
+    restart: unless-stopped
+    healthcheck:
+      test: mysql -h localhost -u root -p${DB_PASSWORD} -e 'SELECT version();'
+      start_period: 5s
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  redis:
+    image: redis:alpine
+    container_name: ${DOCKER_PREFIX}_redis
+    restart: unless-stopped
+    command: redis-server --maxmemory 128mb --maxmemory-policy volatile-lru --save ""
+    healthcheck:
+      test: redis-cli ping
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    volumes:
+      - type: volume
+        source: redisdata
+        target: /data
+
+    meilisearch:
+      image: getmeili/meilisearch:latest
+      ports:
+        - 7700:7700
+      volumes:
+        - ./data.ms:/data.ms
+
+    stripe-cli:
+      image: stripe/stripe-cli:latest
+      command: listen --forward-to api:8000/stripe/webhook --format JSON --api-key sk_test_51PGGRERtk6LWYh9Nopr9EQ4r8UjXGQ48LbgeFofJDO8rf9Zn7lwKbaw5QHijXTUlCnmHrg0Ych5C06qZLIqITH1E00DKijZLGD
+      ports:
+        - "4242:4242"
+
+volumes:
+  storage:
+  mysql-data:
+  data.ms:
+  redisdata:
