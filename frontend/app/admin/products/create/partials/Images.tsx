@@ -2,9 +2,14 @@ import { Reorder } from 'framer-motion';
 import UploadItem from '../../../../ui/UploadItem';
 import React from 'react';
 
+interface Image {
+   name: string;
+   url: string;
+}
+
 interface ImagesProps {
-   images: any[];
-   setImages: React.Dispatch<React.SetStateAction<File[]>>;
+   images: Image[];
+   setImages: React.Dispatch<React.SetStateAction<(Image | File)[]>>;
    handleDroppedFiles: (files: FileList | null) => void;
    handleRemoveImage: (index: number) => void;
 }

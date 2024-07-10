@@ -1,6 +1,6 @@
 import axios from '../lib/axios';
 import { useState } from 'react';
-import { useAuth } from './auth';
+import useAuth from './auth';
 import { ValidationErrors } from '../types/validation-errors';
 
 export const useTwoFactor = () => {

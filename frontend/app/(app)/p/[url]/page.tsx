@@ -8,7 +8,6 @@ import Image from 'next/image';
 import { useCart } from '../../../hooks/cart';
 import Link from 'next/link';
 import { BookmarkIcon, PlusIcon, StarIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { useAuth } from '../../../hooks/auth';
 import { useRouter } from 'next/navigation';
 import { useBookmark } from '../../../hooks/bookmark';
 import RatingStats from '../../../ui/RatingStats';
@@ -21,6 +20,7 @@ import { useQuery } from '@tanstack/react-query';
 import MainImageSkeleton from '../../../ui/MainImageSkeleton';
 import LoadingSpinner from '../../../ui/LoadingSpinner';
 import { Association, Product } from '../../../types/product';
+import useAuth from '../../../hooks/auth';
 
 const Page: React.FC<{ params: { url: string } }> = ({ params }) => {
    const productUrl = params.url;

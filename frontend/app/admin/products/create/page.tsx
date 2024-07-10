@@ -6,7 +6,6 @@ import axios from '../../../lib/axios';
 import General from './partials/General';
 import Images from './partials/Images';
 import Attributes from './partials/Attributes';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ChevronDoubleLeftIcon } from '@heroicons/react/24/outline';
 import { useForm } from 'react-hook-form';
@@ -20,7 +19,6 @@ interface AttributeValue {
 }
 
 export default function Create() {
-   const router = useRouter();
    const {
       register,
       handleSubmit,
@@ -28,7 +26,7 @@ export default function Create() {
    } = useForm<Product>();
 
    const [selectedTab, setSelectedTab] = useState('General');
-   const [images, setImages] = useState<File[]>([]);
+   const [images, setImages] = useState([]);
    const [selectedAttributes, setSelectedAttributes] = useState<SelectedAttribute[]>([]);
    const [attributeValues, setAttributeValues] = useState<AttributeValue[]>([]);
 

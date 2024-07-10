@@ -4,7 +4,7 @@ import DeleteUserForm from './partials/DeleteUserForm';
 import UpdatePasswordForm from './partials/UpdatePasswordForm';
 import UpdateProfileInformationForm from './partials/UpdateProfileInformationForm';
 import TwoFactorAuthenticationForm from './partials/TwoFactorAuthenticationForm';
-import { useAuth } from '../../hooks/auth';
+import useAuth from '../../hooks/auth';
 import LoadingSpinner from '../../ui/LoadingSpinner';
 import { useRouter } from 'next/navigation';
 

@@ -5,7 +5,7 @@ import { useState } from 'react';
 import axios from '../../lib/axios';
 import InputError from '../../ui/InputError';
 import LoadingSpinner from '../../ui/LoadingSpinner';
-import { useAuth } from '../../hooks/auth';
+import useAuth from '../../hooks/auth';
 import AuthSessionStatus from '../components/AuthSessionStatus';
 import GoogleAuth from '../components/GoogleAuth';
 import FacebookAuth from '../components/FacebookAuth';

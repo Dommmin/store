@@ -6,7 +6,7 @@ import PrimaryButton from '../../ui/PrimaryButton';
 import Wrapper from '../../ui/Wrapper';
 import axios from '../../lib/axios';
 import LoadingSpinner from '../../ui/LoadingSpinner';
-import { useAuth } from '../../hooks/auth';
+import useAuth from '../../hooks/auth';
 import { useRouter } from 'next/navigation';
 import { ValidationErrors } from '../../types/validation-errors';
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useAuth } from '../../hooks/auth';
+import useAuth from '../../hooks/auth';
 import { useState } from 'react';
 
 export default function VerifyEmail() {

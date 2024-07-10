@@ -26,7 +26,7 @@ const Checkout = () => {
    const { cartItems, isLoadingCart, totalPrice } = useCart();
 
    const handleValidation = () => {
-      let errors = {};
+      const errors = {};
       let formIsValid = true;
 
       if (!firstName) {
@@ -122,7 +122,7 @@ const Checkout = () => {
                               <div className="relative">
                                  <img
                                     src="https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"
-                                    alt=""
+                                    alt="placeholder"
                                     className="h-14 w-14 rounded object-cover"
                                  />
                                  <div className="absolute right-0 top-0 -mr-3 -mt-3 flex h-6 w-6 items-center justify-center rounded-full border border-neutral-700 bg-base-content text-[12px] font-bold text-black">

@@ -20,6 +20,7 @@ export default function Product({ product, className = '' }) {
             alt={product.name}
             width={800}
             height={800}
+            priority={true}
          />
          <div className="bg-base-100 px-6 py-4">
             <div className="mb-2 text-xl font-bold">{product.name}</div>

@@ -32,7 +32,7 @@ export default function Home() {
 
    return (
       <>
-         <ul className="space-y-8">
+         <div className="space-y-8">
             {collections.map((collection, index) => (
                <div key={collection.id} className="space-y-4">
                   <Link href={'/c/' + collection.slug} className={'block'}>
@@ -112,7 +112,7 @@ export default function Home() {
                   </Carousel>
                </div>
             ))}
-         </ul>
+         </div>
       </>
    );
 }

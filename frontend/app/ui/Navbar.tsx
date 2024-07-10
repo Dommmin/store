@@ -4,7 +4,7 @@ import { Suspense, useState } from 'react';
 import Dropdown from './Dropdown';
 import NavLink from './NavLink';
 import ResponsiveNavLink from './ResponsiveNavLink';
-import { useAuth } from '../hooks/auth';
+import useAuth from '../hooks/auth';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ShoppingBagIcon } from '@heroicons/react/24/outline';
@@ -82,6 +82,14 @@ export default function Navbar() {
                <div className="flex w-full items-center justify-between lg:hidden">
                   <div>
                      <button
+                        type="button"
+                        aria-label="Toggle navigation"
+                        title="Toggle navigation"
+                        aria-expanded={showingNavigationDropdown}
+                        aria-controls="navigation"
+                        role="button"
+                        name="Toggle navigation"
+                        id="Toggle navigation"
                         onClick={() => setShowingNavigationDropdown((previousState) => !previousState)}
                         className="btn inline-flex items-center justify-center border-gray-700 p-2 transition-all ease-in-out hover:border-gray-700"
                      >
@@ -134,7 +142,9 @@ export default function Navbar() {
 
             <div className="border-t border-gray-200 pb-1 pt-3 dark:border-gray-600">
                {!user ? (
-                  <ResponsiveNavLink href="/login">Login</ResponsiveNavLink>
+                  <ResponsiveNavLink name="login" href="/login">
+                     Login
+                  </ResponsiveNavLink>
                ) : (
                   <div>
                      <div className="px-4">

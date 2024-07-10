@@ -1,7 +1,7 @@
 'use client';
 
 import InputError from '../../../ui/InputError';
-import { useAuth } from '../../../hooks/auth';
+import useAuth from '../../../hooks/auth';
 import React, { useEffect, useState } from 'react';
 import AuthSessionStatus from '../../components/AuthSessionStatus';
 import { useSearchParams } from 'next/navigation';

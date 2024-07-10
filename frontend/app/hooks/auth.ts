@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from '../lib/axios';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation'; // Używamy useRouter z next/navigation
 import { useQuery } from '@tanstack/react-query';
 
 interface User {
@@ -14,21 +14,35 @@ interface User {
    profile_photo_url: string;
 }
 
+interface ValidationErrors {
+   [key: string]: string[];
+}
+
 interface AuthHook {
    user: User | null;
    isLoading: boolean;
    isPending: boolean;
    refetch: () => void;
-   register: (params: { setErrors: Function } & Record<string, any>) => Promise<void>;
-   login: (params: { setErrors: Function; setStatus: Function } & Record<string, any>) => Promise<void>;
+   register: (params: { setErrors: (errors: ValidationErrors) => void } & Record<string, unknown>) => Promise<void>;
+   login: (
+      params: {
+         setErrors: (errors: ValidationErrors) => void;
+         setStatus: (status: number | null) => void;
+      } & Record<string, unknown>,
+   ) => Promise<void>;
    forgotPassword: (params: {
-      setErrors: Function;
-      setStatus: Function;
-      setMessage: Function;
+      setErrors: (errors: ValidationErrors) => void;
+      setStatus: (status: number | null) => void;
+      setMessage: (message: string) => void;
       email: string;
    }) => Promise<void>;
-   resetPassword: (params: { setErrors: Function; setStatus: Function } & Record<string, any>) => Promise<void>;
-   resendEmailVerification: (params: { setStatus: Function }) => void;
+   resetPassword: (
+      params: {
+         setErrors: (errors: ValidationErrors) => void;
+         setStatus: (status: number | null) => void;
+      } & Record<string, unknown>,
+   ) => Promise<void>;
+   resendEmailVerification: (params: { setStatus: (status: string) => void }) => void;
    logout: () => Promise<void>;
    getCsrfToken: () => Promise<void>;
 }
@@ -38,14 +52,21 @@ interface AuthOptions {
    redirectIfAuthenticated?: string;
 }
 
-export const useAuth = ({ middleware = 'guest', redirectIfAuthenticated }: AuthOptions = {}): AuthHook => {
+const useAuth = ({ middleware = 'guest', redirectIfAuthenticated }: AuthOptions = {}): AuthHook => {
    const [isLoading, setIsLoading] = useState(false);
-   const router = useRouter();
-   const params = useParams<{ token: string }>();
+   const router = useRouter(); // Używamy useRouter z next/navigation
+   const params = useParams();
 
-   const fetchUser = async () => {
-      const response = await axios.get('/api/v1/user');
-      return response.data;
+   const fetchUser = async (): Promise<User | null> => {
+      try {
+         const response = await axios.get('/api/v1/user');
+         return response.data as User;
+      } catch (error) {
+         if (error.response?.status === 401) {
+            return null; // Zwraca null, jeśli użytkownik nie jest zalogowany
+         }
+         throw error; // Rzucenie błędu, aby móc go obsłużyć poniżej
+      }
    };
 
    const {
@@ -53,7 +74,6 @@ export const useAuth = ({ middleware = 'guest', redirectIfAuthenticated }: AuthO
       refetch,
       isPending,
       isError,
-      error,
    } = useQuery<User | null>({
       queryKey: ['user'],
       queryFn: fetchUser,
@@ -62,11 +82,16 @@ export const useAuth = ({ middleware = 'guest', redirectIfAuthenticated }: AuthO
       staleTime: 5 * 1000,
    });
 
-   const getCsrfToken = async () => {
+   const getCsrfToken = async (): Promise<void> => {
       await axios.get('/api/v1/sanctum/csrf-cookie');
    };
 
-   const register = async ({ setErrors, ...props }: { setErrors: Function } & Record<string, any>): Promise<void> => {
+   const register = async ({
+      setErrors,
+      ...props
+   }: {
+      setErrors: (errors: ValidationErrors) => void;
+   } & Record<string, unknown>): Promise<void> => {
       setIsLoading(true);
       await getCsrfToken();
 
@@ -76,12 +101,12 @@ export const useAuth = ({ middleware = 'guest', redirectIfAuthenticated }: AuthO
          const response = await axios.post('/api/v1/register', props);
          if (response.status === 200) {
             router.push('/');
-            return null;
          }
       } catch (error) {
-         if (error.response?.status !== 422) throw error;
-
-         setErrors(error.response.data.errors);
+         if (error.response?.status === 401 && middleware === 'auth') {
+            router.push('/login'); // Przekierowanie do strony logowania tylko w trybie 'auth'
+         }
+         throw error;
       } finally {
          setIsLoading(false);
       }
@@ -92,9 +117,9 @@ export const useAuth = ({ middleware = 'guest', redirectIfAuthenticated }: AuthO
       setStatus,
       ...props
    }: {
-      setErrors: Function;
-      setStatus: Function;
-   } & Record<string, any>) => {
+      setErrors: (errors: ValidationErrors) => void;
+      setStatus: (status: number | null) => void;
+   } & Record<string, unknown>): Promise<void> => {
       setIsLoading(true);
       await getCsrfToken();
 
@@ -105,16 +130,15 @@ export const useAuth = ({ middleware = 'guest', redirectIfAuthenticated }: AuthO
          const response = await axios.post('/api/v1/login', props);
          if (response.data?.two_factor) {
             router.push('/two-factor-challenge');
-            return null;
-         }
-         if (response.status === 200) {
+         } else if (response.status === 200) {
+            refetch();
             router.push('/');
-            return null;
          }
       } catch (error) {
-         if (error.response?.status !== 422) throw error;
-
-         setErrors(error.response.data.errors);
+         if (error.response?.status === 401 && middleware === 'auth') {
+            router.push('/login'); // Przekierowanie do strony logowania tylko w trybie 'auth'
+         }
+         throw error;
       } finally {
          setIsLoading(false);
       }
@@ -126,11 +150,11 @@ export const useAuth = ({ middleware = 'guest', redirectIfAuthenticated }: AuthO
       setMessage,
       email,
    }: {
-      setErrors: Function;
-      setStatus: Function;
-      setMessage: Function;
+      setErrors: (errors: ValidationErrors) => void;
+      setStatus: (status: number | null) => void;
+      setMessage: (message: string) => void;
       email: string;
-   }) => {
+   }): Promise<void> => {
       await getCsrfToken();
 
       setErrors({});
@@ -142,9 +166,10 @@ export const useAuth = ({ middleware = 'guest', redirectIfAuthenticated }: AuthO
          setStatus(response.data.status);
          setMessage(response.data.message);
       } catch (error) {
-         if (error.response?.status !== 422) throw error;
-
-         setErrors(error.response.data.errors);
+         if (error.response?.status === 401 && middleware === 'auth') {
+            router.push('/login'); // Przekierowanie do strony logowania tylko w trybie 'auth'
+         }
+         throw error;
       }
    };
 
@@ -153,9 +178,9 @@ export const useAuth = ({ middleware = 'guest', redirectIfAuthenticated }: AuthO
       setStatus,
       ...props
    }: {
-      setErrors: Function;
-      setStatus: Function;
-   } & Record<string, any>) => {
+      setErrors: (errors: ValidationErrors) => void;
+      setStatus: (status: number | null) => void;
+   } & Record<string, unknown>): Promise<void> => {
       await getCsrfToken();
 
       setErrors({});
@@ -168,29 +193,32 @@ export const useAuth = ({ middleware = 'guest', redirectIfAuthenticated }: AuthO
          });
          router.push('/login?reset=' + btoa(response.data.status));
       } catch (error) {
-         if (error.response?.status !== 422) throw error;
-
-         setErrors(error.response.data.errors);
+         if (error.response?.status === 401 && middleware === 'auth') {
+            router.push('/login'); // Przekierowanie do strony logowania tylko w trybie 'auth'
+         }
+         throw error;
       }
    };
 
-   const resendEmailVerification = ({ setStatus }: { setStatus: Function }) => {
+   const resendEmailVerification = ({ setStatus }: { setStatus: (status: string) => void }): void => {
       axios.post('/api/v1/email/verification-notification').then((response) => setStatus(response.data.status));
    };
 
-   const logout = async () => {
-      if (!error) {
-         await axios.post('/api/v1/logout').then(() => refetch());
+   const logout = async (): Promise<void> => {
+      try {
+         await axios.post('/api/v1/logout');
+         await refetch();
+         router.push('/'); // Przekierowanie po wylogowaniu
+      } catch (error) {
+         console.error('Błąd podczas wylogowywania:', error);
       }
-
-      window.location.pathname = '/';
    };
 
    useEffect(() => {
-      if (middleware === 'guest' && redirectIfAuthenticated && user) router.push(redirectIfAuthenticated);
-      if (window.location.pathname === '/verify-email' && user?.email_verified_at) router.push(redirectIfAuthenticated);
-      if (middleware === 'auth' && error) logout();
-   }, [user, error]);
+      if (isError && middleware === 'auth') {
+         router.push('/login'); // Przekierowanie do strony logowania tylko w trybie 'auth'
+      }
+   }, [isError]);
 
    return {
       user,
@@ -206,3 +234,5 @@ export const useAuth = ({ middleware = 'guest', redirectIfAuthenticated }: AuthO
       getCsrfToken,
    };
 };
+
+export default useAuth;

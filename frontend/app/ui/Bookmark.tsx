@@ -6,7 +6,11 @@ export default function Bookmark() {
    const { countBookmarks } = useBookmark();
 
    return (
-      <button className="flex h-11 w-11 items-center justify-center rounded-md border border-neutral-200 text-black transition-colors dark:border-neutral-700 dark:text-white">
+      <button
+         name="bookmark"
+         id="bookmark"
+         className="flex h-11 w-11 items-center justify-center rounded-md border border-neutral-200 text-black transition-colors dark:border-neutral-700 dark:text-white"
+      >
          <Link
             href={'/bookmarks'}
             className="relative flex h-11 w-11 items-center justify-center rounded-md border border-neutral-200 text-black transition-colors dark:border-neutral-700 dark:text-white"

@@ -4,7 +4,7 @@ import DialogModal from '../../ui/DialogModal';
 import InputError from '../../ui/InputError';
 import SecondaryButton from '../../ui/SecondaryButton';
 import SuccessButton from '../../ui/SuccessButton';
-import { useAuth } from '../../hooks/auth';
+import useAuth from '../../hooks/auth';
 import { ValidationErrors } from '../../types/validation-errors';
 
 export default function ConfirmPassword({

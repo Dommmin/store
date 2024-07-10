@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import PageNotFound from '../not-found';
 import axios from '../lib/axios';
 import { useEffect, useState } from 'react';
-import { useAuth } from '../hooks/auth';
+import useAuth from '../hooks/auth';
 import Link from 'next/link';
 
 export default function Success() {

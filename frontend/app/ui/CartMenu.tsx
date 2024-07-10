@@ -46,6 +46,7 @@ export default function CartMenu() {
       <>
          <button
             onClick={openCart}
+            name="cart"
             aria-label="Open mobile menu"
             className="flex h-11 w-11 items-center justify-center rounded-md border border-neutral-200 text-black transition-colors dark:border-neutral-700 dark:text-white"
          >

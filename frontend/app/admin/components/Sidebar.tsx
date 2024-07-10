@@ -3,6 +3,7 @@
 import {
    Bars3Icon,
    CubeIcon,
+   GiftIcon,
    PencilSquareIcon,
    PowerIcon,
    PuzzlePieceIcon,
@@ -11,9 +12,8 @@ import {
    TruckIcon,
    UserGroupIcon,
    XMarkIcon,
-   GiftIcon,
 } from '@heroicons/react/24/outline';
-import { useAuth } from '../../hooks/auth';
+import useAuth from '../../hooks/auth';
 import { ShoppingCartIcon } from '@heroicons/react/16/solid';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';

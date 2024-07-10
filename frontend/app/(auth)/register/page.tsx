@@ -1,11 +1,11 @@
 'use client';
 
-import { useAuth } from '../../hooks/auth';
+import useAuth from '../../hooks/auth';
 import InputError from '../../ui/InputError';
 import LoadingSpinner from '../../ui/LoadingSpinner';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { FormEvent, FormEventHandler, ReactEventHandler, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { ValidationErrors } from '../../types/validation-errors';
 
 export default function Register() {
