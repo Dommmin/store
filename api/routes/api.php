@@ -22,6 +22,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 
+Route::get('/', function () {
+    return 'Hello Api';
+});
+
 Route::get('/sanctum/csrf-cookie', [CsrfCookieController::class, 'show']);
 Route::get('/user', fn (Request $request) => $request->user())->middleware('auth:sanctum');
 
