@@ -1,0 +1,17 @@
+# *
+User-agent: *
+Allow: /
+
+# *
+User-agent: *
+Disallow: /api/
+
+# *
+User-agent: *
+Disallow: /admin/
+
+# Host
+Host: http://localhost
+
+# Sitemaps
+Sitemap: http://localhost/sitemap.xml
