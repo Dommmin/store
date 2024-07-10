@@ -1,9 +1,51 @@
+import { useEffect, useState } from 'react';
+
 export default function ThemeButton() {
+   const [theme, setTheme] = useState(() => {
+      if (typeof window !== 'undefined') {
+         return localStorage.getItem('theme') ? localStorage.getItem('theme') : 'dark';
+      }
+      return 'dark'; // domyślny temat, gdy localStorage nie jest dostępne
+   });
+
+   // update state on toggle
+   const handleToggle = (e) => {
+      if (e.target.checked) {
+         setTheme('fantasy');
+      } else {
+         setTheme('dark');
+      }
+   };
+
+   // set theme state in localstorage on mount & also update localstorage on state change
+   useEffect(() => {
+      if (typeof window !== 'undefined') {
+         localStorage.setItem('theme', theme);
+         const localTheme = localStorage.getItem('theme');
+         // add custom data-theme attribute to html tag required to update theme using DaisyUI
+         document.querySelector('html').setAttribute('data-theme', localTheme);
+      }
+   }, [theme]);
+
    return (
-      <button className="flex h-11 w-11 items-center justify-center rounded-md border border-neutral-200 text-black transition-colors dark:border-neutral-700 dark:text-white">
+      <button
+         type="button"
+         name="Toggle theme"
+         id="Toggle theme"
+         className="flex h-11 w-11 items-center justify-center rounded-md border border-neutral-200 text-black transition-colors dark:border-neutral-700 dark:text-white"
+      >
          <label className="swap swap-rotate">
             {/* this hidden checkbox controls the state */}
-            <input type="checkbox" className="theme-controller" value="synthwave" />
+            <label htmlFor="theme" hidden />
+            <input
+               type="checkbox"
+               className="theme-controller"
+               value="synthwave"
+               name="theme"
+               id="theme"
+               onChange={handleToggle}
+               checked={theme === 'fantasy'}
+            />
 
             {/* sun icon */}
             <svg className="swap-off h-6 w-6 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">

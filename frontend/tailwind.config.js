@@ -1,7 +1,5 @@
-/** @type {import('tailwindcss').Config} */
 module.exports = {
-   // darkMode: ['media', '[data-mode="dark"]'],
-   darkMode: ['media', '(prefers-color-scheme: dark)'],
+   darkMode: ['class', '[data-theme="dark"]'],
    content: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}', './app/**/*.{js,ts,jsx,tsx,mdx}'],
    theme: {
       extend: {
@@ -40,7 +38,7 @@ module.exports = {
       },
    },
    daisyui: {
-      themes: ['emerald', 'dark'],
+      themes: ['fantasy', 'dark'],
    },
    plugins: [require('daisyui'), require('tailwindcss-animate')],
 };
