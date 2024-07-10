@@ -2,13 +2,13 @@ const withPWA = require('next-pwa')({
    dest: 'public',
    disable: process.env.NODE_ENV === 'development',
 });
+const TerserPlugin = require('terser-webpack-plugin');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
    reactStrictMode: true,
    swcMinify: true,
    images: {
-      domains: ['via.placeholder.com', 'www.gravatar.com', 'nginx'],
       remotePatterns: [
          {
             protocol: 'https',
@@ -27,6 +27,21 @@ const nextConfig = {
             pathname: '/storage/**',
          },
       ],
+   },
+   webpack(config, { dev, isServer }) {
+      if (!dev && !isServer) {
+         config.optimization.minimizer.push(
+            new TerserPlugin({
+               terserOptions: {
+                  compress: {
+                     drop_console: true,
+                  },
+               },
+            }),
+         );
+      }
+
+      return config;
    },
 };
 
