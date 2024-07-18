@@ -2,14 +2,14 @@
 
 import axios from '../../lib/axios';
 import { motion } from 'framer-motion';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import LoadingSpinner from '../../ui/LoadingSpinner';
 import Wrapper from '../../ui/Wrapper';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Brand } from '../../types/brand';
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
 export default function Customers() {
    const [url, setUrl] = useState('/api/v1/admin/customers');
@@ -62,8 +62,10 @@ export default function Customers() {
       isError,
       error,
    } = useQuery({
-      queryKey: ['data'],
+      queryKey: ['customers', url],
       queryFn: fetchData,
+      placeholderData: keepPreviousData,
+      staleTime: 10 * 1000,
    });
 
    const variants = {
@@ -80,10 +82,6 @@ export default function Customers() {
       hidden: { opacity: 0 },
       show: { opacity: 1 },
    };
-
-   useEffect(() => {
-      refetchData();
-   }, [url, sortOrder, sortBy, perPage, debouncedSearchQuery, refetchData]);
 
    if (isPending) return <LoadingSpinner className="h-screen" />;
    if (isError) return <div>{error.message}</div>;

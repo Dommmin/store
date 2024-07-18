@@ -1,18 +1,34 @@
-import useSWR from 'swr';
 import axios from '../lib/axios';
+import { useQuery } from '@tanstack/react-query';
 
 export const useCart = () => {
-   const { data: cartItemsCount, mutate: mutateCart } = useSWR(
-      '/api/v1/cart-items/count',
-      () => axios.get('/api/v1/cart-items/count').then((res) => res.data),
-      { refreshInterval: 0 },
-   );
+   const { data: cartItemsCount, refetch: refetchCart } = useQuery({
+      queryKey: ['cart-items-count'],
+      queryFn: async () => {
+         const response = await axios.get('/api/v1/cart-items/count');
+         return response.data;
+      },
+   });
 
    const {
       data: cartItems,
-      mutate,
-      isLoading: isLoadingCart,
-   } = useSWR('/api/cart-items', () => axios.get('/api/v1/cart-items').then((res) => res.data));
+      isPending: isPendingCart,
+      refetch,
+   } = useQuery({
+      queryKey: ['cart-items'],
+      queryFn: async () => {
+         const response = await axios.get('/api/v1/cart-items');
+         return response.data;
+      },
+   });
+
+   const { data: totalPrice, refetch: refetchTotal } = useQuery({
+      queryKey: ['total-price'],
+      queryFn: async () => {
+         const response = await axios.get('/api/v1/cart-items/total');
+         return response.data;
+      },
+   });
 
    const removeItem = async (id, productId) => {
       await axios.post('/api/v1/cart-items/remove', {
@@ -20,9 +36,9 @@ export const useCart = () => {
          product_id: productId,
       });
 
-      await mutate();
-      await mutateCart();
-      await mutateTotal();
+      refetch();
+      refetchCart();
+      refetchTotal();
    };
 
    const addToCart = async (productId: number | string, size: number | string) => {
@@ -32,9 +48,9 @@ export const useCart = () => {
             size_id: size,
          });
 
-         mutateCart();
-         mutate();
-         mutateTotal();
+         refetchCart();
+         refetch();
+         refetchTotal();
       } catch (error) {
          console.error('Error:', error);
       }
@@ -48,9 +64,9 @@ export const useCart = () => {
          });
 
          if (response.status === 200) {
-            mutate();
-            mutateCart();
-            mutateTotal();
+            refetch();
+            refetchCart();
+            refetchTotal();
          }
       } catch (error) {
          console.error('Error:', error);
@@ -65,31 +81,25 @@ export const useCart = () => {
          });
 
          if (response.status === 200) {
-            mutate();
-            mutateCart();
-            mutateTotal();
+            refetch();
+            refetchCart();
+            refetchTotal();
          }
       } catch (error) {
          console.error('Error:', error);
       }
    };
 
-   const { data: totalPrice, mutate: mutateTotal } = useSWR(
-      '/api/cart-items/total',
-      () => axios.get('/api/v1/cart-items/total').then((res) => res.data),
-      { refreshInterval: 0 },
-   );
-
    return {
       cartItems,
       cartItemsCount,
-      mutateCart,
-      isLoadingCart,
+      refetchCart,
+      isPendingCart,
       handleRemoveItemFromCart: removeItem,
       handleAddToCart: addToCart,
       incrementQuantity,
       decrementQuantity,
       totalPrice,
-      mutateTotal,
+      refetchTotal,
    };
 };

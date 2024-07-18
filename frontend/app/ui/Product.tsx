@@ -10,17 +10,23 @@ export default function Product({ product, className = '' }) {
          exit={{ opacity: 0 }}
          layout
          className={
-            'border-natural-200 relative max-w-xl overflow-hidden rounded-lg border dark:border-neutral-700 ' +
+            'border-natural-200 relative h-64 max-w-xl overflow-hidden rounded-lg border dark:border-neutral-700 ' +
             className
          }
       >
          <Image
-            className="h-64 w-full object-cover transition-all duration-200"
+            fill
+            loading="lazy"
+            blurDataURL={product.main_image}
+            placeholder="blur"
+            className="object-cover transition-all duration-200"
             src={product.main_image}
             alt={product.name}
-            width={800}
-            height={800}
-            priority={true}
+            quality={50}
+            sizes="(max-width: 640px) 100vw,
+                  (max-width: 1280px) 50vw,
+                  (max-width: 1536px) 33vw,
+                  25vw"
          />
          <div className="bg-base-100 px-6 py-4">
             <div className="mb-2 text-xl font-bold">{product.name}</div>

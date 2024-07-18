@@ -1,7 +1,7 @@
 'use client';
 
 import Wrapper from '../../ui/Wrapper';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import axios from '../../lib/axios';
 import Link from 'next/link';
 import LoadingSpinner from '../../ui/LoadingSpinner';
@@ -9,10 +9,23 @@ import { motion } from 'framer-motion';
 import { Brand } from '../../types/brand';
 import { useQuery } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
+import {
+   AlertDialog,
+   AlertDialogBody,
+   AlertDialogCloseButton,
+   AlertDialogContent,
+   AlertDialogFooter,
+   AlertDialogHeader,
+   AlertDialogOverlay,
+   Button,
+   useDisclosure,
+} from '@chakra-ui/react';
 
 export default function Attributes() {
    const [url, setUrl] = useState('/api/v1/admin/attributes');
    const [selectedItems, setSelectedItems] = useState<number[]>([]);
+   const { isOpen, onOpen, onClose } = useDisclosure();
+   const cancelRef = React.useRef();
 
    const handleSelectAll = (event: React.ChangeEvent<HTMLInputElement>) => {
       if (event.target.checked) {
@@ -47,7 +60,7 @@ export default function Attributes() {
       isError,
       error,
    } = useQuery({
-      queryKey: ['data'],
+      queryKey: ['attributes', url],
       queryFn: fetchData,
    });
 
@@ -91,9 +104,6 @@ export default function Attributes() {
          console.error(error);
       }
    };
-   useEffect(() => {
-      refetchData();
-   }, [refetchData, url]);
 
    if (isPending) return <LoadingSpinner className="h-screen" />;
    if (isError) return <div>{error.message}</div>;
@@ -165,11 +175,38 @@ export default function Attributes() {
                                           Edit
                                        </Link>
                                        <button
-                                          onClick={() => handleDelete(item.id)}
+                                          // onClick={() => handleDelete(item.id)}
+                                          onClick={onOpen}
                                           className="btn btn-outline btn-error btn-xs"
                                        >
                                           Delete
                                        </button>
+                                       <AlertDialog
+                                          motionPreset="slideInBottom"
+                                          leastDestructiveRef={cancelRef}
+                                          onClose={onClose}
+                                          isOpen={isOpen}
+                                          isCentered
+                                       >
+                                          <AlertDialogOverlay />
+
+                                          <AlertDialogContent>
+                                             <AlertDialogHeader>Discard Changes?</AlertDialogHeader>
+                                             <AlertDialogCloseButton />
+                                             <AlertDialogBody>
+                                                Are you sure you want to discard all of your notes? 44 words will be
+                                                deleted.
+                                             </AlertDialogBody>
+                                             <AlertDialogFooter>
+                                                <Button ref={cancelRef} onClick={onClose}>
+                                                   No
+                                                </Button>
+                                                <Button colorScheme="red" ml={3} onClick={() => handleDelete(item.id)}>
+                                                   Yes
+                                                </Button>
+                                             </AlertDialogFooter>
+                                          </AlertDialogContent>
+                                       </AlertDialog>
                                        <Link
                                           href={'/admin/attributes/' + item.id + '/values'}
                                           className="btn btn-outline btn-accent btn-xs col-span-2 "

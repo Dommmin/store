@@ -1,34 +1,26 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import LoadingSpinner from '../ui/LoadingSpinner';
 import axios from '../lib/axios';
 import Product from '../ui/Product';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import Link from 'next/link';
+import { useQuery } from '@tanstack/react-query';
 
 export default function Home() {
-   const [collections, setCollections] = useState([]);
-   const [isLoading, setIsLoading] = useState(true);
+   const fetchCollections = async () => {
+      const response = await axios.get('/api/v1/collections');
 
-   const fetchCollections = () => {
-      axios
-         .get('/api/v1/collections')
-         .then((response) => {
-            setCollections(response.data);
-         })
-         .catch((error) => {
-            console.error(error);
-         })
-         .finally(() => setIsLoading(false));
+      return response.data;
    };
 
-   useEffect(() => {
-      fetchCollections();
-   }, []);
+   const { data: collections, isPending } = useQuery({
+      queryKey: ['collections'],
+      queryFn: fetchCollections,
+   });
 
-   if (isLoading) return <LoadingSpinner className="h-screen" />;
+   if (isPending) return <LoadingSpinner className="h-screen" />;
 
    return (
       <>

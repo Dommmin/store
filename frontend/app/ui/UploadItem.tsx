@@ -25,7 +25,6 @@ const UploadItem = ({ image, onRemove }) => {
                height={100}
                alt={image.name}
                layout="fixed"
-               objectFit="cover"
                quality={100}
                priority
                placeholder="blur"

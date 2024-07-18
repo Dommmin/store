@@ -1,15 +1,17 @@
 'use client';
 
+import React, { useCallback, useEffect, useState } from 'react';
 import Wrapper from '../../ui/Wrapper';
-import React, { useEffect, useState } from 'react';
 import axios from '../../lib/axios';
 import Link from 'next/link';
 import LoadingSpinner from '../../ui/LoadingSpinner';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { Switch } from '@headlessui/react';
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Product } from '../../types/product';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Products() {
    const [url, setUrl] = useState('/api/v1/admin/products');
@@ -35,20 +37,24 @@ export default function Products() {
       }
    };
 
-   const handleSort = (field: string) => {
+   const handleSort = async (field: string) => {
       if (sortBy === field) {
          setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+         await refetchData();
       } else {
          setSortBy(field);
          setSortOrder('asc');
+         await refetchData();
       }
    };
 
-   const fetchData = async () => {
-      const response = await axios.get(url, { params: { sortBy, sortOrder, perPage } });
-
-      return response.data;
-   };
+   const fetchData = useCallback(
+      async (fetchUrl?: string) => {
+         const response = await axios.get(fetchUrl || url, { params: { sortBy, sortOrder, perPage } });
+         return response.data;
+      },
+      [url, sortBy, sortOrder, perPage],
+   );
 
    const {
       data,
@@ -57,9 +63,21 @@ export default function Products() {
       isError,
       error,
    } = useQuery({
-      queryKey: ['data'],
-      queryFn: fetchData,
+      queryKey: ['products', url],
+      queryFn: () => fetchData(),
+      placeholderData: keepPreviousData,
    });
+
+   const queryClient = useQueryClient();
+
+   useEffect(() => {
+      if (data && data.next_page_url) {
+         queryClient.prefetchQuery({
+            queryKey: ['products', data.next_page_url],
+            queryFn: () => fetchData(data.next_page_url),
+         });
+      }
+   }, [data, fetchData, queryClient]);
 
    const variants = {
       hidden: { opacity: 0 },
@@ -94,13 +112,57 @@ export default function Products() {
       }
    };
 
-   const handleDelete = async (url: string) => {
-      const response = await axios.delete(`/api/v1/admin/products/${url}`);
+   const handleDelete = async (productUrl: string) => {
+      try {
+         const response = await axios.delete(`/api/v1/admin/products/${productUrl}`);
 
-      if (response.status === 200) {
-         await refetchData();
+         return response.data;
+      } catch (error) {
+         console.error(error);
       }
    };
+
+   const mutation = useMutation({
+      mutationFn: (productUrl: string) => handleDelete(productUrl),
+      onMutate: async (productUrl) => {
+         await queryClient.cancelQueries({
+            queryKey: ['products', url],
+         });
+
+         const previousData = queryClient.getQueryData(['products', url]);
+
+         queryClient.setQueryData(['products', url], (oldData: { data: Product[] }) => {
+            return {
+               ...oldData,
+               data: oldData.data.filter((item: Product) => item.url !== productUrl),
+            };
+         });
+
+         return { previousData };
+      },
+      onError: (err, url, context) => {
+         queryClient.setQueryData(['products', url], context.previousData);
+         toast.error('Error deleting product', {
+            autoClose: 1000,
+            position: 'bottom-right',
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+         });
+      },
+      onSettled: () => {
+         queryClient.invalidateQueries({
+            queryKey: ['products', url],
+         });
+         toast.success('Product deleted successfully', {
+            autoClose: 1000,
+            position: 'bottom-right',
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+         });
+      },
+   });
 
    const handleMassAction = () => {
       if (!selectedItems.length) return;
@@ -108,15 +170,13 @@ export default function Products() {
       // TODO: Implement mass action
    };
 
-   useEffect(() => {
-      refetchData();
-   }, [url, sortOrder, sortBy, refetchData]);
-
    if (isPending) return <LoadingSpinner className="h-screen" />;
    if (isError) return <div>{error.message}</div>;
 
    return (
       <>
+         <ToastContainer />
+
          <h1 className="p-2 text-3xl font-bold">Products</h1>
          <div className="mx-auto flex max-w-[1920px] justify-between space-x-4 p-2 sm:px-6 lg:px-8">
             <div className="flex w-full max-w-xs space-x-2">
@@ -248,7 +308,9 @@ export default function Products() {
                                           Edit
                                        </Link>
                                        <button
-                                          onClick={() => handleDelete(item.url)}
+                                          onClick={() => {
+                                             mutation.mutate(item.url);
+                                          }}
                                           className="btn btn-outline btn-error btn-xs"
                                        >
                                           Delete

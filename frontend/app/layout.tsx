@@ -1,3 +1,4 @@
+'use memo';
 import { Metadata } from 'next';
 import { Lusitana } from 'next/font/google';
 import './globals.css';

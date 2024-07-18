@@ -1,7 +1,7 @@
 'use client';
 
 import Wrapper from '../../ui/Wrapper';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import axios from '../../lib/axios';
 import LoadingSpinner from '../../ui/LoadingSpinner';
 import { motion } from 'framer-motion';
@@ -49,7 +49,7 @@ export default function Reviews() {
       isError,
       error,
    } = useQuery({
-      queryKey: ['data'],
+      queryKey: ['reviews', url],
       queryFn: fetchData,
    });
 
@@ -110,10 +110,6 @@ export default function Reviews() {
             console.error(error);
          });
    };
-
-   useEffect(() => {
-      refetchData();
-   }, [refetchData, url]);
 
    if (isPending) return <LoadingSpinner className="h-screen" />;
    if (isError) return <div>{error.message}</div>;

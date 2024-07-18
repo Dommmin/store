@@ -1,7 +1,7 @@
 'use client';
 
 import Wrapper from '../../ui/Wrapper';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import axios from '../../lib/axios';
 import Link from 'next/link';
 import LoadingSpinner from '../../ui/LoadingSpinner';
@@ -48,7 +48,7 @@ export default function Brands() {
       isError,
       error,
    } = useQuery({
-      queryKey: ['data'],
+      queryKey: ['brands', url],
       queryFn: fetchData,
    });
 
@@ -92,10 +92,6 @@ export default function Brands() {
          console.error(error);
       }
    };
-
-   useEffect(() => {
-      refetchData();
-   }, [refetchData, url]);
 
    if (isPending) return <LoadingSpinner className="h-screen" />;
    if (isError) return <div>{error.message}</div>;

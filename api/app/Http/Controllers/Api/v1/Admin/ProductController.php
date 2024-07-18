@@ -127,9 +127,9 @@ class ProductController extends ApiController
 
     public function destroy(Product $product)
     {
-        $product->delete();
+        $this->fileService->deleteFiles($product->images);
 
-        $this->fileService->deleteFiles($product->images, 'minio');
+        $product->delete();
 
         return $this->ok('Product deleted successfully.');
     }

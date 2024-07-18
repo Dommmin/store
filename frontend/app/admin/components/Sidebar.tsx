@@ -109,9 +109,9 @@ export default function Sidebar({ setIsOpen, isOpen }) {
          </div>
 
          {isOpen && (
-            <div className="fixed bottom-0 left-0 top-0 flex h-full w-full flex-col border-r border-neutral-200 bg-base-300 md:w-[250px] dark:border-neutral-700">
+            <div className="fixed bottom-0 left-0 top-0 flex h-full w-full flex-col border-r border-neutral-200 bg-base-300 dark:border-neutral-700 md:w-[250px]">
                <button
-                  className="flex h-11 w-11 items-center justify-center rounded-lg text-black transition-colors hover:scale-110 hover:bg-base-100 md:hidden dark:text-white"
+                  className="flex h-11 w-11 items-center justify-center rounded-lg text-black transition-colors hover:scale-110 hover:bg-base-100 dark:text-white md:hidden"
                   onClick={closeMobileMenu}
                   aria-label="Close mobile menu"
                >

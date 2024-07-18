@@ -8,7 +8,7 @@ function PageNotFound() {
                <h1 className="text-primary-600 mb-4 text-7xl font-extrabold tracking-tight text-info lg:text-9xl">
                   404
                </h1>
-               <p className="mb-4 text-3xl font-bold tracking-tight text-gray-900 md:text-4xl dark:text-white">
+               <p className="mb-4 text-3xl font-bold tracking-tight text-gray-900 dark:text-white md:text-4xl">
                   Something&apos;s missing.
                </p>
                <p className="mb-4 text-lg font-light text-gray-500 dark:text-gray-400">

@@ -23,7 +23,7 @@ const Checkout = () => {
 
    const [step, setStep] = useState('Information');
 
-   const { cartItems, isLoadingCart, totalPrice } = useCart();
+   const { cartItems, isPendingCart, totalPrice } = useCart();
 
    const handleValidation = () => {
       const errors = {};
@@ -79,11 +79,11 @@ const Checkout = () => {
       }
    };
 
-   if (isLoadingCart) return;
+   if (isPendingCart) return;
 
    return (
       <>
-         <div className="mt-12 overflow-hidden border-b border-t bg-white shadow-sm lg:hidden dark:border-neutral-700 dark:bg-base-300">
+         <div className="mt-12 overflow-hidden border-b border-t bg-white shadow-sm dark:border-neutral-700 dark:bg-base-300 lg:hidden">
             <div className="px-8 py-4 text-gray-900 dark:text-gray-100">
                <div className="mx-auto max-w-xl">
                   {!isOpen ? (
@@ -113,7 +113,7 @@ const Checkout = () => {
                   animate={{ height: 'auto' }}
                   exit={{ height: 0 }}
                   transition={{ duration: 0.2, ease: 'easeInOut' }}
-                  className="overflow-hidden border-b shadow-sm lg:hidden dark:border-neutral-700"
+                  className="overflow-hidden border-b shadow-sm dark:border-neutral-700 lg:hidden"
                >
                   <div className="px-8 py-4 text-gray-900 dark:text-gray-100">
                      <div className="mx-auto max-w-xl">
@@ -147,7 +147,7 @@ const Checkout = () => {
          </AnimatePresence>
 
          <div className="flex min-h-screen w-full">
-            <div className="flex w-full justify-start border-neutral-200 p-8 lg:border-r dark:border-neutral-700">
+            <div className="flex w-full justify-start border-neutral-200 p-8 dark:border-neutral-700 lg:border-r">
                <div className="flex h-20 w-full justify-end">
                   <div className="w-full max-w-xl space-y-4 max-lg:mx-auto">
                      <Breadcrumb step={step} handleBreadcrumbClick={handleBreadcrumbClick} />
