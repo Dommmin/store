@@ -6,7 +6,8 @@ import Product from '../ui/Product';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import Link from 'next/link';
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import ServerError from '../ui/ServerError';
 
 export default function Home() {
    const fetchCollections = async () => {
@@ -15,12 +16,20 @@ export default function Home() {
       return response.data;
    };
 
-   const { data: collections, isPending } = useQuery({
+   const {
+      data: collections,
+      isPending,
+      isError,
+   } = useQuery({
       queryKey: ['collections'],
       queryFn: fetchCollections,
+      retry: false,
+      placeholderData: keepPreviousData,
    });
 
    if (isPending) return <LoadingSpinner className="h-screen" />;
+   if (isError) return <ServerError />;
+   if (collections.length <= 0) return <p className="flex h-screen items-center justify-center">No collections found...</p>
 
    return (
       <>

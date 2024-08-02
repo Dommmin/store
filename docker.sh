@@ -45,10 +45,15 @@ else
     echo "${BOLD}${RED}Użytkownik ${USER} już istnieje${RESET}"
 fi
 
-# Zmiana uprawnien
+# Zmiana uprawnień
 echo "${BOLD}${RED}--------------------------------------------------------------------------------${RESET}"
-echo -e "${BOLD}${YELLOW}Zmiana uprawnien${RESET}\n"
-docker exec -it -u root "$DOCKER_PREFIX"_api chown -R $USER:$USER storage
+echo -e "${BOLD}${YELLOW}Zmiana uprawnień${RESET}\n"
+docker exec -it -u root "$DOCKER_PREFIX"_api chmod -R 777 /usr/src/storage
+
+# Verify ownership
+echo "${BOLD}${RED}--------------------------------------------------------------------------------${RESET}"
+echo -e "${BOLD}${YELLOW}Weryfikacja uprawnień${RESET}\n"
+docker exec -it -u root "$DOCKER_PREFIX"_api ls -l /usr/src/storage
 
 # Utworzenie katalogu dla Composera i zmiana właściciela
 echo "${BOLD}${RED}--------------------------------------------------------------------------------${RESET}"
