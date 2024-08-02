@@ -2,10 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Http\Controllers\Api\v1\Auth\CurrentUserController;
-use App\Http\Controllers\Api\v1\Auth\PasswordResetController;
-use App\Http\Controllers\Api\v1\Auth\SocialiteLoginController;
-use App\Http\Controllers\Api\v1\Auth\TwoFactorAuthenticationController;
 use App\Http\Controllers\Api\v1\BookmarkController;
 use App\Http\Controllers\Api\v1\BrandController;
 use App\Http\Controllers\Api\v1\CartController;
@@ -16,38 +12,14 @@ use App\Http\Controllers\Api\v1\PaymentController;
 use App\Http\Controllers\Api\v1\ProductController;
 use App\Http\Controllers\Api\v1\ReviewController;
 use App\Http\Controllers\Api\v1\SearchController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 
 Route::get('/', function () {
     return 'Hello Api';
 });
 
-Route::get('/sanctum/csrf-cookie', [CsrfCookieController::class, 'show']);
-Route::get('/user', fn (Request $request) => $request->user())->middleware('auth:sanctum');
-
-Route::delete('/user', [CurrentUserController::class, 'destroy'])
-    ->middleware('auth:sanctum')
-    ->name('user.destroy');
-
-Route::get('/two-factor-authentication-enabled', [
-    TwoFactorAuthenticationController::class, 'enabled',
-])->name('two-factor-authentication.enabled');
-
-Route::get('/two-factor-authentication-challenge', [
-    TwoFactorAuthenticationController::class, 'challenge',
-])->name('two-factor-authentication.challenge')
-    ->middleware(['guest:' . config('fortify.guard')]);
-
-Route::get('/password/reset/{token}', PasswordResetController::class)
-    ->name('password.reset')
-    ->middleware(['guest:' . config('fortify.guard')]);
-
-Route::prefix('auth/{provider}')->group(function (): void {
-    Route::get('/url', [SocialiteLoginController::class, 'redirectToProvider']);
-    Route::get('/callback', [SocialiteLoginController::class, 'handleProviderCallback']);
-});
+include __DIR__ . '/admin.php';
+include __DIR__ . '/auth.php';
 
 Route::get('search', SearchController::class);
 
@@ -58,15 +30,17 @@ Route::get('cart-items/count', [CartController::class, 'count']);
 Route::get('cart-items/total', [CartController::class, 'totalPrice']);
 Route::get('bookmarks/count', [BookmarkController::class, 'count']);
 
-Route::post('checkout', [PaymentController::class, 'checkout']);
-Route::post('confirmation', [PaymentController::class, 'confirmation']);
-Route::apiResource('orders', OrderController::class)->names([
-    'index' => 'public.orders.index',
-    'store' => 'public.orders.store',
-    'show' => 'public.orders.show',
-    'update' => 'public.orders.update',
-    'destroy' => 'public.orders.destroy',
-]);
+Route::middleware('verified')->group(function (): void {
+    Route::post('checkout', [PaymentController::class, 'checkout']);
+    Route::post('confirmation', [PaymentController::class, 'confirmation']);
+    Route::apiResource('orders', OrderController::class)->names([
+        'index' => 'public.orders.index',
+        'store' => 'public.orders.store',
+        'show' => 'public.orders.show',
+        'update' => 'public.orders.update',
+        'destroy' => 'public.orders.destroy',
+    ]);
+});
 
 Route::get('products/{product}/variants', [ProductController::class, 'variants']);
 Route::get('products/{product}/ratings', [ReviewController::class, 'ratings']);
@@ -107,5 +81,3 @@ Route::apiResource('collections', CollectionController::class)->names([
     'update' => 'public.collections.update',
     'destroy' => 'public.collections.destroy',
 ]);
-
-include __DIR__ . '/admin.php';
