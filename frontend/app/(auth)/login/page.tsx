@@ -194,7 +194,7 @@ export default function Login() {
                   <button onClick={handleLoginAsUser} className="btn btn-primary btn-sm text-white">
                      Login as User
                   </button>
-                  <button disabled onClick={handleLoginAsAdmin} className="btn btn-primary btn-sm text-white">
+                  <button onClick={handleLoginAsAdmin} className="btn btn-primary btn-sm text-white">
                      Login as Admin
                   </button>
                </div>

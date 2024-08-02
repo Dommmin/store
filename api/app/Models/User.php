@@ -45,6 +45,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     protected $appends = [
         'two_factor_enabled',
+        'is_admin',
     ];
 
     public function getTwoFactorEnabledAttribute(): bool
@@ -87,6 +88,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isAdmin(): bool
     {
         return $this->hasRole('admin');
+    }
+
+    public function getIsAdminAttribute(): bool
+    {
+        return $this->isAdmin();
     }
 
     /**

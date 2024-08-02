@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from '../lib/axios';
-import { useParams, useRouter } from 'next/navigation'; // Używamy useRouter z next/navigation
+import { useParams, useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 
 interface User {
@@ -12,6 +12,7 @@ interface User {
    two_factor_confirmed_at?: string;
    two_factor_recovery_codes?: string;
    profile_photo_url: string;
+   is_admin: boolean;
 }
 
 interface ValidationErrors {
