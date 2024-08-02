@@ -58,15 +58,9 @@ const useAuth = ({ middleware = 'guest', redirectIfAuthenticated }: AuthOptions 
    const params = useParams();
 
    const fetchUser = async (): Promise<User | null> => {
-      try {
-         const response = await axios.get('/api/v1/user');
-         return response.data as User;
-      } catch (error) {
-         if (error.response?.status === 401) {
-            return null; // Zwraca null, jeśli użytkownik nie jest zalogowany
-         }
-         throw error; // Rzucenie błędu, aby móc go obsłużyć poniżej
-      }
+     const response = await axios.get('/api/v1/user');
+
+     return response.data as User;
    };
 
    const {
