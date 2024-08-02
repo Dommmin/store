@@ -13,7 +13,7 @@ EXPOSE 3000
 
 # Build image
 FROM base AS build
-RUN npm run build
+RUN npm ci && npm run build
 
 # Production image
 FROM node:20-alpine AS prod
