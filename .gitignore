@@ -6,3 +6,4 @@ storage/minio/
 /data.ms/
 /storage/
 /tmp_node_modules/
+/tmp_vendor/
