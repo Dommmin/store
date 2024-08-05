@@ -6,7 +6,7 @@ services:
   proxy:
     build:
       context: .
-      dockerfile: ./Dockerfile.proxy
+      dockerfile: .docker/Dockerfile-proxy
     restart: unless-stopped
     ports:
       - "80:80"
@@ -17,11 +17,12 @@ services:
       - nginx
     networks:
       - laravel
+    tty: true
 
   frontend:
     build:
       context: .
-      dockerfile: ./frontend/Dockerfile
+      dockerfile: .docker/Dockerfile-frontend
       target: dev
     container_name: ${DOCKER_PREFIX}_frontend
     restart: unless-stopped
@@ -35,17 +36,20 @@ services:
       - laravel
     environment:
       NODE_ENV: development
+    tty: true
 
   api:
     build:
       context: .
-      dockerfile: ./api/Dockerfile
+      dockerfile: .docker/Dockerfile-api
       target: api
     container_name: ${DOCKER_PREFIX}_api
     restart: unless-stopped
-    command: sh -c "php artisan octane:start --host=0.0.0.0 --port=8000"
+    command: sh -c "chmod +x /usr/src/octane.sh && /usr/src/octane.sh"
     volumes:
       - ./api:/usr/src
+      - /usr/src/vendor
+      - /usr/src/node_modules
       - ./deployment/config/php-fpm/php-dev.ini:/usr/local/etc/php/conf.d/php.ini
     depends_on:
       mysql:
@@ -54,11 +58,12 @@ services:
         condition: service_started
     networks:
       - laravel
+    tty: true
 
   scheduler:
     build:
       context: .
-      dockerfile: ./api/Dockerfile
+      dockerfile: .docker/Dockerfile-api
       target: scheduler
     command: sh -c "chmod +x /usr/src/scheduler.sh && /usr/src/scheduler.sh"
     restart: unless-stopped
@@ -75,7 +80,7 @@ services:
   worker:
     build:
       context: .
-      dockerfile: ./api/Dockerfile
+      dockerfile: .docker/Dockerfile-api
       target: worker
     command: sh -c "chmod +x /usr/src/worker.sh && /usr/src/worker.sh"
     restart: unless-stopped
@@ -92,7 +97,7 @@ services:
   nginx:
     build:
       context: .
-      dockerfile: ./Dockerfile.nginx
+      dockerfile: .docker/Dockerfile-nginx
     container_name: ${DOCKER_PREFIX}_nginx
     command: sh -c "nginx -g \"daemon off;\""
     restart: unless-stopped
@@ -103,15 +108,16 @@ services:
       - api
     networks:
       - laravel
+    tty: true
 
   mysql:
     build:
       args:
         password: secret
       context: .
-      dockerfile: ./Dockerfile.mysql
+      dockerfile: .docker/Dockerfile-mysql
     container_name: ${DOCKER_PREFIX}_mysql
-    restart: unless-stopped
+    restart: always
     volumes:
       - ./mysqldata:/var/lib/mysql
     ports:
@@ -127,6 +133,7 @@ services:
       - MYSQL_DATABASE=laravel
     networks:
       - laravel
+    tty: true
 
   redis:
     image: redis:alpine
@@ -144,6 +151,7 @@ services:
       retries: 3
     networks:
       - laravel
+    tty: true
 
   mailcatcher:
     image: schickling/mailcatcher
@@ -202,7 +210,7 @@ services:
   reverb:
     build:
       context: .
-      dockerfile: ./api/Dockerfile
+      dockerfile: .docker/Dockerfile-api
       target: reverb
     command: sh -c "chmod +x /usr/src/reverb.sh && /usr/src/reverb.sh"
     restart: unless-stopped
@@ -225,6 +233,7 @@ services:
       - "4242:4242"
     networks:
       - laravel
+    tty: true
 
 volumes:
   storage-minio:
