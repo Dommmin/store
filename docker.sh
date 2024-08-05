@@ -50,7 +50,7 @@ echo "${BOLD}${RED}-------------------------------------------------------------
 echo -e "${BOLD}${YELLOW}Zmiana uprawnień${RESET}\n"
 docker exec -it -u root "$DOCKER_PREFIX"_api chmod -R 777 /usr/src/storage
 
-# Verify ownership
+# Weryfikacja uprawnień
 echo "${BOLD}${RED}--------------------------------------------------------------------------------${RESET}"
 echo -e "${BOLD}${YELLOW}Weryfikacja uprawnień${RESET}\n"
 docker exec -it -u root "$DOCKER_PREFIX"_api ls -l /usr/src/storage
@@ -61,11 +61,12 @@ echo -e "${BOLD}${YELLOW}Utworzenie katalogu dla Composera i zmiana właściciel
 docker exec -it -u root "${DOCKER_PREFIX}_api" mkdir -p /home/$USER/.composer
 docker exec -it -u root "${DOCKER_PREFIX}_api" chown -R $USER:$USER /home/$USER
 
-# Instalacja Composera
+# Kopiowanie vendor do api
 echo "${BOLD}${RED}--------------------------------------------------------------------------------${RESET}"
-echo -e "${BOLD}${YELLOW}Instalacja Composera${RESET}\n"
-docker exec -it -u $USER "${DOCKER_PREFIX}_api" composer install --no-scripts --no-interaction
-docker exec -it "${DOCKER_PREFIX}_api" npm install
+echo -e "${BOLD}${YELLOW}Kopiowanie vendor${RESET}\n"
+docker cp "${DOCKER_PREFIX}_api":/usr/src/vendor tmp_vendor
+sudo rsync -a --delete tmp_vendor/ ./api/vendor/
+sudo rm -rf tmp_vendor
 
 # Uruchomienie migracji
 echo "${BOLD}${RED}--------------------------------------------------------------------------------${RESET}"
@@ -77,11 +78,11 @@ echo "${BOLD}${RED}-------------------------------------------------------------
 echo -e "${BOLD}${YELLOW}Insights${RESET}\n"
 docker exec -it "$DOCKER_PREFIX"_api php artisan insights --fix -n
 
-### Kopiowanie node_modules do frontend'a ###
+# Kopiowanie node_modules do frontend
 echo "${BOLD}${RED}--------------------------------------------------------------------------------${RESET}"
 echo -e "${BOLD}${YELLOW}Kopiowanie node_modules${RESET}\n"
 docker cp "${DOCKER_PREFIX}_frontend":/usr/src/node_modules tmp_node_modules
-sudo mv -f tmp_node_modules/* ./frontend/node_modules/
+sudo rsync -a --delete tmp_node_modules/ ./frontend/node_modules/
 sudo rm -rf tmp_node_modules
 
 # Lint
