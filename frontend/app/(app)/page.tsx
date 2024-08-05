@@ -29,7 +29,8 @@ export default function Home() {
 
    if (isPending) return <LoadingSpinner className="h-screen" />;
    if (isError) return <ServerError />;
-   if (collections.length <= 0) return <p className="flex h-screen items-center justify-center">No collections found...</p>
+   if (collections.length <= 0)
+      return <p className="flex h-screen items-center justify-center">No collections found...</p>;
 
    return (
       <>

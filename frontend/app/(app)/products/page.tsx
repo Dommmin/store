@@ -319,46 +319,45 @@ export default function ProductsPage() {
                      <ProductSkeleton />
                   ) : (
                      <>
-                     {!data.data?.length
-                         ? <p className="flex items-center justify-center">No products found...</p>
-                         : (
-                             <>
-                                 <motion.div
-                                     layout
-                                     className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 min-[1920px]:grid-cols-4 min-[3440px]:grid-cols-5"
+                        {!data.data?.length ? (
+                           <p className="flex items-center justify-center">No products found...</p>
+                        ) : (
+                           <>
+                              <motion.div
+                                 layout
+                                 className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 min-[1920px]:grid-cols-4 min-[3440px]:grid-cols-5"
+                              >
+                                 <AnimatePresence>
+                                    {data.data?.map((product) => (
+                                       <Link href={`/p/${product.url}`} key={product.id}>
+                                          <Product product={product} />
+                                       </Link>
+                                    ))}
+                                 </AnimatePresence>
+                              </motion.div>
+                              <div className="join mt-8 flex items-center justify-center">
+                                 <button
+                                    disabled={!data.prev_page_url}
+                                    onClick={() => setUrl(data.prev_page_url)}
+                                    className="btn join-item"
                                  >
-                                     <AnimatePresence>
-                                         {data.data?.map((product) => (
-                                             <Link href={`/p/${product.url}`} key={product.id}>
-                                                 <Product product={product}/>
-                                             </Link>
-                                         ))}
-                                     </AnimatePresence>
-                                 </motion.div>
-                                 <div className="join mt-8 flex items-center justify-center">
-                                     <button
-                                         disabled={!data.prev_page_url}
-                                         onClick={() => setUrl(data.prev_page_url)}
-                                         className="btn join-item"
-                                     >
-                                         «
-                                     </button>
-                                     <button className="btn btn-disabled join-item">{data?.current_page} Page</button>
-                                     <button
-                                         disabled={!data.next_page_url}
-                                         onClick={() => setUrl(data.next_page_url)}
-                                         className="btn join-item"
-                                     >
-                                         »
-                                     </button>
-                                 </div>
-                             </>
-                         )
-                     }
+                                    «
+                                 </button>
+                                 <button className="btn btn-disabled join-item">{data?.current_page} Page</button>
+                                 <button
+                                    disabled={!data.next_page_url}
+                                    onClick={() => setUrl(data.next_page_url)}
+                                    className="btn join-item"
+                                 >
+                                    »
+                                 </button>
+                              </div>
+                           </>
+                        )}
                      </>
                   )}
                </div>
-                <div className="hidden 2xl:col-span-2"/>
+               <div className="hidden 2xl:col-span-2" />
             </div>
          </HydrationBoundary>
       </QueryClientProvider>

@@ -59,9 +59,9 @@ const useAuth = ({ middleware = 'guest', redirectIfAuthenticated }: AuthOptions 
    const params = useParams();
 
    const fetchUser = async (): Promise<User | null> => {
-     const response = await axios.get('/api/v1/user');
+      const response = await axios.get('/api/v1/user');
 
-     return response.data as User;
+      return response.data as User;
    };
 
    const {

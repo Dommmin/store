@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import Sidebar from './components/Sidebar';
-import useAuth from "../hooks/auth";
-import PageNotFound from "../not-found";
+import useAuth from '../hooks/auth';
+import PageNotFound from '../not-found';
 
 export default function AdminLayout({ children }) {
    const [isOpen, setIsOpen] = useState(true);
@@ -11,7 +11,7 @@ export default function AdminLayout({ children }) {
    const { user, isPending } = useAuth();
 
    if (isPending) return null;
-   if (!user?.is_admin) return <PageNotFound />
+   if (!user?.is_admin) return <PageNotFound />;
 
    return (
       <div>
