@@ -26,9 +26,9 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Build images
         run: |
-          docker build -t $API_IMAGE --target=api -f ./api/Dockerfile .
-          docker build -t $SCHEDULER_IMAGE --target=scheduler -f ./api/Dockerfile .
-          docker build -t $WORKER_IMAGE --target=worker -f ./api/Dockerfile .
+          docker build -t $API_IMAGE --target=api -f .docker/Dockerfile-api .
+          docker build -t $SCHEDULER_IMAGE --target=scheduler -f .docker/Dockerfile-api .
+          docker build -t $WORKER_IMAGE --target=worker -f .docker/Dockerfile-api .
       - name: Install dependencies
         run: docker run --rm -t $API_IMAGE composer install --prefer-dist --no-progress --no-interaction
       - name: Push images
@@ -46,7 +46,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Build MySQL image
-        run: docker build -t $MYSQL_IMAGE --build-arg password=${{ secrets.DB_PASSWORD }} -f ./Dockerfile.mysql .
+        run: docker build -t $MYSQL_IMAGE --build-arg password=${{ secrets.DB_PASSWORD }} -f .docker/Dockerfile-mysql .
       - name: Push Mysql image
         run: docker push $MYSQL_IMAGE
 
@@ -101,7 +101,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Build nginx image
         run: |
-          docker build -t $NGINX_IMAGE -f ./Dockerfile.nginx .
+          docker build -t $NGINX_IMAGE -f .docker/Dockerfile-nginx .
           docker push $NGINX_IMAGE
 
   build-proxy:
@@ -115,7 +115,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Build proxy image
         run: |
-          docker build -t $PROXY_IMAGE -f ./Dockerfile.proxy .
+          docker build -t $PROXY_IMAGE -f .docker/Dockerfile-proxy .
           docker push $PROXY_IMAGE
 
   build-frontend:
@@ -129,7 +129,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Build frontend image
         run: |
-          docker build -t $FRONTEND_IMAGE --target=prod -f ./frontend/Dockerfile .
+          docker build -t $FRONTEND_IMAGE --target=prod -f .docker/Dockerfile-frontend .
           docker push $FRONTEND_IMAGE
 
   deploy:
