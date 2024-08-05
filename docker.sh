@@ -65,27 +65,24 @@ docker exec -it -u root "${DOCKER_PREFIX}_api" chown -R $USER:$USER /home/$USER
 echo "${BOLD}${RED}--------------------------------------------------------------------------------${RESET}"
 echo -e "${BOLD}${YELLOW}Instalacja Composera${RESET}\n"
 docker exec -it -u $USER "${DOCKER_PREFIX}_api" composer install --no-scripts --no-interaction
-
-## Instalacja zależności npm
-#echo "${BOLD}${RED}--------------------------------------------------------------------------------${RESET}"
-#echo -e "${BOLD}${YELLOW}Instalacja zależności npm${RESET}\n"
-#docker exec -it "${DOCKER_PREFIX}_frontend" npm install
+docker exec -it "${DOCKER_PREFIX}_api" npm install
 
 # Uruchomienie migracji
 echo "${BOLD}${RED}--------------------------------------------------------------------------------${RESET}"
 echo -e "${BOLD}${YELLOW}Uruchomienie migracji${RESET}\n"
 docker exec -u root "$DOCKER_PREFIX"_api bash migration.sh
 
-## CS Fixer
-#echo "${BOLD}${RED}--------------------------------------------------------------------------------${RESET}"
-#echo -e "${BOLD}${YELLOW}CS Fixer${RESET}\n"
-#docker exec -it -u root "$DOCKER_PREFIX"_api chown $USER:$USER ./vendor/bin/pint
-#docker exec -it "$DOCKER_PREFIX"_api composer pint
-
 # Insights
 echo "${BOLD}${RED}--------------------------------------------------------------------------------${RESET}"
 echo -e "${BOLD}${YELLOW}Insights${RESET}\n"
 docker exec -it "$DOCKER_PREFIX"_api php artisan insights --fix -n
+
+### Kopiowanie node_modules do frontend'a ###
+echo "${BOLD}${RED}--------------------------------------------------------------------------------${RESET}"
+echo -e "${BOLD}${YELLOW}Kopiowanie node_modules${RESET}\n"
+docker cp "${DOCKER_PREFIX}_frontend":/usr/src/node_modules tmp_node_modules
+sudo mv -f tmp_node_modules/* ./frontend/node_modules/
+sudo rm -rf tmp_node_modules
 
 # Lint
 echo "${BOLD}${RED}--------------------------------------------------------------------------------${RESET}"

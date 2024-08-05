@@ -25,13 +25,16 @@ services:
       target: dev
     container_name: ${DOCKER_PREFIX}_frontend
     restart: unless-stopped
-    command: sh -c "npm install && npm run dev"
+    command: npm run dev
     volumes:
       - ./frontend:/usr/src
+      - /usr/src/node_modules
     depends_on:
       - api
     networks:
       - laravel
+    environment:
+      NODE_ENV: development
 
   api:
     build:
@@ -40,6 +43,7 @@ services:
       target: api
     container_name: ${DOCKER_PREFIX}_api
     restart: unless-stopped
+    command: sh -c "php artisan octane:start --host=0.0.0.0 --port=8000"
     volumes:
       - ./api:/usr/src
       - ./deployment/config/php-fpm/php-dev.ini:/usr/local/etc/php/conf.d/php.ini
@@ -121,8 +125,6 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=secret
       - MYSQL_DATABASE=laravel
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=secret
     networks:
       - laravel
 

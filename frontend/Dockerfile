@@ -1,19 +1,19 @@
-# Base image
-FROM node:20-alpine AS base
+FROM node:18-alpine AS base
 
-# Set working directory
 WORKDIR /usr/src
 
-# Copy frontend files
-COPY ./frontend .
+COPY ./frontend/package*.json ./
+RUN npm install --silent
 
-# Development image
+COPY ./frontend .
+EXPOSE 3000
+
 FROM base AS dev
 EXPOSE 3000
 
 # Build image
 FROM base AS build
-RUN npm ci && npm run build
+RUN npm run build
 
 # Production image
 FROM node:20-alpine AS prod
