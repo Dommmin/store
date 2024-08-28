@@ -3,6 +3,7 @@
 return [
     App\Providers\AppServiceProvider::class,
     App\Providers\FortifyServiceProvider::class,
+    App\Providers\HorizonServiceProvider::class,
     App\Providers\TelescopeServiceProvider::class,
     Spatie\Permission\PermissionServiceProvider::class,
 ];

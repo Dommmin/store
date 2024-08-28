@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 use Laravel\Octane\Contracts\OperationTerminated;
 use Laravel\Octane\Events\RequestHandled;
 use Laravel\Octane\Events\RequestReceived;
@@ -40,7 +38,7 @@ return [
     |
     */
 
-    'server' => env('OCTANE_SERVER', 'swoole'),
+    'server' => env('OCTANE_SERVER', 'roadrunner'),
 
     /*
     |--------------------------------------------------------------------------
@@ -75,11 +73,11 @@ return [
         RequestReceived::class => [
             ...Octane::prepareApplicationForNextOperation(),
             ...Octane::prepareApplicationForNextRequest(),
-
+            //
         ],
 
         RequestHandled::class => [
-
+            //
         ],
 
         RequestTerminated::class => [
@@ -88,20 +86,20 @@ return [
 
         TaskReceived::class => [
             ...Octane::prepareApplicationForNextOperation(),
-
+            //
         ],
 
         TaskTerminated::class => [
-
+            //
         ],
 
         TickReceived::class => [
             ...Octane::prepareApplicationForNextOperation(),
-
+            //
         ],
 
         TickTerminated::class => [
-
+            //
         ],
 
         OperationTerminated::class => [
@@ -137,7 +135,7 @@ return [
     ],
 
     'flush' => [
-
+        //
     ],
 
     /*
@@ -188,7 +186,7 @@ return [
     'watch' => [
         'app',
         'bootstrap',
-        'config',
+        'config/**/*.php',
         'database/**/*.php',
         'public/**/*.php',
         'resources/**/*.php',
@@ -223,10 +221,4 @@ return [
 
     'max_execution_time' => 30,
 
-    'swoole' => [
-        'options' => [
-            'log_file' => storage_path('logs/swoole_http.log'),
-            'package_max_length' => 10 * 1024 * 1024,
-        ],
-    ],
 ];

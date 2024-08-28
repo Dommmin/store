@@ -202,8 +202,8 @@ const useAuth = ({ middleware = 'guest', redirectIfAuthenticated }: AuthOptions 
    const logout = async (): Promise<void> => {
       try {
          await axios.post('/api/v1/logout');
-         await refetch();
-         router.push('/'); // Przekierowanie po wylogowaniu
+          await refetch();
+          window.location.reload();
       } catch (error) {
          console.error('Błąd podczas wylogowywania:', error);
       }
@@ -211,7 +211,7 @@ const useAuth = ({ middleware = 'guest', redirectIfAuthenticated }: AuthOptions 
 
    useEffect(() => {
       if (isError && middleware === 'auth') {
-         router.push('/login'); // Przekierowanie do strony logowania tylko w trybie 'auth'
+         router.push('/login');
       }
    }, [isError]);
 

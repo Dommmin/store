@@ -1,0 +1,12 @@
+FROM mariadb:latest
+
+ARG password
+
+# Skopiuj plik SQL do folderu inicjalizacji MariaDB
+COPY ./deployment/config/mysql/create_database.sql /docker-entrypoint-initdb.d/create_database.sql
+
+# Ustawienia hasła dla użytkownika root
+RUN echo "ALTER USER 'root'@'%' IDENTIFIED BY '${password}';" >> /docker-entrypoint-initdb.d/set_native_password.sql
+
+# Skopiuj plik konfiguracyjny
+COPY ./deployment/config/mysql/mysql.cnf /etc/mysql/mariadb.conf.d/mysql.cnf

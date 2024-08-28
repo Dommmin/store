@@ -4,6 +4,7 @@ set -e
 
 USER=dominik
 USER_ID=1000
+GROUP_ID=1000
 
 BOLD="$(tput bold)"
 RED="$(tput setaf 1)"
@@ -39,8 +40,8 @@ docker-compose up -d
 # Dodanie użytkownika, jeśli nie istnieje
 if ! docker exec -it -u root "$DOCKER_PREFIX"_api id -u $USER > /dev/null 2>&1; then
     echo -e "${BOLD}${YELLOW}Dodanie użytkownika ${USER}${RESET}\n"
-    docker exec -it -u root "$DOCKER_PREFIX"_api addgroup -g $USER_ID $USER
-    docker exec -it -u root "$DOCKER_PREFIX"_api adduser -u $USER_ID -G $USER -h /home/$USER -D $USER
+    docker exec -it -u root "$DOCKER_PREFIX"_api addgroup --gid $GROUP_ID $USER || true
+    docker exec -it -u root "$DOCKER_PREFIX"_api adduser --uid $USER_ID --gid $GROUP_ID --home /home/$USER --disabled-password $USER || true
 else
     echo "${BOLD}${RED}Użytkownik ${USER} już istnieje${RESET}"
 fi

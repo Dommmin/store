@@ -1,0 +1,6 @@
+# .dockerignore
+frontend/node_modules
+api/vendor
+api/node_modules
+.git
+tmp

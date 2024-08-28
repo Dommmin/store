@@ -53,7 +53,7 @@ services:
       - ./deployment/config/php-fpm/php-dev.ini:/usr/local/etc/php/conf.d/php.ini
     depends_on:
       mysql:
-        condition: service_healthy
+        condition: service_started
       redis:
         condition: service_started
     networks:
@@ -71,7 +71,7 @@ services:
       - ./api:/usr/src
     depends_on:
       mysql:
-        condition: service_healthy
+        condition: service_started
       redis:
         condition: service_started
     networks:
@@ -88,7 +88,7 @@ services:
       - ./api:/usr/src
     depends_on:
       mysql:
-        condition: service_healthy
+        condition: service_started
       redis:
         condition: service_started
     networks:
@@ -115,19 +115,13 @@ services:
       args:
         password: secret
       context: .
-      dockerfile: .docker/Dockerfile-mysql
+      dockerfile: .docker/Dockerfile-mariadb
     container_name: ${DOCKER_PREFIX}_mysql
     restart: always
     volumes:
       - ./mysqldata:/var/lib/mysql
     ports:
       - "33060:3306"
-    healthcheck:
-      test: mysql -h localhost -u root -psecret -e 'SELECT version();'
-      start_period: 5s
-      interval: 15s
-      timeout: 5s
-      retries: 5
     environment:
       - MYSQL_ROOT_PASSWORD=secret
       - MYSQL_DATABASE=laravel
@@ -220,7 +214,7 @@ services:
       - "8080:8080"
     depends_on:
       mysql:
-        condition: service_healthy
+        condition: service_started
       redis:
         condition: service_started
     networks:
