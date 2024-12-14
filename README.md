@@ -1,3 +1,5 @@
+<img src="/frontend/public/preview.png" >
+
 This app is build in with laravel as a backend and next.js in frontend.
 Whole app is containerized in Docker.
 It includes CI/CD.
